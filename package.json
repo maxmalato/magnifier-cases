@@ -14,7 +14,8 @@
     "typecheck": "pnpm -r --parallel typecheck",
     "build": "pnpm --filter @magnifier-cases/web build && pnpm --filter @magnifier-cases/server build",
     "e2e": "pnpm --filter @magnifier-cases/web e2e",
-    "simulate": "pnpm --filter @magnifier-cases/sim simulate"
+    "simulate": "pnpm --filter @magnifier-cases/sim simulate",
+    "simulate:check": "pnpm --filter @magnifier-cases/sim simulate --runs 2000 --check --label \"Verificação da CI (2.000 mistérios por nível e bot)\""
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

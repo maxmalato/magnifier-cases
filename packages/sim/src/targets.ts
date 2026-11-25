@@ -14,6 +14,11 @@ export const TargetsSchema = z.object({
   levels: z.record(z.enum(levelIds), LevelTargetSchema),
   /** Diferença mínima ideal − aleatório em cada nível ("decisão que vale a pena"). */
   minIdealRandomGap: rate,
+  /**
+   * A faixa do bot casual quebra o build? Enquanto o casual não for calibrado com partidas reais
+   * (Etapa 7), fica como aviso (false).
+   */
+  casualEnforced: z.boolean(),
 })
 export type Targets = z.infer<typeof TargetsSchema>
 export type LevelTarget = z.infer<typeof LevelTargetSchema>

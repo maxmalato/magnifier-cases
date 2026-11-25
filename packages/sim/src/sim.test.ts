@@ -57,6 +57,11 @@ describe('simulação', () => {
     const issues = checkTargets(fake)
     expect(issues.map((i) => i.message).join(' ')).toMatch(/ideal/)
     expect(issues.map((i) => i.message).join(' ')).toMatch(/aleatório/)
+    // o casual só quebra o build quando os dados pedem; ideal e diferença sempre quebram
+    expect(issues.find((i) => i.message.includes('casual'))?.severity).toBe(
+      targets.casualEnforced ? 'error' : 'warning',
+    )
+    expect(issues.find((i) => i.message.includes('ideal'))?.severity).toBe('error')
     expect(
       toMarkdown({ label: 'teste', runs: 20, baseSeed: 1, engine: 'x' }, fake, issues),
     ).toContain('## Metas')

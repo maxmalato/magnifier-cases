@@ -64,7 +64,8 @@ if (values.out) {
   writeFileSync(`${values.out}.json`, `${JSON.stringify(toJson(meta, results, issues), null, 2)}\n`)
   console.log(`Relatório gravado em ${values.out}.md e ${values.out}.json`)
 }
-if (values.check && issues.length > 0) {
-  console.error(`${issues.length} meta(s) fora do alvo.`)
+const errors = issues.filter((i) => i.severity === 'error')
+if (values.check && errors.length > 0) {
+  console.error(`${errors.length} meta(s) fora do alvo.`)
   process.exitCode = 1
 }

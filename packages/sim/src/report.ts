@@ -72,7 +72,16 @@ export function toMarkdown(
   }
   lines.push('', '## Metas', '')
   if (issues.length === 0) lines.push('Todos os níveis dentro das metas.')
-  else for (const i of issues) lines.push(`- **${i.level}:** ${i.message}`)
+  else
+    for (const i of issues)
+      lines.push(
+        `- ${i.severity === 'error' ? 'Fora da meta' : 'Aviso'} — **${i.level}:** ${i.message}`,
+      )
+  if (!targets.casualEnforced)
+    lines.push(
+      '',
+      'A faixa do bot casual é só aviso até ele ser calibrado com partidas reais (Etapa 7).',
+    )
   lines.push('')
   return lines.join('\n')
 }

@@ -41,6 +41,9 @@ jobs:
       - run: pnpm lint
       - run: pnpm typecheck
       - run: pnpm test
+
+      # Simulação reduzida com sementes fixas: nível fora da meta quebra o build (regras, seção 9)
+      - run: pnpm simulate:check
       - run: pnpm build
 
       - name: Instala o Chromium do Playwright

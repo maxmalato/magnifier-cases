@@ -4,6 +4,7 @@ import {
   difficultyOf,
   generateMysteryWithStats,
   MysteryGenerationError,
+  type DifficultyParams,
   type LevelId,
   type ThemePack,
 } from '@magnifier-cases/engine'
@@ -19,6 +20,8 @@ export interface SimOptions {
   /** Semente do primeiro mistério; os seguintes usam baseSeed + i. */
   readonly baseSeed: number
   readonly botParams?: BotParams
+  /** Variante: sobrepõe os parâmetros de um nível (calibração). O padrão vem dos dados. */
+  readonly paramsOf?: (level: LevelId) => DifficultyParams
   /** Relógio para medir o tempo de geração (injetado: a função continua testável). */
   readonly now?: () => number
 }
@@ -71,7 +74,7 @@ function summarize(skill: BotSkill, outcomes: readonly GameOutcome[]): BotResult
 }
 
 export function simulateLevel(level: LevelId, options: SimOptions): LevelResult {
-  const params = difficultyOf(level)
+  const params = options.paramsOf?.(level) ?? difficultyOf(level)
   const now = options.now ?? (() => 0)
   const seeds: number[] = []
   const attempts: number[] = []
