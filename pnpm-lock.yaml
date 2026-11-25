@@ -230,9 +230,18 @@ importers:
 
   apps/web:
     dependencies:
+      '@magnifier-cases/bots':
+        specifier: workspace:*
+        version: link:../../packages/bots
       '@magnifier-cases/content':
         specifier: workspace:*
         version: link:../../packages/content
+      '@magnifier-cases/engine':
+        specifier: workspace:*
+        version: link:../../packages/engine
+      '@magnifier-cases/kit':
+        specifier: workspace:*
+        version: link:../../packages/kit
     devDependencies:
       '@axe-core/playwright':
         specifier: ^4.14.1
