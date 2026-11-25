@@ -2,7 +2,7 @@
 
 [Versão em português](README.md)
 
-A cooperative deduction game for the browser, for 2 to 6 players (people or bots), 20 to 30 minutes, for all ages (8+). In the first case, the party cake has vanished: the team investigates places, questions suspects and accuses who took the cake and where it is hidden, before 6 PM. Every clue is true.
+A cooperative deduction game for the browser, for 2 to 6 players, 20 to 30 minutes, for all ages (8+). In the first case, the party cake has vanished: the team investigates places, questions suspects and accuses who took the cake and where it is hidden, before 6 PM. Every clue is true.
 
 It runs on phones, tablets, desktops and Smart TVs with a browser, as a PWA.
 
@@ -44,7 +44,7 @@ pnpm --filter @magnifier-cases/server dev   # local Cloudflare server
 | `packages/content`  | Theme, clue templates, PT-BR and EN texts and the public name (`appName`) |
 | `packages/protocol` | Messages between the device and the server                                |
 | `packages/kit`      | Rooms, seats, reconnection, limits and table mode (game-agnostic)         |
-| `packages/bots`     | Ideal, casual and random bots (public view only)                          |
+| `packages/bots`     | Bots for simulation, tests and play hints (public view only)              |
 | `packages/sim`      | Batch simulation                                                          |
 | `apps/web`          | User interface (Svelte 5 + Vite)                                          |
 | `apps/server`       | Cloudflare Worker + one Durable Object per room                           |
@@ -60,7 +60,7 @@ Dependencies point inwards: the interface and the server depend on the engine, a
 
 ## Privacy
 
-No accounts, no chat, no free text, no ads and no trackers. Nicknames are generated from lists.
+No accounts, no chat, no ads and no trackers. The only typed text is the nickname (up to 20 characters), which never goes into logs and disappears when the room expires.
 
 ## License
 

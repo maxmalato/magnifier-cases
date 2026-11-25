@@ -2,7 +2,7 @@
 
 [English version](README.en.md)
 
-Jogo cooperativo de dedução para o navegador, para 2 a 6 jogadores (pessoas ou bots), de 20 a 30 minutos, para todas as idades (8+). No primeiro caso, o bolo da festa sumiu: a equipe investiga lugares, interroga suspeitos e acusa quem levou o bolo e onde ele está, antes das 18h. Todas as pistas são verdadeiras.
+Jogo cooperativo de dedução para o navegador, para 2 a 6 jogadores, de 20 a 30 minutos, para todas as idades (8+). No primeiro caso, o bolo da festa sumiu: a equipe investiga lugares, interroga suspeitos e acusa quem levou o bolo e onde ele está, antes das 18h. Todas as pistas são verdadeiras.
 
 Roda em celular, tablet, desktop e Smart TV com navegador, como PWA.
 
@@ -44,7 +44,7 @@ pnpm --filter @magnifier-cases/server dev   # servidor local da Cloudflare
 | `packages/content`  | Tema, modelos de pista, textos PT-BR e EN e o nome público (`appName`) |
 | `packages/protocol` | Mensagens entre o aparelho e o servidor                                |
 | `packages/kit`      | Salas, assentos, reconexão, limites e modo mesa (agnóstico de jogo)    |
-| `packages/bots`     | Bots ideal, casual e aleatório (só com a visão pública)                |
+| `packages/bots`     | Bots para simulação, testes e dica de jogada (só com a visão pública)  |
 | `packages/sim`      | Simulação em lote                                                      |
 | `apps/web`          | Interface (Svelte 5 + Vite)                                            |
 | `apps/server`       | Cloudflare Worker + Durable Object por sala                            |
@@ -60,7 +60,7 @@ As dependências apontam para dentro: a interface e o servidor dependem do motor
 
 ## Privacidade
 
-Sem conta, sem chat, sem texto livre, sem anúncios e sem rastreadores. Só apelidos gerados por listas.
+Sem conta, sem chat, sem anúncios e sem rastreadores. O único texto digitado é o apelido (até 20 caracteres), que nunca vai para registros e some quando a sala expira.
 
 ## Licença
 

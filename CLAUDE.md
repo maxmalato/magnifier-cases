@@ -4,7 +4,7 @@ Instruções para o Claude Code neste repositório. Leia antes de qualquer taref
 
 ## O projeto
 
-Casos da Lupa (`magnifier-cases`): jogo **cooperativo de dedução** para o navegador, de 2 a 6 assentos (pessoas ou bots). No tema da v1, o bolo da festa sumiu. Um culpado e um esconderijo ficam em segredo. A equipe gasta ações de 30 minutos (investigar um lugar, interrogar um suspeito, ir a outro lugar) até as 18h e acusa um suspeito e um lugar. Todas as pistas são verdadeiras. Modos: um aparelho, mesa (tela grande + celulares, só em tela grande) e online (sala por código; o aparelho guarda o token do assento). Roda em celular, tablet, desktop e Smart TV com navegador, como PWA. Todas as idades (8+).
+Casos da Lupa (`magnifier-cases`): jogo **cooperativo de dedução** para o navegador, de 2 a 6 pessoas (bots não jogam nas partidas). No tema da v1, o bolo da festa sumiu. Um culpado e um esconderijo ficam em segredo. A equipe gasta ações de 30 minutos (investigar um lugar, interrogar um suspeito, ir a outro lugar) até as 18h e acusa um suspeito e um lugar. Todas as pistas são verdadeiras. Modos: um aparelho, mesa (tela grande + celulares, só em tela grande) e online (sala por código; o aparelho guarda o token do assento). Roda em celular, tablet, desktop e Smart TV com navegador, como PWA. Todas as idades (8+).
 
 - Regras: `docs/magnifier-cases-rules.md`.
 - Especificação técnica: `docs/magnifier-cases-tech-spec.md`.
@@ -47,7 +47,7 @@ Arquitetura limpa: dependências apontam para dentro (UI e servidor dependem do 
 - `packages/content`: tema `party-cake`, modelos de pista, textos PT-BR e EN, formatadores de concordância.
 - `packages/protocol`: tipos das mensagens cliente/servidor.
 - `packages/kit`: salas, assentos, reconexão, limites e modo mesa, **agnóstico de jogo** (só conhece `GameDefinition`). Vem do `senhorio-web` e do `village-flood`.
-- `packages/bots`: `botMove` e `suggest` (políticas ideal, casual e aleatória), funções puras, **só sobre `PublicView`**.
+- `packages/bots`: `botMove` e `suggest` (políticas ideal, casual e aleatória), funções puras, **só sobre `PublicView`**. Usados na simulação, nos testes e na dica de jogada (só no Aprendiz); **bots não jogam nas partidas**.
 - `packages/sim`: simulação em lote (fora do `pnpm test`).
 - `apps/web`: Svelte 5 + Vite + PWA. Só desenha a visão, envia ações e anima eventos. Nunca calcula regra.
 - `apps/server`: Cloudflare Worker + um Durable Object por sala. Roda o mesmo motor, valida quem envia cada ação e **só envia `PublicView`**.
@@ -96,7 +96,7 @@ No ambiente sem download de navegador, rode o E2E com `PLAYWRIGHT_CHROMIUM_EXECU
 - O servidor é a única fonte da verdade: valida `actorsOf` e toda ação antes de aplicar. O cliente nunca é confiável.
 - Token de assento guardado apenas como hash (SHA-256). Limite de 40 mensagens por 10 s por conexão. Sala expira em 12 h.
 - Princípio do menor privilégio em permissões, tokens e acessos.
-- Jogo para todas as idades: sem conta, sem chat, sem texto livre, só apelidos gerados por listas, sem compras, sem anúncios, sem rastreadores, sem analytics (LGPD). Nada de dado pessoal em logs.
+- Jogo para todas as idades: sem conta, sem chat, nenhum texto digitado além do apelido (até 20 caracteres, nunca em log), sem compras, sem anúncios, sem rastreadores, sem analytics (LGPD). Nada de dado pessoal em logs.
 - Exemplos e testes com dados fictícios (nomes sugeridos: Ana, Bruno, Carla, Diego, Elisa, Fábio; apelidos como "Raposa Curiosa").
 - LGPD (dados de crianças) e ECA Digital: o dono do projeto revisa com um advogado antes da publicação. Não afirme conformidade jurídica; registre dúvidas.
 
