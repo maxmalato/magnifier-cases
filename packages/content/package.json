@@ -1,0 +1,16 @@
+{
+  "name": "@magnifier-cases/content",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Tema party-cake, modelos de pista, textos PT-BR e EN e formatadores",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@magnifier-cases/engine": "workspace:*"
+  }
+}
