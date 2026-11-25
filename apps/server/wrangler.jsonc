@@ -1,0 +1,21 @@
+// Configuração do Worker. Nenhum segredo nem ID de conta aqui:
+// credenciais ficam no painel da Cloudflare, no `wrangler secret` ou nos segredos do GitHub Actions.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "magnifier-cases",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-11-01",
+  // Sem telemetria do Wrangler (privacidade)
+  "send_metrics": false,
+  // Sem registros de acesso guardados na Cloudflare (LGPD: nada de dado pessoal em logs)
+  "observability": { "enabled": false },
+  // Sem endereços de prévia por versão: só um endereço público
+  "preview_urls": false,
+  // O Worker serve o site (apps/web/dist) e responde primeiro só nas rotas /api/*
+  "assets": {
+    "directory": "../web/dist",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*"],
+  },
+  // Etapa 4: um Durable Object (SQLite) por sala, com os tempos de bot e desconexão em "vars".
+}
