@@ -120,10 +120,14 @@ describe('acusação', () => {
     expect(r.state.phase).toBe('won')
     expect(r.state.actionsLeft).toBe(P.actionsTotal)
     expect(r.events.map((e) => e.type)).toEqual(['won', 'revealed'])
-    expect(viewFor(r.state).reveal?.solution).toEqual({
+    const reveal = viewFor(r.state).reveal
+    expect(reveal?.solution).toEqual({
       culpritId: 'dog-biscuit',
       hideoutId: 'lucia-backyard',
     })
+    // as cartas-chave vêm com o texto, inclusive as que ficaram fechadas
+    expect(reveal?.keyCards.map((c) => c.id).sort()).toEqual([...(reveal?.keyCardIds ?? [])].sort())
+    expect(reveal?.keyCards.every((c) => !c.opened && c.textKey.length > 0)).toBe(true)
     expect(transition(r.state, { type: 'move', placeId: 'bakery' }, B)).toMatchObject({
       reason: 'game-over',
     })
