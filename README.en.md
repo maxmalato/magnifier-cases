@@ -18,7 +18,7 @@ Apprentice, Investigator, Expert and Legend. The map and the clock change with t
 
 ## Status
 
-Stage 0 (foundation) ready for review: the monorepo, tooling and CI are set up, with no game logic yet. See `docs/ROADMAP.md` (in Portuguese).
+Stage 1 (engine, generator and solver) ready for review: the engine generates mysteries proven solvable and runs a full game, with no screens yet. See `docs/ROADMAP.md` (in Portuguese).
 
 ## How to run
 
