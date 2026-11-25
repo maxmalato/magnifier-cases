@@ -63,6 +63,7 @@ pnpm typecheck
 pnpm build
 pnpm e2e                                      # Playwright + axe-core (apps/web)
 pnpm simulate                                 # simulação com bots (fora do pnpm test)
+pnpm simulate:check                           # simulação reduzida da CI (quebra fora da meta)
 pnpm --filter @magnifier-cases/web dev        # site em desenvolvimento
 pnpm --filter @magnifier-cases/server dev     # servidor local da Cloudflare
 ```

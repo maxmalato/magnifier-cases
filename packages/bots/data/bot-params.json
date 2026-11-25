@@ -1,0 +1,11 @@
+{
+  "casual": {
+    "mistakeRate": 0.2,
+    "ignorePartialRate": 0.3,
+    "earlyAccuseRate": 0.3,
+    "earlyAccuseMaxPairs": 4
+  },
+  "random": {
+    "accuseMaxPairs": 2
+  }
+}

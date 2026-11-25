@@ -1,0 +1,34 @@
+{
+  "levels": {
+    "apprentice": {
+      "idealMin": 0.98,
+      "casual": {
+        "min": 0.85,
+        "max": 0.95
+      }
+    },
+    "investigator": {
+      "idealMin": 0.9,
+      "casual": {
+        "min": 0.65,
+        "max": 0.8
+      }
+    },
+    "expert": {
+      "idealMin": 0.75,
+      "casual": {
+        "min": 0.45,
+        "max": 0.6
+      }
+    },
+    "legend": {
+      "idealMin": 0.55,
+      "casual": {
+        "min": 0.25,
+        "max": 0.4
+      }
+    }
+  },
+  "minIdealRandomGap": 0.25,
+  "casualEnforced": false
+}

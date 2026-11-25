@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { difficultyOf } from './data.ts'
+import { difficulties, difficultyOf } from './data.ts'
 import { canShowTable, candidatesOf, cardCost, clockAt, startTime } from './rules.ts'
 import type { Cast } from './types.ts'
 
@@ -41,15 +41,26 @@ describe('custo das cartas', () => {
 })
 
 describe('relógio derivado', () => {
-  it('início de cada nível (13:00, 14:00, 14:00, 14:30)', () => {
-    expect(startTime(difficultyOf('apprentice'))).toBe('13:00')
-    expect(startTime(difficultyOf('investigator'))).toBe('14:00')
-    expect(startTime(difficultyOf('expert'))).toBe('14:00')
-    expect(startTime(difficultyOf('legend'))).toBe('14:30')
+  // A fórmula, com os valores iniciais das regras (10, 8, 8 e 7 ações → 13:00, 14:00, 14:00 e
+  // 14:30). Os valores atuais vêm dos dados e mudam com a calibração.
+  it('início derivado: 18:00 − ações × 30 min', () => {
+    const base = difficultyOf('apprentice')
+    const start = (actionsTotal: number) => startTime({ ...base, actionsTotal })
+    expect(start(10)).toBe('13:00')
+    expect(start(8)).toBe('14:00')
+    expect(start(7)).toBe('14:30')
+    expect(start(12)).toBe('12:00')
+  })
+
+  it('o início de todo nível dos dados segue a fórmula', () => {
+    for (const p of difficulties) {
+      const [h, m] = startTime(p).split(':').map(Number)
+      expect((h ?? 0) * 60 + (m ?? 0)).toBe(18 * 60 - p.actionsTotal * p.actionMinutes)
+    }
   })
 
   it('horário atual pelas ações restantes, sem passar do fim', () => {
-    const p = difficultyOf('investigator')
+    const p = { ...difficultyOf('investigator'), actionsTotal: 8 }
     expect(clockAt(p, 8)).toBe('14:00')
     expect(clockAt(p, 3)).toBe('16:30')
     expect(clockAt(p, 0)).toBe('18:00')

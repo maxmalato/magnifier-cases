@@ -16,7 +16,7 @@ O caso dos mockups (nível Investigador, culpado Biscoito, esconderijo Quintal d
 | Chips "visto sujo de farinha" e "rastro aponta para cá" mudam o item. | Só há dois estados: descartado e possível. Grupo (`only-*`) aparece como "um dos 2" (pontilhado, âmbar). Ruído é uma nota cinza que **não altera** o item. |
 | Revelação: "Quando duas pistas dizem a mesma coisa, vale acusar." | A dica vem do solucionador: "as pistas N e M, juntas, já deixavam um único resultado." |
 | Revelação: 3 pistas usadas levam à resposta. | As pistas mostradas são o conjunto de custo mínimo do solucionador, quantas forem. |
-| Barra de 8 segmentos, "Começa às 14:00", "1 hora (2 ações)". | Tudo vem de `DifficultyParams` do nível (10, 8, 8 ou 7 ações; início 13:00, 14:00, 14:00 ou 14:30). |
+| Barra de 8 segmentos, "Começa às 14:00", "1 hora (2 ações)". | Tudo vem de `DifficultyParams` do nível (hoje 11, 10, 12 ou 10 ações; início 12:30, 13:00, 12:00 ou 13:00; os valores mudam com a calibração). |
 | Nomes Lia, Carla e Bruno; "Sala K7P·4QX". | Exemplos. No jogo, apelidos digitados pelos jogadores (até 20 caracteres). O código da sala vem do `kit`. |
 | Mapa 3×3 com 6 lugares. | A grade muda com o nível: 3×2 (5 lugares), 3×3 (6 ou 8), 4×3 (10). |
 | "Toquem em OK para continuar." | O "OK" só fecha a tela neste aparelho. O estado já mudou e a pista fica no caderno. |

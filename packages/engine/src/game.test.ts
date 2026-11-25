@@ -1,9 +1,12 @@
 import { describe, expect, it } from 'vitest'
 import { difficultyOf } from './data.ts'
 import { legalActions, newGame, parseAction, transition, viewFor } from './game.ts'
+import { clockAt } from './rules.ts'
 import { testTheme, makeState } from './testing.ts'
 import type { Action, GameState, TransitionResult } from './types.ts'
 
+// makeState usa o Aprendiz; os valores vêm dos dados (mudam com a calibração)
+const P = difficultyOf('apprentice')
 const A = { seat: 'seat-1' }
 const B = { seat: 'seat-2' }
 
@@ -29,7 +32,7 @@ describe('newGame', () => {
       seed: 42,
     })
     expect(state.teamAt).toBe('square')
-    expect(state.actionsLeft).toBe(8)
+    expect(state.actionsLeft).toBe(difficultyOf('investigator').actionsTotal)
     expect(state.activeSeat).toBe('seat-1')
     expect(state.phase).toBe('playing')
     expect(state.cards.every((c) => !c.opened)).toBe(true)
@@ -46,7 +49,7 @@ describe('ações', () => {
   it('move: custa 1, muda o lugar e passa a vez', () => {
     const r = ok(transition(makeState(), { type: 'move', placeId: 'bakery' }, A))
     expect(r.state.teamAt).toBe('bakery')
-    expect(r.state.actionsLeft).toBe(9)
+    expect(r.state.actionsLeft).toBe(P.actionsTotal - 1)
     expect(r.state.activeSeat).toBe('seat-2')
     expect(r.events.map((e) => e.type)).toEqual(['moved', 'clock-advanced', 'turn-started'])
   })
@@ -71,7 +74,7 @@ describe('ações', () => {
     const r = ok(transition(makeState({ teamAt: 'bakery' }), { type: 'investigate' }, A))
     const card = r.state.cards.find((c) => c.id === 'place:bakery')
     expect(card).toMatchObject({ opened: true, openedAtAction: 1, openedBySeat: 'seat-1' })
-    expect(r.state.actionsLeft).toBe(9)
+    expect(r.state.actionsLeft).toBe(P.actionsTotal - 1)
     expect(r.events.map((e) => e.type)).toContain('clue-found')
     expect(r.events.map((e) => e.type)).toContain('candidates-changed')
     expect(transition(r.state, { type: 'investigate' }, B)).toMatchObject({
@@ -115,7 +118,7 @@ describe('acusação', () => {
       ),
     )
     expect(r.state.phase).toBe('won')
-    expect(r.state.actionsLeft).toBe(10)
+    expect(r.state.actionsLeft).toBe(P.actionsTotal)
     expect(r.events.map((e) => e.type)).toEqual(['won', 'revealed'])
     expect(viewFor(r.state).reveal?.solution).toEqual({
       culpritId: 'dog-biscuit',
@@ -127,9 +130,11 @@ describe('acusação', () => {
   })
 
   it('erro: custa o valor do nível, não diz qual metade errou e bloqueia a dupla', () => {
-    const state = makeState({}, 'investigator')
+    const state = makeState({}, 'legend')
+    const cost = difficultyOf('legend').wrongAccusationCost
+    expect(cost).toBeGreaterThan(1)
     const r = ok(transition(state, { type: 'accuse', suspectId: 'baker-ze', placeId: 'bakery' }, A))
-    expect(r.state.actionsLeft).toBe(8 - 2)
+    expect(r.state.actionsLeft).toBe(state.actionsLeft - cost)
     const wrong = r.events.find((e) => e.type === 'accused-wrong')
     expect(wrong).toEqual({
       type: 'accused-wrong',
@@ -179,7 +184,7 @@ describe('acusação', () => {
 })
 
 describe('caso da seção 4.7', () => {
-  it('o caminho do exemplo deixa um único par e a equipe vence com 3 ações de folga', () => {
+  it('o caminho do exemplo (7 ações) deixa um único par e a equipe vence', () => {
     const s = play(makeState(), [
       { type: 'interrogate', suspectId: 'mail-tiao' },
       { type: 'interrogate', suspectId: 'baker-ze' },
@@ -191,8 +196,8 @@ describe('caso da seção 4.7', () => {
     ])
     const view = viewFor(s)
     expect(view.candidates).toEqual({ suspects: ['dog-biscuit'], places: ['lucia-backyard'] })
-    expect(view.actionsLeft).toBe(3)
-    expect(view.clock).toBe('16:30')
+    expect(view.actionsLeft).toBe(P.actionsTotal - 7)
+    expect(view.clock).toBe(clockAt(P, P.actionsTotal - 7))
     const end = ok(
       transition(
         s,
