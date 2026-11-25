@@ -18,7 +18,7 @@ Apprentice, Investigator, Expert and Legend. The map and the clock change with t
 
 ## Status
 
-Stage 1 (engine, generator and solver) done. Stage 2 (bots and simulation) in progress. See `docs/ROADMAP.md` (in Portuguese).
+Stage 2 (bots and simulation) ready for review: ideal, casual and random bots, batch simulation and the first calibration of the levels (report in `docs/simulation/`, in Portuguese). Screens start after approval. See `docs/ROADMAP.md` (in Portuguese).
 
 ## How to run
 
@@ -31,7 +31,8 @@ pnpm lint        # ESLint (with the architecture rules) and Prettier
 pnpm typecheck   # strict TypeScript in every package
 pnpm build       # website (Vite) and Worker (wrangler, without publishing)
 pnpm e2e         # end-to-end tests (Playwright + axe-core)
-pnpm simulate    # bot simulation (Stage 2; not part of pnpm test)
+pnpm simulate    # bot simulation: 10,000 mysteries per level and bot (not part of pnpm test)
+pnpm simulate:check  # reduced CI simulation: fails if a level misses its target
 pnpm --filter @magnifier-cases/web dev      # website in development mode
 pnpm --filter @magnifier-cases/server dev   # local Cloudflare server
 ```

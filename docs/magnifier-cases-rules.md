@@ -127,7 +127,7 @@ Nível Aprendiz (5 × 5), solução: culpado Biscoito, esconderijo Quintal da L�
 | Interrogar Dona Lúcia | "Vi o Seu Zé e o Tião entregando pão o dia todo." | `exclude-suspects` [Zé, Tião] | suspeito: Biscoito |
 | Ir à Escola e investigar | "A porta da Padaria ficou aberta o dia todo, ninguém escondeu nada lá." | `exclude-places` [Padaria] | lugar: Quintal |
 
-Custo: 1 + 1 + 2 + 1 + 2 = 7 ações, folga de 3 em 10. A equipe acusa Biscoito no Quintal da Lúcia e vence. Este é um caminho possível, não o único.
+Custo: 1 + 1 + 2 + 1 + 2 = 7 ações, folga de 4 em 11 (valores da primeira calibração; eram 3 em 10). A equipe acusa Biscoito no Quintal da Lúcia e vence. Este é um caminho possível, não o único.
 
 ## 5. Relógio, ações e turno
 
@@ -156,14 +156,14 @@ Custo: 1 + 1 + 2 + 1 + 2 = 7 ações, folga de 3 em 10. A equipe acusa Biscoito 
 
 ## 7. Níveis
 
-Quatro níveis com nomes do mundo dos mistérios. Todos os valores são **(inicial)** e vêm de dados (`DifficultyParams`). A calibração é feita por simulação (seção 9).
+Quatro níveis com nomes do mundo dos mistérios. Todos os valores são **(inicial)** e vêm de dados (`DifficultyParams`). A calibração é feita por simulação (seção 9). A tabela mostra os valores da **primeira calibração** (Etapa 2, 25/11/2026); os que mudaram trazem o valor anterior entre parênteses. Relatório: `docs/simulation/`.
 
 | Nível (`id`) | Suspeitos × lugares | Ações | Início | Acusação errada custa | Ruído | Exclusão em grupo | Parcial (`only-*`) | Folga mínima |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Aprendiz (`apprentice`) | 5 × 5 | 10 | 13:00 | 1 ação (30 min) | 0% | 1 a 2 | 0% | ≥ 3 |
-| Investigador (`investigator`) | 6 × 6 | 8 | 14:00 | 2 ações (1 h) | 10% | 1 a 3 | 15% | ≥ 2 |
-| Perito (`expert`) | 8 × 8 | 8 | 14:00 | 2 ações (1 h) | 20% | 2 a 4 | 25% | ≥ 1 |
-| Lenda (`legend`) | 10 × 10 | 7 | 14:30 | 3 ações (1 h 30) | 30% | 2 a 5 | 35% | ≥ 0 |
+| Aprendiz (`apprentice`) | 5 × 5 | 11 (10) | 12:30 (13:00) | 1 ação (30 min) | 0% | 1 a 2 | 0% | ≥ 3 |
+| Investigador (`investigator`) | 6 × 6 | 10 (8) | 13:00 (14:00) | 1 ação, 30 min (2 ações) | 10% | 1 a 3 | 15% | ≥ 2 |
+| Perito (`expert`) | 8 × 8 | 12 (8) | 12:00 (14:00) | 2 ações (1 h) | 20% | 2 a 4 | 25% | ≥ 1 |
+| Lenda (`legend`) | 10 × 10 | 10 (7) | 13:00 (14:30) | 3 ações (1 h 30) | 30% | 2 a 5 | 35% | ≥ 0 |
 
 - "Ruído" é a taxa de cartas sem efeito. "Exclusão em grupo" é o tamanho do grupo nas cartas `exclude-*`. "Parcial" é a taxa de cartas `only-*`.
 - Dica de jogada (`suggest`): ligada só no Aprendiz, desligada nos outros níveis (decisão de 25/11/2026; o valor fica nos dados, em `suggestEnabled`).
@@ -202,6 +202,8 @@ As taxas abaixo são **metas** a validar. Ainda não houve simulação: ela depe
 - **Bot aleatório:** linha de base. A diferença entre ideal e aleatório mede se há **decisão que vale a pena**: meta de pelo menos 25 pontos em cada nível. **(a testar)** Se a diferença for pequena, o jogo vira sorte, e o gerador deve ganhar pistas que apontam onde procurar (seção 11, item 1).
 - **Protocolo:** 10.000 mistérios por nível e por bot, com sementes fixas. Com esse volume o intervalo de confiança de 95% fica em cerca de ±1 ponto percentual. Se um nível sair da meta, ajustar nesta ordem: ações, ruído, custo da acusação errada, tamanho do mapa, mistura de pistas. Simular de novo. O relatório é versionado e a simulação entra na CI: nível fora da meta quebra o build.
 - **Partidas reais** (família e amigos, algumas por nível) calibram o bot casual. Amostra pequena não prova percentual.
+- **Bot casual na CI:** até ser calibrado com partidas reais (Etapa 7), a faixa do casual aparece como aviso e não quebra o build (`casualEnforced` nos dados das metas). Bot ideal, diferença ideal − aleatório e mistérios resolvíveis quebram o build.
+- **Primeira calibração (25/11/2026):** com os valores iniciais, o bot ideal ficou em 97%, 56%, 48% e 30% (metas: 98%, 90%, 75% e 55%) e a Lenda teve diferença ideal − aleatório de 16 pontos. Mudando só ações e custo da acusação errada (seção 7), o ideal ficou em 99%, 92%, 80% e 62%, com diferença de 30 a 48 pontos em todos os níveis. O casual ficou acima da faixa no Investigador (82%), no Perito (75%) e na Lenda (52%). Detalhes em `docs/simulation/`.
 - **Também medir:** taxa de rejeição do gerador (quantas tentativas por mistério válido), distribuição da folga, tempo para gerar um mistério e horário médio de resolução.
 
 ## 10. Papéis e habilidades (depois da v1)
@@ -218,17 +220,18 @@ Na v1, o código **não** implementa papéis. O ponto de extensão está descrit
 
 ## 11. Pontos em aberto e hipóteses a validar
 
-1. **Decisão ou sorte?** As cartas são abertas sem saber o que dizem. Se o bot ideal não superar o aleatório por pelo menos 25 pontos, adicionar pistas que apontam onde procurar (`lead`, por exemplo "ouvi barulho na Escola") ou tornar o custo visível. Medir na Etapa 2.
+1. **Decisão ou sorte?** As cartas são abertas sem saber o que dizem. Se o bot ideal não superar o aleatório por pelo menos 25 pontos, adicionar pistas que apontam onde procurar (`lead`, por exemplo "ouvi barulho na Escola") ou tornar o custo visível. **Medido na Etapa 2:** depois da primeira calibração, a diferença fica entre 30 e 48 pontos em todos os níveis. Por ora não precisa de `lead`.
 2. Valores dos níveis, mistura de pistas e metas: tudo **(inicial)**, calibrar por simulação.
-3. A viabilidade dos níveis altos (Perito e Lenda) com custo 1 por suspeito e 2 por lugar: o gerador pode precisar de mais pistas de grupo ou de folga menor.
-4. Acusação final quando o relógio zera (hoje não existe). Avaliar se frustra.
+3. A viabilidade dos níveis altos (Perito e Lenda) com custo 1 por suspeito e 2 por lugar: o gerador pode precisar de mais pistas de grupo ou de folga menor. **Medido na Etapa 2:** o gerador nunca falha, mas com 8 e 7 ações uma equipe que joga bem vence pouco (48% e 30%). Com 12 e 10 ações as metas são cumpridas. A folga mínima nunca é o problema: o caminho do oráculo é curto; difícil é achá-lo sem saber as cartas.
+4. Acusação final quando o relógio zera (hoje não existe). Avaliar se frustra. **Medido na Etapa 2:** os bots usam a última ação para acusar, então a regra já permite um "chute final". Recomendação: não criar acusação extra; a interface avisa "última ação: dá para acusar". Validar com crianças.
 5. Dica de jogada: decidido em 25/11/2026, só no Aprendiz. Validar com crianças se ajuda ou atrapalha.
-6. Política do bot casual em partida (dica x jogada) e calibração com partidas reais.
+6. Política do bot casual em partida (dica x jogada) e calibração com partidas reais. **Medido na Etapa 2:** com os defeitos iniciais, o casual fica só 5 a 12 pontos abaixo do ideal; as metas pedem 15 a 25. Ou as partidas reais mostram que o casual está certo (e a faixa muda), ou os defeitos aumentam.
 7. Sugestão única por jogador e a confirmação antes de cada ação: validar com crianças e adultos.
 8. Apelidos digitados (até 20 caracteres): uma criança pode digitar o nome real (dado pessoal, LGPD art. 14) ou uma palavra imprópria, que os outros jogadores veem. Avaliar com o advogado medidas como um aviso na tela ("não use seu nome completo") e um filtro de palavras.
 9. Mesa na TV sem toque: como abrir o caderno completo (controle remoto, teclado ou celular de quem controla).
 10. Textos das cartas gerados por modelos em PT-BR e EN: concordância (o/a, do/da, no/na) e listas ("A, B e C") precisam de formatadores. Validar a legibilidade para 8 anos.
 11. Nome público "Casos da Lupa": consulta ao INPI e parecer jurídico pelo dono do projeto.
+12. **Acusar dupla por dupla (Etapa 2).** Como a acusação errada só custa tempo e não dá pista, a melhor estratégia é reduzir as duplas até que acusar todas, uma por vez, caiba no relógio. O bot ideal vence assim em 98% das partidas do Aprendiz, 85% do Investigador e 68% do Perito; deduzir o par único é raro (Lenda: 18% das partidas). Decidir se isso é parte do jogo (gestão de risco) ou se a acusação deve pesar mais. Opções: custo maior por erro, limite de acusações erradas (por exemplo, 2) ou a acusação errada encerrar a partida. Qualquer opção exige nova calibração.
 
 ## 12. Acessibilidade
 
@@ -277,6 +280,8 @@ Na v1, o código **não** implementa papéis. O ponto de extensão está descrit
 
 Decisão nova entra no topo, com data e motivo.
 
+- **25/11/2026 — Primeira calibração (Etapa 2), pendente de aprovação.** Só nos dados: Aprendiz 11 ações (era 10); Investigador 10 ações e erro de 1 ação (eram 8 e 2); Perito 12 ações (era 8); Lenda 10 ações (era 7). Motivo: com os valores iniciais, o bot ideal ficava muito abaixo das metas a partir do Investigador. Escolha: o menor número de valores mudados, na ordem da seção 9 (ações primeiro). O bot casual segue fora da faixa e vira aviso na CI até a calibração com partidas reais.
+- **25/11/2026 — Política do bot ideal (Etapa 2).** Acusa quando resta uma dupla, quando acusar todas cabe no relógio ou na última ação; senão abre a carta com maior ganho esperado por ação (log2 das duplas, pela mistura de pistas do nível). Um planejamento de vários passos foi testado e jogou pior (chutava cedo demais). Detalhes em `packages/bots/src/policies.ts`.
 - **25/11/2026 — Detalhes do motor (Etapa 1).** (1) `move` não vai para a Praça: ela não tem carta. (2) Dois campos novos em `DifficultyParams`, por serem valores (inicial) que antes ficariam no código: `placeTargetRate` (parte das cartas com efeito que fala de lugares; 0,5) e `maxAttempts` (tentativas do gerador; 500). (3) Consequência da regra 4.4.4: uma pista de grupo (`only-*`) que fala do mesmo tipo da origem inclui a própria origem (senão a descartaria). (4) Se o grupo sorteado não cabe no tipo escolhido, o gerador tenta o outro tipo; se não couber em nenhum, a carta vira ruído. (5) O id da carta vem da origem (`suspect:baker-ze`), que é pública.
 - **25/11/2026 — Dica de jogada só no Aprendiz.** `suggestEnabled` ligado só no Aprendiz (antes: Aprendiz e Investigador). Os bots seguem como na seção 8: completam a equipe, substituem quem desconecta e são a régua da simulação.
 - **25/11/2026 — Apelido digitado, até 20 caracteres.** Mesma dinâmica do Enchente na Vila; substitui os apelidos por listas. O apelido é o único texto digitado, nunca vai para log e some quando a sala expira. Riscos para a revisão jurídica na seção 11, item 8.

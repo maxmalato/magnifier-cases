@@ -18,7 +18,7 @@ Aprendiz, Investigador, Perito e Lenda. O mapa e o relógio mudam com o nível.
 
 ## Situação
 
-Etapa 1 (motor, gerador e solucionador) concluída. Etapa 2 (bots e simulação) em andamento. Veja `docs/ROADMAP.md`.
+Etapa 2 (bots e simulação) pronta para revisão: bots ideal, casual e aleatório, simulação em lote e primeira calibração dos níveis (relatório em `docs/simulation/`). As telas começam depois da aprovação. Veja `docs/ROADMAP.md`.
 
 ## Como rodar
 
@@ -31,7 +31,8 @@ pnpm lint        # ESLint (com as regras de arquitetura) e Prettier
 pnpm typecheck   # TypeScript estrito em todos os pacotes
 pnpm build       # site (Vite) e Worker (wrangler, sem publicar)
 pnpm e2e         # testes de ponta a ponta (Playwright + axe-core)
-pnpm simulate    # simulação com bots (Etapa 2; fora do pnpm test)
+pnpm simulate    # simulação com bots: 10.000 mistérios por nível e bot (fora do pnpm test)
+pnpm simulate:check  # simulação reduzida da CI: quebra se um nível sair da meta
 pnpm --filter @magnifier-cases/web dev      # site em desenvolvimento
 pnpm --filter @magnifier-cases/server dev   # servidor local da Cloudflare
 ```
