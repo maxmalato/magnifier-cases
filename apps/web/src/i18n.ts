@@ -1,20 +1,298 @@
-// Textos da interface em PT-BR e inglês (i18n desde o início). O nome público vem de
-// `appName` (packages/content) e nunca é escrito aqui. Toda chave nova entra nos dois idiomas;
-// o teste garante que os dois têm as mesmas chaves e os mesmos parâmetros ({nome}).
+// Textos da interface em PT-BR e inglês (i18n desde o início). O nome público vem de `appName`
+// (packages/content) e os nomes do elenco e textos do tema também vêm de lá; aqui ficam só os
+// textos gerais da interface. Toda chave nova entra nos dois idiomas; o teste garante que os
+// dois têm as mesmas chaves e os mesmos parâmetros ({nome}). Chaves com plural terminam em
+// .one e .other. Linguagem de leitura fácil (8 anos): frases curtas, sem jargão.
 import type { Locale } from '@magnifier-cases/content'
 
 const ptBR = {
   'app.tagline': 'Um jogo cooperativo de dedução para toda a família.',
-  'app.status': 'Em construção. Volte em breve!',
-  'app.logoAlt': 'Logo: uma lupa',
+  'app.language': 'Idioma',
+  'app.back': 'Voltar',
+  'app.ok': 'OK',
+  'app.clock': 'Relógio: {time}',
+
+  'home.playLocal': 'Jogar neste aparelho',
+  'home.playLocalHint': 'De 2 a 6 detetives em volta da mesma tela. Bots completam a equipe.',
+  'home.moreSoon': 'Online e modo mesa chegam em breve.',
+
+  'lobby.title': 'Montar a equipe',
+  'lobby.level': 'Nível',
+  'lobby.levelInfo': '{suspects} suspeitos · {places} lugares · começa às {start}',
+  'lobby.seats': 'Detetives',
+  'lobby.seat': 'Detetive {n}',
+  'lobby.nickname': 'Apelido',
+  'lobby.nicknameHelp': 'Até 20 letras. Não use seu nome completo.',
+  'lobby.person': 'Pessoa',
+  'lobby.bot': 'Bot',
+  'lobby.botName': 'Bot {n}',
+  'lobby.addSeat': 'Adicionar detetive',
+  'lobby.removeSeat': 'Tirar {name}',
+  'lobby.start': 'Montar o mistério',
+  'lobby.errorHuman': 'Pelo menos 1 detetive precisa ser uma pessoa.',
+  'lobby.errorNames': 'Todo detetive precisa de um apelido.',
+  'lobby.errorNamesRepeated': 'Cada detetive precisa de um apelido diferente.',
+  'lobby.errorSeats': 'A equipe precisa de 2 a 6 detetives.',
+
+  'level.apprentice': 'Aprendiz',
+  'level.investigator': 'Investigador',
+  'level.expert': 'Perito',
+  'level.legend': 'Lenda',
+
+  'briefing.clockTitle': 'Começa às {start}, festa às {deadline}',
+  'briefing.clockText.one': '{n} ação de {minutes} minutos. A equipe começa {square}.',
+  'briefing.clockText.other': '{n} ações de {minutes} minutos. A equipe começa {square}.',
+  'briefing.suspects': '{n} suspeitos',
+  'briefing.places': '{n} lugares',
+  'briefing.order': 'Ordem dos detetives',
+  'briefing.start': 'Começar a investigação',
+
+  'clock.left.one': 'Resta 1 ação até a festa das {deadline}',
+  'clock.left.other': 'Restam {n} ações até a festa das {deadline}',
+
+  'turn.of': 'Vez de {name}',
+  'turn.botThinking': '{name} está pensando…',
+  'turn.teamAt': 'A equipe está {place}. O que vocês querem fazer?',
+  'turn.map': 'Mapa do bairro',
+  'turn.here': 'equipe aqui',
+  'turn.start': 'início',
+  'turn.discarded': 'descartado',
+  'turn.clueClosed': 'tem pista',
+  'turn.clueOpen': 'pista aberta',
+  'turn.notebook': 'Abrir caderno',
+  'turn.accuse': 'Acusar agora',
+  'turn.lastAction': 'Última ação: dá para acusar!',
+  'turn.hint': 'Ver dica',
+  'turn.moved': '{name} levou a equipe {place}.',
+
+  'action.investigate': 'Investigar {place}',
+  'action.investigateSub': '{duration} · procurar uma pista aqui',
+  'action.investigateSquare': 'Vão a um lugar primeiro',
+  'action.investigateDone': 'Este lugar já foi investigado',
+  'action.interrogate': 'Interrogar alguém',
+  'action.interrogateSub': '{duration} · escolher um suspeito',
+  'action.interrogateNone': 'Todos já foram interrogados',
+  'action.move': 'Ir a outro lugar',
+  'action.moveSub': '{duration} · escolher no mapa',
+
+  'hint.interrogate': 'Dica: interroguem {name}.',
+  'hint.investigate': 'Dica: investiguem {place}.',
+  'hint.move': 'Dica: vão {place}.',
+  'hint.accuse': 'Dica: acusem {suspect} {place}.',
+
+  'choose.suspectTitle': 'Quem vocês querem interrogar?',
+  'choose.alreadyAsked': 'já falou',
+  'choose.placeTitle': 'Para onde a equipe vai?',
+
+  'confirm.interrogate': 'Interrogar {name}?',
+  'confirm.investigate': 'Investigar {place}?',
+  'confirm.move': 'Ir {place}?',
+  'confirm.cost': 'Isso gasta {duration} do relógio.',
+  'confirm.yes': 'Confirmar',
+  'confirm.no': 'Voltar',
+
+  'result.investigated': '{name} investigou {place}.',
+  'result.interrogated': '{name} interrogou um suspeito.',
+  'result.clue': 'Pista {n} · {source}',
+  'result.testimony': 'Interrogatório',
+  'result.shows': 'O que ela mostra',
+  'result.exclude': 'Descarta: {list}.',
+  'result.only': 'É um destes: {list}.',
+  'result.none': 'Não muda o caderno.',
+  'result.notebookUpdated': 'Caderno atualizado',
+  'result.next': 'Próxima vez: {name}.',
+  'result.readTogether': 'Todos leem juntos. Toquem em OK para continuar.',
+
+  'wrong.title': 'Não foi essa dupla!',
+  'wrong.text': '{name} acusou {suspect} {place}, mas não é a resposta.',
+  'wrong.which': 'Pode ser o suspeito, o lugar ou os dois.',
+  'wrong.cost': 'O relógio avançou {duration}.',
+
+  'notebook.title': 'Caderno do detetive',
+  'notebook.subtitle': 'Todos veem o mesmo caderno. Vez de {name}.',
+  'notebook.suspects': 'Suspeitos',
+  'notebook.places': 'Lugares',
+  'notebook.open': 'possível',
+  'notebook.discarded': 'descartado',
+  'notebook.oneOf': 'um dos {n}',
+  'notebook.clues': 'Pistas até agora',
+  'notebook.noClues': 'Nenhuma pista ainda.',
+  'notebook.back': 'Voltar ao jogo',
+
+  'accuse.subtitle': '{name}, combinem com a equipe e escolham os dois.',
+  'accuse.suspect': 'Suspeito',
+  'accuse.place': 'Lugar',
+  'accuse.discarded': 'descartado',
+  'accuse.tried': 'Já acusaram essa dupla. Escolham outra.',
+  'accuse.rule':
+    'Se errarem, o relógio avança {duration} e vocês continuam investigando. Se acertarem, o mistério termina na hora.',
+  'accuse.ruleLast': 'Se errarem, o tempo acaba e o jogo revela a resposta.',
+  'accuse.choose': 'Escolham um suspeito e um lugar',
+  'accuse.button': 'Acusar {suspect} {place}',
+  'accuse.back': 'Voltar',
+
+  'reveal.solved': 'Mistério resolvido',
+  'reveal.timeout': 'Tempo esgotado',
+  'reveal.keyClues': 'As pistas que levavam até a resposta',
+  'reveal.hint': 'Juntas, as pistas {list} já deixavam uma única resposta.',
+  'reveal.notOpened': 'não aberta',
+  'reveal.solvedAt': 'resolvido às',
+  'reveal.actionsLeft': 'ações sobraram',
+  'reveal.cluesUsed': 'pistas abertas',
+  'reveal.noBlame': 'Sem problema: cada mistério ensina um jeito novo de investigar.',
+  'reveal.newMystery': 'Novo mistério',
+  'reveal.home': 'Voltar ao início',
+
+  'duration.minutes': '{n} min',
+  'duration.hours.one': '1 hora',
+  'duration.hours.other': '{n} horas',
+  'duration.hoursMinutes': '{h} h {m}',
 }
 
 export type MessageKey = keyof typeof ptBR
 
 const en: Record<MessageKey, string> = {
   'app.tagline': 'A cooperative deduction game for the whole family.',
-  'app.status': 'Under construction. Come back soon!',
-  'app.logoAlt': 'Logo: a magnifying glass',
+  'app.language': 'Language',
+  'app.back': 'Back',
+  'app.ok': 'OK',
+  'app.clock': 'Clock: {time}',
+
+  'home.playLocal': 'Play on this device',
+  'home.playLocalHint': '2 to 6 detectives around the same screen. Bots fill the team.',
+  'home.moreSoon': 'Online and table mode are coming soon.',
+
+  'lobby.title': 'Build the team',
+  'lobby.level': 'Level',
+  'lobby.levelInfo': '{suspects} suspects · {places} places · starts at {start}',
+  'lobby.seats': 'Detectives',
+  'lobby.seat': 'Detective {n}',
+  'lobby.nickname': 'Nickname',
+  'lobby.nicknameHelp': 'Up to 20 letters. Do not use your full name.',
+  'lobby.person': 'Person',
+  'lobby.bot': 'Bot',
+  'lobby.botName': 'Bot {n}',
+  'lobby.addSeat': 'Add a detective',
+  'lobby.removeSeat': 'Remove {name}',
+  'lobby.start': 'Set up the mystery',
+  'lobby.errorHuman': 'At least 1 detective must be a person.',
+  'lobby.errorNames': 'Every detective needs a nickname.',
+  'lobby.errorNamesRepeated': 'Each detective needs a different nickname.',
+  'lobby.errorSeats': 'The team needs 2 to 6 detectives.',
+
+  'level.apprentice': 'Apprentice',
+  'level.investigator': 'Investigator',
+  'level.expert': 'Expert',
+  'level.legend': 'Legend',
+
+  'briefing.clockTitle': 'Starts at {start}, party at {deadline}',
+  'briefing.clockText.one': '{n} action of {minutes} minutes. The team starts {square}.',
+  'briefing.clockText.other': '{n} actions of {minutes} minutes. The team starts {square}.',
+  'briefing.suspects': '{n} suspects',
+  'briefing.places': '{n} places',
+  'briefing.order': 'Detectives in order',
+  'briefing.start': 'Start investigating',
+
+  'clock.left.one': '1 action left until the {deadline} party',
+  'clock.left.other': '{n} actions left until the {deadline} party',
+
+  'turn.of': "{name}'s turn",
+  'turn.botThinking': '{name} is thinking…',
+  'turn.teamAt': 'The team is {place}. What do you want to do?',
+  'turn.map': 'Neighborhood map',
+  'turn.here': 'team here',
+  'turn.start': 'start',
+  'turn.discarded': 'ruled out',
+  'turn.clueClosed': 'has a clue',
+  'turn.clueOpen': 'clue found',
+  'turn.notebook': 'Open notebook',
+  'turn.accuse': 'Accuse now',
+  'turn.lastAction': 'Last action: you can accuse!',
+  'turn.hint': 'Show hint',
+  'turn.moved': '{name} took the team {place}.',
+
+  'action.investigate': 'Search {place}',
+  'action.investigateSub': '{duration} · look for a clue here',
+  'action.investigateSquare': 'Go to a place first',
+  'action.investigateDone': 'This place was already searched',
+  'action.interrogate': 'Question someone',
+  'action.interrogateSub': '{duration} · pick a suspect',
+  'action.interrogateNone': 'Everyone was already questioned',
+  'action.move': 'Go somewhere else',
+  'action.moveSub': '{duration} · pick on the map',
+
+  'hint.interrogate': 'Hint: question {name}.',
+  'hint.investigate': 'Hint: search {place}.',
+  'hint.move': 'Hint: go {place}.',
+  'hint.accuse': 'Hint: accuse {suspect} {place}.',
+
+  'choose.suspectTitle': 'Who do you want to question?',
+  'choose.alreadyAsked': 'already talked',
+  'choose.placeTitle': 'Where is the team going?',
+
+  'confirm.interrogate': 'Question {name}?',
+  'confirm.investigate': 'Search {place}?',
+  'confirm.move': 'Go {place}?',
+  'confirm.cost': 'This uses {duration} of the clock.',
+  'confirm.yes': 'Confirm',
+  'confirm.no': 'Back',
+
+  'result.investigated': '{name} searched {place}.',
+  'result.interrogated': '{name} questioned a suspect.',
+  'result.clue': 'Clue {n} · {source}',
+  'result.testimony': 'Questioning',
+  'result.shows': 'What it shows',
+  'result.exclude': 'Rules out: {list}.',
+  'result.only': 'It is one of these: {list}.',
+  'result.none': 'It does not change the notebook.',
+  'result.notebookUpdated': 'Notebook updated',
+  'result.next': 'Next turn: {name}.',
+  'result.readTogether': 'Everyone reads together. Tap OK to go on.',
+
+  'wrong.title': 'Not that pair!',
+  'wrong.text': '{name} accused {suspect} {place}, but that is not the answer.',
+  'wrong.which': 'It could be the suspect, the place or both.',
+  'wrong.cost': 'The clock moved forward {duration}.',
+
+  'notebook.title': "Detective's notebook",
+  'notebook.subtitle': "Everyone sees the same notebook. {name}'s turn.",
+  'notebook.suspects': 'Suspects',
+  'notebook.places': 'Places',
+  'notebook.open': 'possible',
+  'notebook.discarded': 'ruled out',
+  'notebook.oneOf': 'one of {n}',
+  'notebook.clues': 'Clues so far',
+  'notebook.noClues': 'No clues yet.',
+  'notebook.back': 'Back to the game',
+
+  'accuse.subtitle': '{name}, talk with the team and choose both.',
+  'accuse.suspect': 'Suspect',
+  'accuse.place': 'Place',
+  'accuse.discarded': 'ruled out',
+  'accuse.tried': 'You already accused this pair. Choose another one.',
+  'accuse.rule':
+    'If you are wrong, the clock moves forward {duration} and you keep investigating. If you are right, the mystery ends right away.',
+  'accuse.ruleLast': 'If you are wrong, time runs out and the game shows the answer.',
+  'accuse.choose': 'Choose a suspect and a place',
+  'accuse.button': 'Accuse {suspect} {place}',
+  'accuse.back': 'Back',
+
+  'reveal.solved': 'Mystery solved',
+  'reveal.timeout': 'Time is up',
+  'reveal.keyClues': 'The clues that led to the answer',
+  'reveal.hint': 'Together, the clues {list} already left a single answer.',
+  'reveal.notOpened': 'not opened',
+  'reveal.solvedAt': 'solved at',
+  'reveal.actionsLeft': 'actions left',
+  'reveal.cluesUsed': 'clues opened',
+  'reveal.noBlame': 'No problem: every mystery teaches a new way to investigate.',
+  'reveal.newMystery': 'New mystery',
+  'reveal.home': 'Back to start',
+
+  'duration.minutes': '{n} min',
+  'duration.hours.one': '1 hour',
+  'duration.hours.other': '{n} hours',
+  'duration.hoursMinutes': '{h} h {m}',
 }
 
 export const messages: Record<Locale, Record<MessageKey, string>> = { 'pt-BR': ptBR, en }
@@ -25,6 +303,35 @@ export function pickLocale(languages: readonly string[]): Locale {
 }
 
 /** Texto traduzido, trocando {nome} pelos parâmetros. */
-export function t(locale: Locale, key: MessageKey, params: Record<string, string> = {}): string {
-  return messages[locale][key].replace(/\{(\w+)\}/g, (match, name: string) => params[name] ?? match)
+export function t(
+  locale: Locale,
+  key: MessageKey,
+  params: Record<string, string | number> = {},
+): string {
+  return messages[locale][key].replace(/\{(\w+)\}/g, (match, name: string) =>
+    params[name] === undefined ? match : String(params[name]),
+  )
+}
+
+type PluralBase<K> = K extends `${infer B}.one` ? B : never
+export type PluralKey = PluralBase<MessageKey>
+
+/** Texto com plural: usa a chave .one quando n = 1 e .other nos outros casos. */
+export function tn(
+  locale: Locale,
+  key: PluralKey,
+  n: number,
+  params: Record<string, string | number> = {},
+): string {
+  const full = `${key}.${n === 1 ? 'one' : 'other'}` as MessageKey
+  return t(locale, full, { n, ...params })
+}
+
+/** Duração legível: 30 → "30 min", 60 → "1 hora", 90 → "1 h 30". */
+export function durationText(locale: Locale, minutes: number): string {
+  if (minutes < 60) return t(locale, 'duration.minutes', { n: minutes })
+  const h = Math.floor(minutes / 60)
+  const m = minutes % 60
+  if (m === 0) return tn(locale, 'duration.hours', h)
+  return t(locale, 'duration.hoursMinutes', { h, m })
 }
