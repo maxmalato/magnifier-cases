@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Casos da Lupa – tela da mesa</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&amp;family=Nunito:wght@600;700;800&amp;display=swap">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="width: 1280px; height: 720px; box-sizing: border-box; padding: 32px 48px; background: #2B2230; color: #F6EFE0; font-family: 'Nunito', system-ui, sans-serif; display: flex; flex-direction: column; gap: 20px">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 24px">
+<div style="display: flex; align-items: baseline; gap: 16px">
+<h1 style="margin: 0; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 36px; line-height: 1">Casos da Lupa</h1>
+<span style="font-size: 20px; font-weight: 700; color: #CDBFD2">O bolo da festa sumiu</span>
+</div>
+<div style="display: flex; align-items: center; gap: 16px">
+<div style="display: flex; gap: 4px; width: 240px">
+<sc-for list="{{segs}}" as="seg" hint-placeholder-count="8">
+<div style="flex: 1; height: 10px; border-radius: 5px; background: {{seg.bg}}"></div>
+</sc-for>
+</div>
+<div style="display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 999px; background: #3A2E42; font-size: 20px; font-weight: 800">
+<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="#F2B84B" stroke-width="2"></circle><path d="M12 7v5l3 2" fill="none" stroke="#F2B84B" stroke-width="2" stroke-linecap="round"></path></svg>
+<span>15:30</span>
+<span style="font-size: 16px; font-weight: 700; color: #CDBFD2">festa às 18:00 · restam 5 ações</span>
+</div>
+</div>
+</div>
+<div style="display: flex; gap: 32px; flex: 1; min-height: 0">
+<div style="flex: none; width: 594px; display: flex; flex-direction: column; gap: 10px">
+<div style="font-size: 16px; font-weight: 800; letter-spacing: 0.08em; color: #CDBFD2">MAPA DO BAIRRO</div>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px">
+<sc-for list="{{tiles}}" as="t" hint-placeholder-count="9">
+<div style="min-height: 112px; display: flex">
+<sc-if value="{{t.isHere}}" hint-placeholder-val="{{ false }}">
+<div style="flex: 1; box-sizing: border-box; border-radius: 16px; background: #F6EFE0; color: #2B2230; border: 4px solid #F2B84B; padding: 12px 14px; display: flex; flex-direction: column; justify-content: space-between">
+<div style="font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 22px">{{t.name}}</div>
+<div style="font-size: 16px; font-weight: 800; color: #4A3A52">Equipe aqui · investigada</div>
+</div>
+</sc-if>
+<sc-if value="{{t.isOff}}" hint-placeholder-val="{{ false }}">
+<div style="flex: 1; box-sizing: border-box; border-radius: 16px; background: #3A2E42; border: 2px dashed #8A7790; padding: 12px 14px; display: flex; flex-direction: column; justify-content: space-between">
+<div style="font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 22px; color: #B9A8BF; text-decoration: line-through">{{t.name}}</div>
+<div style="font-size: 16px; font-weight: 800; color: #B9A8BF">Descartado</div>
+</div>
+</sc-if>
+<sc-if value="{{t.isHint}}" hint-placeholder-val="{{ false }}">
+<div style="flex: 1; box-sizing: border-box; border-radius: 16px; background: #4A3A52; border: 3px dotted #F2B84B; padding: 12px 14px; display: flex; flex-direction: column; justify-content: space-between">
+<div style="font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 22px">{{t.name}}</div>
+<div style="font-size: 16px; font-weight: 800; color: #F2B84B">Rastro de migalhas</div>
+</div>
+</sc-if>
+<sc-if value="{{t.isPlain}}" hint-placeholder-val="{{ false }}">
+<div style="flex: 1; box-sizing: border-box; border-radius: 16px; background: #4A3A52; padding: 12px 14px; display: flex; flex-direction: column; justify-content: space-between">
+<div style="font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 22px">{{t.name}}</div>
+<div style="font-size: 16px; font-weight: 700; color: #E7DDEA">{{t.note}}</div>
+</div>
+</sc-if>
+</div>
+</sc-for>
+</div>
+</div>
+<div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+<div style="box-sizing: border-box; background: #F6EFE0; color: #2B2230; border-radius: 20px; padding: 24px 28px; display: flex; flex-direction: column; gap: 12px">
+<div style="font-size: 16px; font-weight: 800; letter-spacing: 0.08em; color: #5B4A63">PISTA 2 · PADARIA · achada por Bruno</div>
+<div style="font-family: 'Fredoka', sans-serif; font-weight: 500; font-size: 32px; line-height: 1.2">Migalhas de bolo de cenoura fazem um rastro da padaria até o Quintal da Lúcia.</div>
+<div style="font-size: 20px; font-weight: 700; color: #4A3A52">O rastro não passa pelo Mercado.</div>
+</div>
+<div style="box-sizing: border-box; background: #3A2E42; border-radius: 20px; padding: 18px 28px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px">
+<sc-for list="{{counts}}" as="c" hint-placeholder-count="3">
+<div style="display: flex; flex-direction: column; gap: 2px">
+<div style="font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 34px; color: #F2B84B; line-height: 1.1">{{c.value}}</div>
+<div style="font-size: 16px; font-weight: 700; color: #E7DDEA">{{c.label}}</div>
+</div>
+</sc-for>
+</div>
+</div>
+</div>
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 24px; background: #3A2E42; border-radius: 16px; padding: 12px 20px">
+<div style="display: flex; align-items: center; gap: 12px">
+<sc-for list="{{players}}" as="p" hint-placeholder-count="3">
+<div style="display: flex; align-items: center; gap: 8px; padding: 6px 14px 6px 6px; border-radius: 999px; border: {{p.border}}; background: {{p.bg}}">
+<div style="width: 32px; height: 32px; border-radius: 50%; background: {{p.dot}}; color: #2B2230; display: flex; align-items: center; justify-content: center; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 18px">{{p.initial}}</div>
+<span style="font-size: 18px; font-weight: 800">{{p.name}}</span>
+<sc-if value="{{p.turn}}" hint-placeholder-val="{{ false }}">
+<span style="font-size: 16px; font-weight: 800; color: #F2B84B">decidindo agora</span>
+</sc-if>
+</div>
+</sc-for>
+</div>
+<div style="font-size: 18px; font-weight: 700; color: #E7DDEA">Lia escolhe a ação no celular dela · Sala K7P·4QX</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":720}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const segs = [];
+    for (let i = 0; i < 8; i++) segs.push({ bg: i < 3 ? '#F2B84B' : '#5A4863' });
+    const tiles = [
+      { name: 'Padaria', isHere: true },
+      { name: 'Escola', isPlain: true, note: 'Livre' },
+      { name: 'Mercado', isOff: true },
+      { name: 'Correio', isOff: true },
+      { name: 'Praça', isPlain: true, note: 'Início' },
+      { name: 'Coreto', isPlain: true, note: 'Livre' },
+      { name: '' },
+      { name: 'Quintal da Lúcia', isHint: true },
+      { name: '' }
+    ];
+    return {
+      segs,
+      tiles,
+      counts: [
+        { value: '6 de 6', label: 'suspeitos ainda possíveis' },
+        { value: '4 de 6', label: 'lugares ainda possíveis' },
+        { value: '2', label: 'pistas no caderno' }
+      ],
+      players: [
+        { name: 'Lia', initial: 'L', dot: '#4FC3F7', turn: true, border: '2px solid #F2B84B', bg: '#4A3A52' },
+        { name: 'Carla', initial: 'C', dot: '#FF8A65', turn: false, border: '2px solid transparent', bg: 'transparent' },
+        { name: 'Bruno', initial: 'B', dot: '#B39DDB', turn: false, border: '2px solid transparent', bg: 'transparent' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

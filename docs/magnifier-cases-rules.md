@@ -1,0 +1,285 @@
+# Casos da Lupa (`magnifier-cases`): regras v1
+
+Status: decisões aprovadas em conversa (25/11/2026). Valores marcados como **(inicial)** e regras marcadas como **(a testar)** são pontos de partida: serão calibrados por simulação de bots e por partidas reais e **podem mudar**. Identificadores de código em inglês (glossário no fim). Tudo (nome, arte, textos, sons) é original. O nome público "Casos da Lupa" foi escolhido pelo dono do projeto e ainda depende de consulta ao INPI; por isso ele vive em uma única constante de i18n (`appName`) e nunca fica espalhado pelo código.
+
+## 1. Resumo
+
+Um mistério leve acontece no bairro. No tema da v1, **o bolo da festa sumiu**. Um culpado e um esconderijo são sorteados e ficam em segredo. A equipe tem um relógio que termina às 18h e gasta 30 minutos a cada ação: investigar um lugar, interrogar um suspeito ou ir a outro lugar. Cada ação abre uma carta de pista, e todas as pistas são verdadeiras. Quando tiver certeza, a equipe acusa **um suspeito e um lugar**. Quem acerta vence junto. Quem estoura o relógio vê a solução, as pistas que levavam a ela e uma dica, sem punição. Duração prevista: 20 a 30 minutos. Para todas as idades (8+).
+
+## 2. Decisões fechadas
+
+| Tema | Decisão |
+| --- | --- |
+| Jogadores | 2 a 6 assentos (pessoa ou bot), com pelo menos 1 pessoa. |
+| Modos | Um aparelho, mesa (tela grande + celulares) e online (sala por código). Seção 8. |
+| Tela da mesa | Só em tela grande: menor lado da tela física ≥ 600 px CSS. Tablet conta. Celular nunca, nem deitado. |
+| Informação escondida | Só a solução (culpado e esconderijo) e o conteúdo das cartas ainda fechadas. Todo o resto é público. No online, o servidor nunca envia esses segredos. |
+| Pistas | Todas **verdadeiras**. Ninguém mente. Existem pistas de ruído (verdadeiras e sem efeito) e pistas de grupo (parciais). Seção 4. |
+| Solvabilidade | Todo mistério é gerado e **provado resolvível** por um solucionador antes de entrar em jogo. Seção 4.6. |
+| Movimento | Qualquer lugar, custo fixo de 30 minutos. Investigar exige estar no lugar. Interrogar de qualquer lugar. |
+| Níveis | Aprendiz, Investigador, Perito e Lenda. O mapa e o relógio mudam com o nível. Seção 7. |
+| Relógio | O fim é fixo (18:00). O início é derivado do nível: `18:00 − ações × 30 min`. |
+| Acusação | Suspeito + lugar. Erro custa tempo, acerto encerra. Sem retorno parcial (não se diz qual metade errou). Erro que estoura o relógio vira tempo esgotado. |
+| Tempo esgotado | Revela solução, pistas que levavam a ela e uma dica. Sem punição. |
+| Conteúdo da v1 | **Um único tema** (o bolo da festa), com 10 suspeitos e 10 lugares. Outros temas só depois que a v1 estiver pronta. |
+| Papéis (habilidades) | **Depois da v1.** A v1 não tem habilidades. Seção 10. |
+| Bots | Entram na v1. Completam a equipe e substituem quem desconecta. Também são a régua das simulações. |
+| Desconexão | Bot assume e todos são avisados. A pessoa volta a qualquer momento e retoma no início do próprio turno. |
+| Opinar | Qualquer jogador pode marcar uma sugestão durante o turno de outro. Quem tem a vez decide. |
+| Desfazer | Não existe: toda ação revela informação. Para evitar toque errado, toda ação que gasta tempo pede confirmação. |
+| Dados pessoais | Sem conta, sem chat, sem texto livre. Apelido montado por listas (adjetivo + animal). |
+| Público | Todas as idades (8+), gratuito, sem compras, sem loot box, sem anúncios, sem rastreadores. Tom leve, sem terror. |
+
+## 3. Tema, elenco e mapa da v1
+
+Tema: **O bolo da festa sumiu**. A festa do bairro é às 18h e alguém levou o bolo de cenoura. Tudo (nomes, textos, arte, sons) é original e fictício.
+
+Elenco completo (o jogo sorteia um subconjunto por nível):
+
+| Suspeito (`id`) | Nome |
+| --- | --- |
+| `baker-ze` | Seu Zé, o padeiro |
+| `miss-lucia` | Dona Lúcia |
+| `dog-biscuit` | Biscoito, o cachorro |
+| `mail-tiao` | Tião, o carteiro |
+| `teacher-rita` | Profª Rita |
+| `cat-cleo` | Cleo, a gata |
+| `gardener-nando` | Vovô Nando, o jardineiro |
+| `skater-bia` | Bia, a skatista |
+| `vet-caio` | Dr. Caio, o veterinário |
+| `parrot-pipa` | Pipa, o papagaio |
+
+| Lugar (`id`) | Nome |
+| --- | --- |
+| `bakery` | Padaria |
+| `school` | Escola |
+| `market` | Mercado |
+| `post-office` | Correio |
+| `lucia-backyard` | Quintal da Lúcia |
+| `bandstand` | Coreto |
+| `library` | Biblioteca |
+| `fountain` | Chafariz |
+| `ball-field` | Campinho |
+| `fair` | Feira |
+
+- A **Praça** (`square`) é o ponto de partida da equipe. Ela não tem carta e não pode ser esconderijo.
+- O mapa é só visual: uma grade com os lugares sorteados e a Praça. Não há vizinhança nem caminho. Ir de qualquer lugar a qualquer lugar custa o mesmo. Grades: 5 lugares + Praça em 3×2; 6 em 3×3 (com células vazias); 8 em 3×3; 10 em 4×3.
+- Sorteio por nível: o jogo escolhe N suspeitos e M lugares do elenco, depois o culpado entre os N e o esconderijo entre os M.
+- Os nomes acima são provisórios. A arte e os textos finais são originais, feitos para o jogo.
+
+## 4. O mistério
+
+### 4.1 O segredo
+
+`solution = { culpritId, hideoutId }`. Fica só no estado do motor (no servidor, no online) e nunca vai para a visão pública antes do fim da partida.
+
+### 4.2 Cartas de pista
+
+Cada lugar tem **uma** carta e cada suspeito tem **uma** carta, ou seja, N + M cartas por mistério. **Investigar** um lugar abre a carta do lugar. **Interrogar** um suspeito abre a carta dele. Cada carta abre uma vez só. A equipe não sabe, antes de abrir, o que a carta diz.
+
+### 4.3 Efeitos
+
+Cada carta tem exatamente um efeito lógico sobre o par (culpado, esconderijo):
+
+| Efeito (`kind`) | Significado | Exemplo de texto |
+| --- | --- | --- |
+| `exclude-suspects` | O culpado **não** está neste grupo. | "Dona Lúcia e a Profª Rita estavam comigo na padaria." |
+| `exclude-places` | O esconderijo **não** está neste grupo. | "O Correio ficou fechado o dia todo." |
+| `only-suspects` | O culpado **está** neste grupo (pista parcial). O grupo tem 2 ou mais. | "Vi um bicho de pelo rondando. Foi o Biscoito ou a Cleo." |
+| `only-places` | O esconderijo **está** neste grupo (pista parcial). O grupo tem 2 ou mais. | "O rastro termina na Escola ou no Coreto." |
+| `none` | Ruído: verdadeiro, mas sem efeito sobre a solução. | "A Padaria cheira a canela." |
+
+### 4.4 Regras de verdade e de justiça
+
+1. Toda carta é verdadeira para a solução. O culpado também diz a verdade.
+2. O texto diz exatamente o efeito, sem revelar mais. Carta de ruído tem texto de ambiente sem efeito.
+3. Pista de grupo (`only-*`) nunca tem grupo de tamanho 1: nenhuma carta entrega a resposta sozinha.
+4. **Sem denúncia por padrão:** uma carta nunca elimina a própria origem (o suspeito não se dá álibi, o lugar não diz "não está aqui"). Se pudesse, o culpado e o esconderijo seriam os únicos sem "autoálibi". Álibis vêm de outros suspeitos ou de outros lugares.
+5. Quem joga não deve conseguir deduzir a solução só pelo formato das cartas (tipo de efeito, tamanho do texto). O gerador embaralha as formas.
+
+### 4.5 Caderno
+
+Todos veem o mesmo caderno. Ele mostra suspeitos, lugares e as pistas abertas, e é **derivado** das cartas abertas (nunca guardado à parte).
+
+- `eliminated`: o item foi excluído por uma pista (mostra o número da pista).
+- `open`: ainda possível.
+- Marca `in-group` (pontilhada, âmbar): item que está no grupo de uma pista `only-*`, por exemplo "um dos 2".
+- Notas de ruído aparecem na lista de pistas e podem aparecer como nota cinza junto ao item. Nota **nunca** altera o estado do item.
+
+### 4.6 Provado resolvível (solucionador)
+
+Antes de entrar em jogo, o mistério passa por um solucionador. Ele prova duas coisas:
+
+1. **Unicidade:** com todas as N + M cartas, só o par (culpado, esconderijo) verdadeiro permanece possível.
+2. **Alcance com folga:** existe um conjunto de cartas, de custo mínimo `minCost`, que determina a solução, com `ações do nível − minCost ≥ folga mínima do nível`.
+
+Custo das cartas: **interrogar um suspeito = 1 ação**. **Investigar um lugar = 2 ações** (ir até lá e investigar; o deslocamento já está contado). O solucionador conhece a resposta (é um oráculo), então o resultado diz que **é possível**, e não que uma equipe consegue achar o caminho sem conhecê-lo. Quem mede a dificuldade real é o bot ideal (seção 9).
+
+### 4.7 Exemplo
+
+Nível Aprendiz (5 × 5), solução: culpado Biscoito, esconderijo Quintal da Lúcia.
+
+| Ação | Carta | Efeito | Possíveis depois |
+| --- | --- | --- | --- |
+| Interrogar Tião | "O Correio ficou fechado o dia todo." | `exclude-places` [Correio] | lugares: Padaria, Escola, Mercado, Quintal |
+| Interrogar Seu Zé | "Dona Lúcia e a Profª Rita estavam comigo na padaria." | `exclude-suspects` [Lúcia, Rita] | suspeitos: Zé, Biscoito, Tião |
+| Ir à Padaria e investigar | "O rastro de migalhas não passa pelo Mercado nem pela Escola." | `exclude-places` [Mercado, Escola] | lugares: Padaria, Quintal |
+| Interrogar Dona Lúcia | "Vi o Seu Zé e o Tião entregando pão o dia todo." | `exclude-suspects` [Zé, Tião] | suspeito: Biscoito |
+| Ir à Escola e investigar | "A porta da Padaria ficou aberta o dia todo, ninguém escondeu nada lá." | `exclude-places` [Padaria] | lugar: Quintal |
+
+Custo: 1 + 1 + 2 + 1 + 2 = 7 ações, folga de 3 em 10. A equipe acusa Biscoito no Quintal da Lúcia e vence. Este é um caminho possível, não o único.
+
+## 5. Relógio, ações e turno
+
+- **Relógio:** o fim é `deadline` (18:00). Cada ação gasta `actionMinutes` (30 min). O início é derivado: `início = deadline − ações do nível × actionMinutes`. O jogo guarda `actionsLeft` e calcula o horário.
+- **Turno:** uma ação por vez. Depois de cada ação a vez passa ao próximo assento, em ordem fixa. Quem tem a vez escolhe a ação; os outros opinam (seção 8).
+- **Posição:** a equipe é uma só e começa na Praça. Ela se desloca junta.
+
+| Ação (`action`) | Regra | Custo |
+| --- | --- | --- |
+| `move` | Vai a qualquer lugar diferente do atual. Não revela nada. | 1 |
+| `investigate` | Abre a carta do lugar atual. Exige que a equipe esteja no lugar e que ele ainda não tenha sido investigado. | 1 |
+| `interrogate` | Abre a carta de um suspeito ainda não interrogado, de qualquer lugar. | 1 |
+| `accuse` | Acusa um suspeito e um lugar (seção 6). | 0 se acertar; `wrongAccusationCost` se errar |
+
+- Toda ação que gasta tempo pede confirmação antes de valer. Não existe desfazer.
+- Tela de resultado: depois da ação, todos leem a carta. O botão "OK" apenas fecha a tela **neste aparelho**. O estado do jogo já mudou, e a pista continua no caderno. Não há "esperar todos".
+- Itens bloqueados mostram o motivo ("já investigada", "já interrogado", "já acusaram essa dupla").
+
+## 6. Acusação e fim
+
+- Só dá para acusar quando `actionsLeft ≥ 1`. A equipe escolhe um suspeito e um lugar entre os possíveis (itens eliminados ficam bloqueados).
+- **Acerto:** vitória imediata, sem custo de tempo. A tela mostra o horário em que foi resolvido, quantas ações sobraram e as pistas que bastavam.
+- **Erro:** o relógio avança `wrongAccusationCost` ações. O jogo diz apenas que a dupla está errada, **sem** dizer qual metade. A mesma dupla não pode ser acusada de novo. Se `actionsLeft` chegar a 0 ou menos, vira tempo esgotado.
+- **Tempo esgotado** (por ações ou por erro de acusação): revela o culpado e o esconderijo, mostra as pistas que levavam à resposta (o conjunto de custo mínimo do solucionador) e uma dica gerada dele ("as pistas 2 e 5, juntas, já deixavam um único lugar"). Sem punição e sem placar negativo.
+- Não há acusação final com o relógio zerado na v1 (ponto em aberto, seção 11).
+
+## 7. Níveis
+
+Quatro níveis com nomes do mundo dos mistérios. Todos os valores são **(inicial)** e vêm de dados (`DifficultyParams`). A calibração é feita por simulação (seção 9).
+
+| Nível (`id`) | Suspeitos × lugares | Ações | Início | Acusação errada custa | Ruído | Exclusão em grupo | Parcial (`only-*`) | Folga mínima |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Aprendiz (`apprentice`) | 5 × 5 | 10 | 13:00 | 1 ação (30 min) | 0% | 1 a 2 | 0% | ≥ 3 |
+| Investigador (`investigator`) | 6 × 6 | 8 | 14:00 | 2 ações (1 h) | 10% | 1 a 3 | 15% | ≥ 2 |
+| Perito (`expert`) | 8 × 8 | 8 | 14:00 | 2 ações (1 h) | 20% | 2 a 4 | 25% | ≥ 1 |
+| Lenda (`legend`) | 10 × 10 | 7 | 14:30 | 3 ações (1 h 30) | 30% | 2 a 5 | 35% | ≥ 0 |
+
+- "Ruído" é a taxa de cartas sem efeito. "Exclusão em grupo" é o tamanho do grupo nas cartas `exclude-*`. "Parcial" é a taxa de cartas `only-*`.
+- Dica de jogada (`suggest`): ligada em Aprendiz e Investigador, desligada em Perito e Lenda. **(a testar)**
+- Nos níveis altos, as cartas precisam eliminar vários itens de uma vez (grupos grandes e pistas parciais). Esse é um requisito do gerador, não da interface.
+- O texto de regra e a barra do relógio mostram os valores do nível, vindos dos dados: "Se errarem, o relógio avança 1 hora (2 ações)" é calculado, não escrito.
+
+## 8. Modos de jogo
+
+- **Um aparelho:** todos em volta de um tablet ou notebook. O segredo só existe no próprio aparelho (a equipe coopera, então não há "passe o aparelho").
+- **Mesa:** uma tela grande mostra o mapa, a pista mais recente, as contagens ("4 de 6 lugares ainda possíveis") e a vez de cada jogador. Os celulares são o controle. Funciona como o modo online mais uma tela espelhada (assento de mesa). **A tela da mesa só é oferecida quando `Math.min(screen.width, screen.height) ≥ 600`** (tela física, não janela nem orientação). Em celular a opção não aparece, e abrir o endereço da mesa leva à tela do jogador com um aviso curto. É uma barreira de interface, não de segurança.
+- **Online:** sala com código de 6 caracteres e senha, do `packages/kit`. Cada pessoa vê o caderno, a pista mais recente e os botões. Só quem tem a vez age.
+- **Opinar:** fora da sua vez, o jogador marca uma sugestão (uma opção do menu de ações, um lugar, um suspeito ou uma dupla de acusação). Cada jogador tem **uma** sugestão ativa por vez, que some quando a ação é resolvida. As sugestões ficam fora do estado do jogo, com limite de frequência. **(a testar)**
+- **Conversa:** por voz, fora do app. Não há chat nem texto livre.
+- **Desconexão:**
+  1. A equipe é avisada ("Raposa Curiosa desconectou, o bot assumiu").
+  2. O bot entra após cerca de 20 s na vez da pessoa, ou no início do próximo turno dela.
+  3. A pessoa volta com o código e a senha (ou o token do assento) e retoma no início do próprio turno seguinte, nunca no meio do turno de um bot.
+  4. O assento não é removido por inatividade.
+- **Bots:** completam a equipe e substituem quem desconecta. Usam só a informação pública (`PublicView`) e nunca a solução. O bot de partida usa a política "casual" por padrão. O bot "ideal" é usado nas simulações e na dica de jogada. **(a testar)**
+- **Apelidos:** montados por listas (adjetivo + animal, em PT-BR e EN). Sem texto livre. Ponto em aberto: no modo de um aparelho, permitir nomes digitados, já que nada sai do aparelho (seção 11).
+
+## 9. Metas de dificuldade e simulação
+
+As taxas abaixo são **metas** a validar. Ainda não houve simulação: ela depende do gerador e dos bots (Etapa 2 do roadmap).
+
+| Nível | Bot ideal (mínimo) | Bot casual (proxy de equipe real) | Mistérios resolvíveis | Folga mínima do caminho mais curto |
+| --- | --- | --- | --- | --- |
+| Aprendiz | 98% | 85–95% | 100% | ≥ 3 ações |
+| Investigador | 90% | 65–80% | 100% | ≥ 2 ações |
+| Perito | 75% | 45–60% | 100% | ≥ 1 ação |
+| Lenda | 55% | 25–40% | 100% | ≥ 0 ação |
+
+- **Resolvível** (oráculo): existe um caminho de custo ≤ ações do nível que determina a solução (seção 4.6).
+- **Bot ideal:** joga bem sem conhecer a resposta. Por isso a taxa dele fica abaixo de 100% mesmo com todos os mistérios resolvíveis.
+- **Bot casual:** representa uma equipe real. Escolhe com ruído, ignora pistas parciais com certa probabilidade e acusa cedo com certa probabilidade. Os parâmetros são calibrados com partidas reais.
+- **Bot aleatório:** linha de base. A diferença entre ideal e aleatório mede se há **decisão que vale a pena**: meta de pelo menos 25 pontos em cada nível. **(a testar)** Se a diferença for pequena, o jogo vira sorte, e o gerador deve ganhar pistas que apontam onde procurar (seção 11, item 1).
+- **Protocolo:** 10.000 mistérios por nível e por bot, com sementes fixas. Com esse volume o intervalo de confiança de 95% fica em cerca de ±1 ponto percentual. Se um nível sair da meta, ajustar nesta ordem: ações, ruído, custo da acusação errada, tamanho do mapa, mistura de pistas. Simular de novo. O relatório é versionado e a simulação entra na CI: nível fora da meta quebra o build.
+- **Partidas reais** (família e amigos, algumas por nível) calibram o bot casual. Amostra pequena não prova percentual.
+- **Também medir:** taxa de rejeição do gerador (quantas tentativas por mistério válido), distribuição da folga, tempo para gerar um mistério e horário médio de resolução.
+
+## 10. Papéis e habilidades (depois da v1)
+
+Ideia aprovada: os personagens escolhidos pelos jogadores podem ter uma habilidade. **Decisão: depois da v1.** Motivos: habilidade grátis facilita o jogo e multiplica a calibração (cada habilidade × nível × tamanho de equipe).
+
+Quando entrar, será uma opção ligável no lobby ("Modo Equipe"), com metas próprias:
+
+- Cada habilidade é limitada (uma vez por partida, por exemplo).
+- Nenhuma composição de equipe pode ter mais de 10 pontos de diferença na taxa de vitória em relação à média do nível.
+- Exemplos a testar: investigar revela uma segunda pista do mesmo lugar; interrogar revela depoimento e álibi; uma ação custa 0 minuto; a acusação errada custa uma ação a menos.
+
+Na v1, o código **não** implementa papéis. O ponto de extensão está descrito na especificação técnica (seção 12).
+
+## 11. Pontos em aberto e hipóteses a validar
+
+1. **Decisão ou sorte?** As cartas são abertas sem saber o que dizem. Se o bot ideal não superar o aleatório por pelo menos 25 pontos, adicionar pistas que apontam onde procurar (`lead`, por exemplo "ouvi barulho na Escola") ou tornar o custo visível. Medir na Etapa 2.
+2. Valores dos níveis, mistura de pistas e metas: tudo **(inicial)**, calibrar por simulação.
+3. A viabilidade dos níveis altos (Perito e Lenda) com custo 1 por suspeito e 2 por lugar: o gerador pode precisar de mais pistas de grupo ou de folga menor.
+4. Acusação final quando o relógio zera (hoje não existe). Avaliar se frustra.
+5. Dica de jogada ligada nos dois níveis fáceis.
+6. Política do bot casual em partida (dica x jogada) e calibração com partidas reais.
+7. Sugestão única por jogador e a confirmação antes de cada ação: validar com crianças e adultos.
+8. Apelidos por listas no modo de um aparelho.
+9. Mesa na TV sem toque: como abrir o caderno completo (controle remoto, teclado ou celular de quem controla).
+10. Textos das cartas gerados por modelos em PT-BR e EN: concordância (o/a, do/da, no/na) e listas ("A, B e C") precisam de formatadores. Validar a legibilidade para 8 anos.
+11. Nome público "Casos da Lupa": consulta ao INPI e parecer jurídico pelo dono do projeto.
+
+## 12. Acessibilidade
+
+- O estado de cada item não depende só de cor: eliminado = texto riscado + tarja "descartado"; grupo = tarja pontilhada com texto ("um dos 2"); álibi = texto.
+- Alvos de toque de pelo menos 44 px (botões principais de 56 px), contraste mínimo 4,5:1, foco visível por teclado, rótulos de acessibilidade por lugar e por suspeito, anúncio das pistas e do relógio em `aria-live`.
+- Respeitar `prefers-reduced-motion`. Textos em PT-BR e EN. Leitura fácil para 8 anos (frases curtas, sem jargão).
+- Sem informação passada só por som.
+
+## 13. Público, privacidade e conformidade
+
+- Todas as idades (8+), gratuito. Sem conta, sem chat, sem texto livre, sem compras, sem loot box, sem anúncios, sem rastreadores. Só apelidos gerados por listas. Nada de dado pessoal em logs.
+- Como o jogo pode ser acessado por crianças, a LGPD (art. 14, tratamento de dados de crianças e adolescentes) e o ECA Digital (Lei 15.211/2025) devem ser revisados pelo dono do projeto com um advogado antes da publicação. Este documento não é parecer jurídico.
+- Tom leve: mistério de bairro, sem terror, sem violência, sem sobrenatural pesado.
+- Inspirações gerais (séries e filmes de mistério em equipe) servem só como ideias de mecânica e de clima. Nada de nomes, personagens, cenas ou formatos de obras existentes.
+
+## 14. Glossário PT para EN (nomes no código)
+
+| PT | EN |
+| --- | --- |
+| Casos da Lupa | `magnifier-cases` |
+| Mistério | `mystery` |
+| Suspeito | `suspect` |
+| Lugar | `place` |
+| Praça (início) | `square` |
+| Culpado | `culprit` |
+| Esconderijo | `hideout` |
+| Solução | `solution` |
+| Carta de pista | `clueCard` |
+| Efeito da pista | `clueEffect` (`exclude-suspects`, `exclude-places`, `only-suspects`, `only-places`, `none`) |
+| Pista de ruído | `noise` |
+| Caderno | `notebook` |
+| Descartado, possível | `eliminated`, `open` |
+| Investigar, interrogar, ir, acusar | `investigate`, `interrogate`, `move`, `accuse` |
+| Relógio, fim, minutos por ação | `clock`, `deadline`, `actionMinutes` |
+| Ações restantes | `actionsLeft` |
+| Acusação errada custa | `wrongAccusationCost` |
+| Nível: Aprendiz, Investigador, Perito, Lenda | `apprentice`, `investigator`, `expert`, `legend` |
+| Folga | `slack` |
+| Solucionador, oráculo | `solver`, `oracle` |
+| Visão pública | `PublicView` |
+| Tema | `themePack` |
+| Opinar (sugestão) | `suggestion` |
+| Mesa | `table` |
+
+## 15. Registro de decisões
+
+Decisão nova entra no topo, com data e motivo.
+
+- **25/11/2026 — Papéis depois da v1.** Habilidade grátis facilita o jogo e dobra a calibração. A v1 calibra a linha de base primeiro.
+- **25/11/2026 — Nome público "Casos da Lupa" (`magnifier-cases`).** Usa as palavras preferidas do dono do projeto (lupa, caso). Pendente de consulta ao INPI.
+- **25/11/2026 — Níveis e relógio derivado.** Quatro níveis aprovados. O fim é fixo (18:00) e o início depende das ações do nível. Metas por bot (seção 9) e simulação com testes reais do bot.
+- **25/11/2026 — Tablet conta como tela da mesa.** Regra do menor lado da tela física ≥ 600 px.
+- **25/11/2026 — Modelo de cartas.** Uma carta por lugar e por suspeito, com efeito lógico explícito. Texto = efeito. Sem carta que elimina a própria origem (evita denunciar a solução). Custo: suspeito 1, lugar 2.
+- **25/11/2026 — Pistas verdadeiras, solvabilidade provada, movimento livre, um único tema na v1, casos de borda.** Aprovados (conversa de 25/11/2026).

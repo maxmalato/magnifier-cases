@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Casos da Lupa – caderno</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&amp;family=Nunito:wght@600;700;800&amp;display=swap">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; padding: 24px 20px; background: #2B2230; color: #F6EFE0; font-family: 'Nunito', system-ui, sans-serif; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; align-items: center; justify-content: space-between">
+<span style="font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 20px">Casos da Lupa</span>
+<span style="display: flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px; background: #3A2E42; font-size: 18px; font-weight: 800">
+<svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="#F2B84B" stroke-width="2"></circle><path d="M12 7v5l3 2" fill="none" stroke="#F2B84B" stroke-width="2" stroke-linecap="round"></path></svg>
+16:00
+</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 2px">
+<h1 style="margin: 0; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 28px; line-height: 1.1">Caderno do detetive</h1>
+<span style="font-size: 15px; font-weight: 700; color: #CDBFD2">Todos os jogadores veem o mesmo caderno. Vez de Carla.</span>
+</div>
+<div style="box-sizing: border-box; background: #3A2E42; border-radius: 16px; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px">
+<span style="font-size: 14px; font-weight: 800; letter-spacing: 0.08em; color: #CDBFD2">SUSPEITOS</span>
+<sc-for list="{{suspects}}" as="r" hint-placeholder-count="6">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 30px">
+<span style="font-size: 17px; font-weight: 800; color: {{r.nameInk}}; text-decoration: {{r.deco}}">{{r.name}}</span>
+<span style="padding: 2px 10px; border-radius: 999px; border: {{r.chipBorder}}; font-size: 14px; font-weight: 800; color: {{r.chipInk}}">{{r.status}}</span>
+</div>
+</sc-for>
+</div>
+<div style="box-sizing: border-box; background: #3A2E42; border-radius: 16px; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px">
+<span style="font-size: 14px; font-weight: 800; letter-spacing: 0.08em; color: #CDBFD2">LUGARES</span>
+<sc-for list="{{places}}" as="r" hint-placeholder-count="6">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 30px">
+<span style="font-size: 17px; font-weight: 800; color: {{r.nameInk}}; text-decoration: {{r.deco}}">{{r.name}}</span>
+<span style="padding: 2px 10px; border-radius: 999px; border: {{r.chipBorder}}; font-size: 14px; font-weight: 800; color: {{r.chipInk}}">{{r.status}}</span>
+</div>
+</sc-for>
+</div>
+<div style="box-sizing: border-box; background: #F6EFE0; color: #2B2230; border-radius: 16px; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px">
+<span style="font-size: 14px; font-weight: 800; letter-spacing: 0.08em; color: #5B4A63">PISTAS ATÉ AGORA</span>
+<sc-for list="{{clues}}" as="c" hint-placeholder-count="3">
+<span style="font-size: 15px; font-weight: 700; line-height: 1.3">{{c.text}}</span>
+</sc-for>
+</div>
+<div style="flex: 1"></div>
+<div style="display: flex; gap: 10px">
+<button type="button" style="flex: 1; height: 56px; border-radius: 16px; border: 2px solid #8A7790; background: transparent; color: #F6EFE0; font-family: 'Nunito', system-ui, sans-serif; font-size: 17px; font-weight: 800; cursor: pointer">Voltar ao mapa</button>
+<button type="button" style="flex: 1; height: 56px; border: 0; border-radius: 16px; background: #F2B84B; color: #2B2230; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 20px; outline: 3px solid #F6EFE0; outline-offset: 3px; cursor: pointer">Acusar</button>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const ok = { nameInk: '#F6EFE0', deco: 'none', chipBorder: '2px solid #8A7790', chipInk: '#E7DDEA' };
+    const off = { nameInk: '#B9A8BF', deco: 'line-through', chipBorder: '2px dashed #8A7790', chipInk: '#B9A8BF' };
+    const hint = { nameInk: '#F6EFE0', deco: 'none', chipBorder: '2px dotted #F2B84B', chipInk: '#F2B84B' };
+    const alibi = { nameInk: '#B9A8BF', deco: 'line-through', chipBorder: '2px solid #8BD3A0', chipInk: '#8BD3A0' };
+    return {
+      suspects: [
+        Object.assign({ name: 'Seu Zé', status: 'tem álibi' }, alibi),
+        Object.assign({ name: 'Dona Lúcia', status: 'suspeita' }, ok),
+        Object.assign({ name: 'Biscoito', status: 'visto sujo de farinha' }, hint),
+        Object.assign({ name: 'Tião', status: 'suspeito' }, ok),
+        Object.assign({ name: 'Profª Rita', status: 'suspeita' }, ok),
+        Object.assign({ name: 'Cleo', status: 'suspeita' }, ok)
+      ],
+      places: [
+        Object.assign({ name: 'Padaria', status: 'investigada' }, ok),
+        Object.assign({ name: 'Escola', status: 'livre' }, ok),
+        Object.assign({ name: 'Mercado', status: 'descartado' }, off),
+        Object.assign({ name: 'Correio', status: 'descartado' }, off),
+        Object.assign({ name: 'Quintal da Lúcia', status: 'rastro aponta' }, hint),
+        Object.assign({ name: 'Coreto', status: 'livre' }, ok)
+      ],
+      clues: [
+        { text: '1. O Correio ficou fechado o dia todo.' },
+        { text: '2. Rastro de migalhas até o Quintal da Lúcia.' },
+        { text: '3. Seu Zé viu o Biscoito sujo de farinha.' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Casos da Lupa – revelação</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&amp;family=Nunito:wght@600;700;800&amp;display=swap">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; padding: 24px 20px; background: #2B2230; color: #F6EFE0; font-family: 'Nunito', system-ui, sans-serif; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; align-items: center; justify-content: space-between">
+<span style="font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 20px">Casos da Lupa</span>
+<span style="display: flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px; background: #3A2E42; font-size: 18px; font-weight: 800">
+<svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="#F2B84B" stroke-width="2"></circle><path d="M12 7v5l3 2" fill="none" stroke="#F2B84B" stroke-width="2" stroke-linecap="round"></path></svg>
+{{clock}}
+</span>
+</div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 12px; padding-top: 8px; text-align: center">
+<div style="width: 96px; height: 96px; border-radius: 50%; background: #F2B84B; color: #2B2230; display: flex; align-items: center; justify-content: center; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 48px; border: 4px solid #F6EFE0" role="img" aria-label="Biscoito, o cachorro">B</div>
+<span style="font-size: 14px; font-weight: 800; letter-spacing: 0.08em; color: #CDBFD2">{{kicker}}</span>
+<h1 style="margin: 0; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 34px; line-height: 1.1">{{heading}}</h1>
+<span style="font-size: 18px; font-weight: 700; line-height: 1.35; color: #E7DDEA">{{sub}}</span>
+</div>
+<div style="box-sizing: border-box; background: #F6EFE0; color: #2B2230; border-radius: 18px; padding: 16px 18px; display: flex; flex-direction: column; gap: 8px">
+<span style="font-size: 14px; font-weight: 800; letter-spacing: 0.08em; color: #5B4A63">AS PISTAS QUE LEVAVAM ATÉ A RESPOSTA</span>
+<sc-for list="{{clues}}" as="c" hint-placeholder-count="3">
+<div style="display: flex; gap: 10px; align-items: flex-start">
+<span style="flex: none; width: 24px; height: 24px; border-radius: 50%; background: #2B2230; color: #F6EFE0; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800">{{c.n}}</span>
+<span style="font-size: 16px; font-weight: 700; line-height: 1.3">{{c.text}}</span>
+</div>
+</sc-for>
+</div>
+<sc-if value="{{isLoss}}" hint-placeholder-val="{{ false }}">
+<div style="box-sizing: border-box; background: #3A2E42; border-radius: 16px; padding: 14px 16px; display: flex; flex-direction: column; gap: 4px">
+<span style="font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 18px; color: #F2B84B">Dica para o próximo mistério</span>
+<span style="font-size: 16px; font-weight: 600; line-height: 1.4; color: #E7DDEA">O rastro de migalhas e o depoimento do Seu Zé já apontavam para o Biscoito e para o Quintal. Quando duas pistas dizem a mesma coisa, vale acusar.</span>
+</div>
+</sc-if>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; text-align: center">
+<sc-for list="{{stats}}" as="s" hint-placeholder-count="3">
+<div style="box-sizing: border-box; background: #3A2E42; border-radius: 14px; padding: 10px 6px; display: flex; flex-direction: column; gap: 2px">
+<span style="font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 24px; color: #F2B84B; line-height: 1.1">{{s.value}}</span>
+<span style="font-size: 14px; font-weight: 700; color: #E7DDEA">{{s.label}}</span>
+</div>
+</sc-for>
+</div>
+<div style="flex: 1"></div>
+<button type="button" style="height: 56px; border: 0; border-radius: 16px; background: #F2B84B; color: #2B2230; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 20px; outline: 3px solid #F6EFE0; outline-offset: 3px; cursor: pointer">Novo mistério</button>
+<button type="button" style="height: 48px; border-radius: 14px; border: 2px solid #8A7790; background: transparent; color: #F6EFE0; font-family: 'Nunito', system-ui, sans-serif; font-size: 16px; font-weight: 800; cursor: pointer">Voltar ao início</button>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"resultado":{"editor":"enum","options":["Vitória","Tempo esgotado"],"default":"Vitória"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const win = (this.props.resultado ?? 'Vitória') === 'Vitória';
+    return {
+      isLoss: !win,
+      clock: win ? '16:00' : '18:00',
+      kicker: win ? 'MISTÉRIO RESOLVIDO' : 'A FESTA VOLTOU',
+      heading: win ? 'Foi o Biscoito!' : 'O relógio chegou às 18h',
+      sub: win ? 'O bolo estava no Quintal da Lúcia.' : 'Era o Biscoito, e o bolo estava no Quintal da Lúcia.',
+      clues: [
+        { n: '1', text: 'O Correio ficou fechado o dia todo.' },
+        { n: '2', text: 'Migalhas fizeram um rastro da padaria até o Quintal da Lúcia.' },
+        { n: '3', text: 'Seu Zé viu o Biscoito sujo de farinha.' }
+      ],
+      stats: win
+        ? [{ value: '16:00', label: 'resolvido às' }, { value: '4', label: 'ações sobraram' }, { value: '3', label: 'pistas usadas' }]
+        : [{ value: '8 de 8', label: 'ações usadas' }, { value: '5', label: 'pistas achadas' }, { value: '0', label: 'acusações' }]
+    };
+  }
+}
+</script>
+</body>
+</html>

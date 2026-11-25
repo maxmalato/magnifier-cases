@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Casos da Lupa – visão geral</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&amp;family=Nunito:wght@600;700;800&amp;display=swap">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="width: 1280px; height: 720px; box-sizing: border-box; padding: 44px 56px; background: #2B2230; color: #F6EFE0; font-family: 'Nunito', system-ui, sans-serif; display: flex; flex-direction: column; gap: 24px">
+<div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 24px">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<h1 style="margin: 0; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 52px; line-height: 1; color: #F6EFE0">Casos da Lupa</h1>
+<div style="font-size: 18px; font-weight: 700; color: #CDBFD2">Cooperativo de dedução · 2 a 6 jogadores · 20 a 30 minutos</div>
+</div>
+<div style="padding: 10px 16px; border-radius: 999px; background: #3A2E42; font-size: 16px; font-weight: 700; color: #F2B84B">Exemplo: o bolo da festa sumiu</div>
+</div>
+<div style="display: flex; align-items: stretch; gap: 8px">
+<sc-for list="{{steps}}" as="step" hint-placeholder-count="4">
+<div style="flex: 1 1 0; min-width: 0; display: flex; align-items: center; gap: 8px">
+<div style="flex: 1 1 0; min-width: 0; align-self: stretch; box-sizing: border-box; background: #F6EFE0; color: #2B2230; border-radius: 18px; padding: 20px; display: flex; flex-direction: column; gap: 10px">
+<div style="width: 40px; height: 40px; border-radius: 50%; background: #F2B84B; color: #2B2230; display: flex; align-items: center; justify-content: center; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 22px">{{step.n}}</div>
+<div style="font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 24px; line-height: 1.15">{{step.title}}</div>
+<div style="font-size: 16px; line-height: 1.4; font-weight: 600; color: #4A3A52">{{step.text}}</div>
+</div>
+<div style="width: 28px; height: 28px; flex: none">
+<sc-if value="{{step.hasNext}}" hint-placeholder-val="{{ true }}">
+<svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="#F2B84B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+</sc-if>
+</div>
+</div>
+</sc-for>
+</div>
+<div style="display: flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 700; color: #CDBFD2">
+<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 13.5-5.8L20 8.5M20 4v4.5h-4.5M20 12a8 8 0 0 1-13.5 5.8L4 15.5M4 20v-4.5h4.5" fill="none" stroke="#F2B84B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+<span>Os passos 1 a 3 se repetem até a equipe decidir acusar (passo 4) ou o relógio chegar às 18h.</span>
+</div>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px">
+<sc-for list="{{infos}}" as="info" hint-placeholder-count="3">
+<div style="box-sizing: border-box; background: #3A2E42; border-radius: 16px; padding: 18px 20px; display: flex; flex-direction: column; gap: 6px">
+<div style="font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 20px; color: #F2B84B">{{info.title}}</div>
+<div style="font-size: 16px; line-height: 1.4; font-weight: 600; color: #E7DDEA">{{info.text}}</div>
+</div>
+</sc-for>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":720}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      steps: [
+        { n: '1', title: 'Escolher uma ação', text: 'Quem está com a vez escolhe: investigar o lugar, interrogar alguém ou ir a outro lugar. Cada ação gasta 30 minutos.', hasNext: true },
+        { n: '2', title: 'Ver o resultado', text: 'O jogo mostra uma pista ou um depoimento. Cada um descarta suspeitos ou lugares no caderno de todos.', hasNext: true },
+        { n: '3', title: 'O relógio avança', text: 'A festa volta às 18h. A vez passa para o próximo jogador, e a equipe decide junta a próxima ação.', hasNext: true },
+        { n: '4', title: 'Acusar quem e onde', text: 'Quando houver certeza, a equipe acusa um suspeito e um lugar. Errar custa 1 hora.', hasNext: false }
+      ],
+      infos: [
+        { title: 'O que fica em segredo', text: 'O culpado e o esconderijo são sorteados no início. Só o jogo sabe (no online, só o servidor). Ninguém vê a resposta antes da revelação.' },
+        { title: 'Quem decide', text: 'Todos veem as mesmas pistas e opinam. Quem está com a vez escolhe a ação, e a vez passa de jogador em jogador.' },
+        { title: 'Como termina', text: 'Vitória ao acusar certo antes das 18h. Se o tempo acabar, o jogo revela a solução e as pistas que levavam a ela, sem punição.' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>
