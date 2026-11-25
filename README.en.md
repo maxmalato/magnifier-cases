@@ -18,7 +18,7 @@ Apprentice, Investigator, Expert and Legend. The map and the clock change with t
 
 ## Status
 
-Stage 2 (bots and simulation) ready for review: ideal, casual and random bots, batch simulation and the first calibration of the levels (report in `docs/simulation/`, in Portuguese). Screens start after approval. See `docs/ROADMAP.md` (in Portuguese).
+Stage 2 (bots and simulation) done, with the first calibration of the levels (report in `docs/simulation/`, in Portuguese). Stage 3 (one-device screens) in progress. See `docs/ROADMAP.md` (in Portuguese).
 
 ## How to run
 

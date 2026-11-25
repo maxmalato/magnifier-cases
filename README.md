@@ -18,7 +18,7 @@ Aprendiz, Investigador, Perito e Lenda. O mapa e o relógio mudam com o nível.
 
 ## Situação
 
-Etapa 2 (bots e simulação) pronta para revisão: bots ideal, casual e aleatório, simulação em lote e primeira calibração dos níveis (relatório em `docs/simulation/`). As telas começam depois da aprovação. Veja `docs/ROADMAP.md`.
+Etapa 2 (bots e simulação) concluída, com a primeira calibração dos níveis (relatório em `docs/simulation/`). Etapa 3 (telas no modo de um aparelho) em andamento. Veja `docs/ROADMAP.md`.
 
 ## Como rodar
 

@@ -12,8 +12,8 @@ A ordem é **motor, gerador, solucionador, bots e simulação antes de qualquer 
 | --- | --- | --- |
 | 0 – Fundação | Concluída | `v0.1-foundation` |
 | 1 – Motor, gerador e solucionador | Concluída | `v0.2-engine` |
-| 2 – Bots e simulação | Aprovada (fecha com o CI verde na `main`) | `v0.3-bots-sim` |
-| 3 – Telas (um aparelho) | Não iniciada | `v0.4-local-ui` |
+| 2 – Bots e simulação | Concluída | `v0.3-bots-sim` |
+| 3 – Telas (um aparelho) | Em andamento | `v0.4-local-ui` |
 | 4 – Online | Não iniciada | `v0.5-online` |
 | 5 – Mesa e PWA | Não iniciada | `v0.6-table-pwa` |
 | 6 – Acabamento | Não iniciada | `v0.9-polish` |
