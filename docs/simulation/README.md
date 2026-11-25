@@ -63,8 +63,24 @@ O gerador fez 100% dos mistérios resolvíveis em todos os níveis (nenhuma falh
 4. **Dica de jogada (item 5).** Decidido: só no Aprendiz. A dica é a jogada do bot ideal, então ela vai sugerir "acusar dupla por dupla" quando isso couber no relógio. Ver o item 2.
 5. **Bot casual (item 6).** Com os defeitos iniciais (20% de erro de escolha, 30% de esquecer pistas parciais, 30% de acusar cedo), o casual fica só 5 a 12 pontos abaixo do ideal, e as metas pedem 15 a 25 nos níveis altos. O casual é um palpite até as partidas reais (Etapa 7). Por isso a faixa dele virou aviso na CI, e o build só quebra por ideal, diferença e resolvibilidade.
 
+### Erro mais caro (pedido do dono, 25/11/2026)
+
+2.000 mistérios por variante; "dedução" e "dupla por dupla" são a forma da primeira acusação nas vitórias do bot ideal (1.000 partidas).
+
+| Nível | Variante | Ideal | Ideal − aleatório | Vitórias por dedução | Vitórias dupla por dupla |
+| --- | --- | --- | --- | --- | --- |
+| Aprendiz | atual (erro 1, 11 ações) | 99,5% | 37,0 | 0% | 98% |
+| Aprendiz | erro 2 | 83,7% | 28,3 | 2% | 73% |
+| Aprendiz | erro 2, 12 ações | 92,5% | 25,7 | 1% | 87% |
+| Aprendiz | erro 2, exclusão 2 a 3 | 98,9% | 11,8 | 1% | 98% |
+| Investigador | atual (erro 1, 10 ações) | 91,7% | 46,1 | 0% | 85% |
+| Investigador | erro 2, 12 ações | 85,3% | 26,3 | 2% | 74% |
+| Investigador | erro 2, exclusão 2 a 4, 11 ações | 95,8% | 22,2 | 3% | 91% |
+
+Conclusão: com acusação que só custa tempo, acusar todas as duplas é a jogada racional sempre que cabe no relógio. Um custo maior só muda quando isso passa a valer, deixa o jogo mais difícil e mais dependente de sorte. Os níveis continuam com a calibração aprovada.
+
 ## Para aprovar (portão da Etapa 3)
 
-- A calibração da tabela acima.
+- A calibração da tabela acima (aprovada em 25/11/2026).
 - O bot casual como aviso na CI até a Etapa 7 (`casualEnforced: false`).
 - Uma decisão sobre o item 12 (acusar dupla por dupla).
