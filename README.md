@@ -18,7 +18,7 @@ Aprendiz, Investigador, Perito e Lenda. O mapa e o relógio mudam com o nível.
 
 ## Situação
 
-Etapa 1 (motor, gerador e solucionador) pronta para revisão: o motor gera mistérios provados resolvíveis e roda a partida inteira, ainda sem telas. Veja `docs/ROADMAP.md`.
+Etapa 1 (motor, gerador e solucionador) concluída. Etapa 2 (bots e simulação) em andamento. Veja `docs/ROADMAP.md`.
 
 ## Como rodar
 
