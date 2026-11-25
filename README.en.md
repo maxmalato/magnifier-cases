@@ -18,7 +18,7 @@ Apprentice, Investigator, Expert and Legend. The map and the clock change with t
 
 ## Status
 
-Stage 2 (bots and simulation) done, with the first calibration of the levels (report in `docs/simulation/`, in Portuguese). Stage 3 (one-device screens) in progress. See `docs/ROADMAP.md` (in Portuguese).
+Stage 3 (one-device screens) ready for review: you can play a full game on a phone, tablet or computer, with bots filling the team, in Portuguese or English. Online, table mode and PWA come in the next stages. See `docs/ROADMAP.md` (in Portuguese).
 
 ## How to run
 
