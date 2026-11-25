@@ -1,0 +1,3 @@
+# Mesmo final de linha em qualquer computador (Windows, macOS ou Linux)
+* text=auto eol=lf
+*.png binary

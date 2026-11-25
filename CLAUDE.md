@@ -4,7 +4,7 @@ Instruções para o Claude Code neste repositório. Leia antes de qualquer taref
 
 ## O projeto
 
-Casos da Lupa (`magnifier-cases`): jogo **cooperativo de dedução** para o navegador, de 2 a 6 assentos (pessoas ou bots). No tema da v1, o bolo da festa sumiu. Um culpado e um esconderijo ficam em segredo. A equipe gasta ações de 30 minutos (investigar um lugar, interrogar um suspeito, ir a outro lugar) até as 18h e acusa um suspeito e um lugar. Todas as pistas são verdadeiras. Modos: um aparelho, mesa (tela grande + celulares, só em tela grande) e online (sala por código e senha). Roda em celular, tablet, desktop e Smart TV com navegador, como PWA. Todas as idades (8+).
+Casos da Lupa (`magnifier-cases`): jogo **cooperativo de dedução** para o navegador, de 2 a 6 assentos (pessoas ou bots). No tema da v1, o bolo da festa sumiu. Um culpado e um esconderijo ficam em segredo. A equipe gasta ações de 30 minutos (investigar um lugar, interrogar um suspeito, ir a outro lugar) até as 18h e acusa um suspeito e um lugar. Todas as pistas são verdadeiras. Modos: um aparelho, mesa (tela grande + celulares, só em tela grande) e online (sala por código; o aparelho guarda o token do assento). Roda em celular, tablet, desktop e Smart TV com navegador, como PWA. Todas as idades (8+).
 
 - Regras: `docs/magnifier-cases-rules.md`.
 - Especificação técnica: `docs/magnifier-cases-tech-spec.md`.
@@ -61,11 +61,15 @@ pnpm test
 pnpm lint
 pnpm typecheck
 pnpm build
-pnpm e2e
-pnpm --filter @magnifier-cases/sim simulate   # simulação com bots (fora do pnpm test)
+pnpm e2e                                      # Playwright + axe-core (apps/web)
+pnpm simulate                                 # simulação com bots (fora do pnpm test)
+pnpm --filter @magnifier-cases/web dev        # site em desenvolvimento
+pnpm --filter @magnifier-cases/server dev     # servidor local da Cloudflare
 ```
 
-(Ajuste os nomes dos pacotes na Etapa 0.)
+Pacotes: `@magnifier-cases/engine`, `content`, `protocol`, `kit`, `bots`, `sim`, `web` e `server`. O ESLint garante a direção das dependências e a pureza do motor, do conteúdo, do kit e dos bots (sem `Math.random`, `Date.now`, `console` nem APIs de navegador).
+
+No ambiente sem download de navegador, rode o E2E com `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` apontando para um Chromium já instalado.
 
 ## Regras de trabalho
 
@@ -92,7 +96,7 @@ pnpm --filter @magnifier-cases/sim simulate   # simulação com bots (fora do pn
 - O servidor é a única fonte da verdade: valida `actorsOf` e toda ação antes de aplicar. O cliente nunca é confiável.
 - Token de assento guardado apenas como hash (SHA-256). Limite de 40 mensagens por 10 s por conexão. Sala expira em 12 h.
 - Princípio do menor privilégio em permissões, tokens e acessos.
-- Jogo para todas as idades: sem conta, sem chat, sem texto livre, só apelidos gerados por listas, sem compras, sem anúncios, sem rastreadores, sem analytics (LGPD). Nada de dado pessoal em logs.
+- Jogo para todas as idades: sem conta, sem chat, nenhum texto digitado além do apelido (até 20 caracteres, nunca em log), sem compras, sem anúncios, sem rastreadores, sem analytics (LGPD). Nada de dado pessoal em logs.
 - Exemplos e testes com dados fictícios (nomes sugeridos: Ana, Bruno, Carla, Diego, Elisa, Fábio; apelidos como "Raposa Curiosa").
 - LGPD (dados de crianças) e ECA Digital: o dono do projeto revisa com um advogado antes da publicação. Não afirme conformidade jurídica; registre dúvidas.
 

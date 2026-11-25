@@ -1,0 +1,37 @@
+/* Paleta dos mockups (spec, seção 10). Tema escuro: fundo #2B2230 e texto creme.
+   Tema claro: fundo creme e texto tinta. Contraste mínimo 4,5:1 nos dois. */
+:root {
+  --bg: #f6efe0;
+  --text: #2b2230;
+  --text-muted: #4a3d52;
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #2b2230;
+    --text: #f6efe0;
+    --text-muted: #e7ddea;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, sans-serif;
+  line-height: 1.5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

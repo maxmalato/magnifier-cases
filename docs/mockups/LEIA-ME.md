@@ -3,7 +3,7 @@
 - `source/` guarda o código-fonte das telas (`*.dc.html`) e o `canvas.json` com a ordem das pranchas. Serve de referência para cores, medidas e textos. Os arquivos não abrem sozinhos no navegador: dependem do visualizador onde foram criados.
 - Coloque aqui as telas exportadas (PNG ou PDF), se quiser: `overview.png`, `table.png`, `briefing.png`, `your-turn.png`, `clue.png`, `interrogation.png`, `notebook.png`, `accusation.png`, `reveal.png`.
 - Telas: visão geral, mesa (tela grande), novo mistério, vez de alguém (escolher ação), nova pista, interrogatório, caderno, acusação e revelação (vitória e tempo esgotado).
-- Telas que **ainda não existem** e devem ser desenhadas na Etapa 3 ou 4: início, lobby (apelidos por listas, bots, nível), opinar (sugestão), bot assumiu, jogador voltou, aviso de mesa não disponível em celular.
+- Telas que **ainda não existem** e devem ser desenhadas na Etapa 3 ou 4: início, lobby (apelidos digitados, bots, nível), opinar (sugestão), bot assumiu, jogador voltou, aviso de mesa não disponível em celular.
 
 ## Os mockups usam um caso ilustrativo
 
@@ -17,7 +17,7 @@ O caso dos mockups (nível Investigador, culpado Biscoito, esconderijo Quintal d
 | Revelação: "Quando duas pistas dizem a mesma coisa, vale acusar." | A dica vem do solucionador: "as pistas N e M, juntas, já deixavam um único resultado." |
 | Revelação: 3 pistas usadas levam à resposta. | As pistas mostradas são o conjunto de custo mínimo do solucionador, quantas forem. |
 | Barra de 8 segmentos, "Começa às 14:00", "1 hora (2 ações)". | Tudo vem de `DifficultyParams` do nível (10, 8, 8 ou 7 ações; início 13:00, 14:00, 14:00 ou 14:30). |
-| Nomes Lia, Carla e Bruno; "Sala K7P·4QX". | Exemplos. No jogo, apelidos montados por listas. O código da sala vem do `kit`. |
+| Nomes Lia, Carla e Bruno; "Sala K7P·4QX". | Exemplos. No jogo, apelidos digitados pelos jogadores (até 20 caracteres). O código da sala vem do `kit`. |
 | Mapa 3×3 com 6 lugares. | A grade muda com o nível: 3×2 (5 lugares), 3×3 (6 ou 8), 4×3 (10). |
 | "Toquem em OK para continuar." | O "OK" só fecha a tela neste aparelho. O estado já mudou e a pista fica no caderno. |
 | Tela da mesa exibida sem restrição. | Só aparece quando o menor lado da tela física é ≥ 600 px. Em celular, a opção não existe. |

@@ -10,7 +10,7 @@ It runs on phones, tablets, desktops and Smart TVs with a browser, as a PWA.
 
 - **One device:** everyone gathers around a tablet or notebook.
 - **Table:** a large screen shows the notebook and phones act as controllers. Large screens only (tablet, notebook, TV).
-- **Online:** a room with a code and a password, each person on their own device.
+- **Online:** a room with a code, each person on their own device.
 
 ## Levels
 
@@ -18,7 +18,38 @@ Apprentice, Investigator, Expert and Legend. The map and the clock change with t
 
 ## Status
 
-In planning. See `docs/ROADMAP.md` (in Portuguese).
+Stage 0 (foundation) ready for review: the monorepo, tooling and CI are set up, with no game logic yet. See `docs/ROADMAP.md` (in Portuguese).
+
+## How to run
+
+Requirements: Node 24 (see `.nvmrc`) and pnpm 12.
+
+```bash
+pnpm install
+pnpm test        # unit and property tests (Vitest + fast-check)
+pnpm lint        # ESLint (with the architecture rules) and Prettier
+pnpm typecheck   # strict TypeScript in every package
+pnpm build       # website (Vite) and Worker (wrangler, without publishing)
+pnpm e2e         # end-to-end tests (Playwright + axe-core)
+pnpm simulate    # bot simulation (Stage 2; not part of pnpm test)
+pnpm --filter @magnifier-cases/web dev      # website in development mode
+pnpm --filter @magnifier-cases/server dev   # local Cloudflare server
+```
+
+## Structure
+
+| Folder              | Contents                                                                  |
+| ------------------- | ------------------------------------------------------------------------- |
+| `packages/engine`   | Rules engine, generator and solver (pure, no I/O)                         |
+| `packages/content`  | Theme, clue templates, PT-BR and EN texts and the public name (`appName`) |
+| `packages/protocol` | Messages between the device and the server                                |
+| `packages/kit`      | Rooms, seats, reconnection, limits and table mode (game-agnostic)         |
+| `packages/bots`     | Ideal, casual and random bots (public view only)                          |
+| `packages/sim`      | Batch simulation                                                          |
+| `apps/web`          | User interface (Svelte 5 + Vite)                                          |
+| `apps/server`       | Cloudflare Worker + one Durable Object per room                           |
+
+Dependencies point inwards: the interface and the server depend on the engine, and the engine depends on nothing. ESLint enforces this.
 
 ## Documentation
 
@@ -29,7 +60,7 @@ In planning. See `docs/ROADMAP.md` (in Portuguese).
 
 ## Privacy
 
-No accounts, no chat, no free text, no ads and no trackers. Nicknames are generated from lists.
+No accounts, no chat, no ads and no trackers. The only typed text is the nickname (up to 20 characters), which never goes into logs and disappears when the room expires.
 
 ## License
 

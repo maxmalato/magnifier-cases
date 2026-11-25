@@ -8,7 +8,7 @@ Valores marcados **(inicial)** e regras marcadas **(a testar)** no documento de 
 
 Objetivos: jogo cooperativo de dedução para 2 a 6 assentos (pessoas ou bots), nos modos um aparelho, mesa e online, como PWA para celular, tablet, desktop e navegador de Smart TV. Um tema (o bolo da festa), 10 suspeitos, 10 lugares, 4 níveis, gerador de mistérios com solucionador, bots (ideal, casual, aleatório) e simulação em lote.
 
-Fora de escopo da v1: contas, ranking, chat, texto livre, papéis e habilidades (seção 12), outros temas, casos em capítulos, enigmas de código, pistas binárias (que relacionam culpado e lugar), cartas com mais de um efeito.
+Fora de escopo da v1: contas, ranking, chat, texto livre (exceto o apelido, até 20 caracteres), papéis e habilidades (seção 12), outros temas, casos em capítulos, enigmas de código, pistas binárias (que relacionam culpado e lugar), cartas com mais de um efeito.
 
 ## 2. Stack proposta
 
@@ -32,7 +32,7 @@ packages/sim        CLI de simulação em lote e relatórios
 ```ts
 interface GameDefinition<State, Action, Event, Config, View> {
   id: string
-  newGame(config: Config, seed: number): State
+  newGame(config: Config, seats: SeatId[], seed: number): State
   transition(state: State, action: Action, ctx: Ctx): Result<State, Event>
   actorsOf(state: State): SeatId[]
   viewFor(state: State, seat: SeatId | 'table'): View   // NÃO é identidade neste jogo
@@ -99,7 +99,7 @@ Visão pública:
 ```ts
 interface PublicView {
   level: LevelId
-  params: PublicDifficultyParams       // sem nada que revele o mistério
+  params: PublicDifficultyParams       // todos os campos de DifficultyParams (decisão de 25/11/2026)
   cast: { suspects: SuspectId[]; places: PlaceId[] }
   teamAt: PlaceId | 'square'
   actionsLeft: number; clock: string   // "15:30", derivado
@@ -198,11 +198,11 @@ Os valores iniciais da tabela da seção 7 do documento de regras entram em `Dif
 
 ## 8. Protocolo e salas
 
-- Reaproveitar o protocolo do `kit`: código de sala de 6 caracteres, senha, token de assento guardado como hash SHA-256, limite de 40 mensagens por 10 s, expiração de 12 h, assento de mesa.
+- Reaproveitar o protocolo do `kit`: código de sala de 6 caracteres, token de assento (a "senha" do assento) guardado como hash SHA-256, limite de 40 mensagens por 10 s, expiração de 12 h, assento de mesa.
 - Mensagens: `action`, `state` (sempre o resultado de `viewFor`), `resync` (visão completa na reconexão), `suggest` (opinar: efêmera, fora do estado, uma por jogador, limpa quando a ação é resolvida, com limite de frequência) e eventos de desconexão.
 - O servidor guarda o estado completo (com a solução) e **só envia `PublicView`**. Nenhuma mensagem, log ou erro pode conter a solução, a semente, o `oracle` ou o conteúdo de cartas fechadas.
 - A semente é gerada no servidor (fonte de aleatoriedade do ambiente). No modo local, no aparelho.
-- Sem contas, só apelido gerado por listas. Nada de dado pessoal em logs.
+- Sem contas. Apelido digitado, até 20 caracteres e único na sala (como no Enchente na Vila); nunca em log, apagado com a sala. Nada de dado pessoal em logs.
 
 ## 9. Desconexão e bots
 
@@ -252,7 +252,7 @@ Telas (alinhadas aos mockups em `docs/mockups/`): início (criar sala, entrar, j
 
 - Princípio do menor privilégio. Validar toda ação no servidor. O servidor é a única fonte da verdade e a única que conhece a solução no modo online.
 - Token de assento só como hash. Limites de frequência por conexão. Sala expira em 12 h.
-- Sem dados pessoais (apelido gerado por listas) e sem credenciais no repositório (variáveis de ambiente e `wrangler secret`; `.env.example` só com valores fictícios).
+- Sem dados pessoais além do apelido digitado (nunca em log, apagado com a sala) e sem credenciais no repositório (variáveis de ambiente e `wrangler secret`; `.env.example` só com valores fictícios).
 - Nenhum log com a solução, a semente ou o conteúdo de cartas fechadas. Erros devolvidos ao cliente não citam esses dados.
 - Sem rastreadores, anúncios ou compras. LGPD e ECA Digital: revisão com advogado antes da publicação.
 - Em exemplos e testes, usar apenas dados fictícios (apelidos como "Raposa Curiosa"; nomes de teste Ana, Bruno, Carla, Diego, Elisa, Fábio).

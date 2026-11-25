@@ -1,0 +1,17 @@
+{
+  "name": "@magnifier-cases/protocol",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Tipos das mensagens entre o aparelho e o servidor",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@magnifier-cases/engine": "workspace:*",
+    "@magnifier-cases/kit": "workspace:*"
+  }
+}

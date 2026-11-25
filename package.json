@@ -1,0 +1,34 @@
+{
+  "name": "magnifier-cases",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@12.21.0",
+  "engines": {
+    "node": ">=22.12"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint . && prettier --check .",
+    "format": "prettier --write .",
+    "typecheck": "pnpm -r --parallel typecheck",
+    "build": "pnpm --filter @magnifier-cases/web build && pnpm --filter @magnifier-cases/server build",
+    "e2e": "pnpm --filter @magnifier-cases/web e2e",
+    "simulate": "pnpm --filter @magnifier-cases/sim simulate"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^24.19.2",
+    "eslint": "^10.15.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-svelte": "^3.24.1",
+    "fast-check": "^4.11.0",
+    "globals": "^17.14.0",
+    "prettier": "^3.10.1",
+    "prettier-plugin-svelte": "^4.2.0",
+    "svelte": "^5.59.1",
+    "typescript": "~6.0.3",
+    "typescript-eslint": "^8.74.0",
+    "vitest": "^5.1.1"
+  }
+}

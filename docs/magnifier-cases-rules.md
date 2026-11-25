@@ -27,7 +27,7 @@ Um mistério leve acontece no bairro. No tema da v1, **o bolo da festa sumiu**. 
 | Desconexão | Bot assume e todos são avisados. A pessoa volta a qualquer momento e retoma no início do próprio turno. |
 | Opinar | Qualquer jogador pode marcar uma sugestão durante o turno de outro. Quem tem a vez decide. |
 | Desfazer | Não existe: toda ação revela informação. Para evitar toque errado, toda ação que gasta tempo pede confirmação. |
-| Dados pessoais | Sem conta, sem chat, sem texto livre. Apelido montado por listas (adjetivo + animal). |
+| Dados pessoais | Sem conta e sem chat. O único texto digitado é o apelido (até 20 caracteres), como no Enchente na Vila. Nunca vai para log e some quando a sala expira. |
 | Público | Todas as idades (8+), gratuito, sem compras, sem loot box, sem anúncios, sem rastreadores. Tom leve, sem terror. |
 
 ## 3. Tema, elenco e mapa da v1
@@ -166,7 +166,7 @@ Quatro níveis com nomes do mundo dos mistérios. Todos os valores são **(inici
 | Lenda (`legend`) | 10 × 10 | 7 | 14:30 | 3 ações (1 h 30) | 30% | 2 a 5 | 35% | ≥ 0 |
 
 - "Ruído" é a taxa de cartas sem efeito. "Exclusão em grupo" é o tamanho do grupo nas cartas `exclude-*`. "Parcial" é a taxa de cartas `only-*`.
-- Dica de jogada (`suggest`): ligada em Aprendiz e Investigador, desligada em Perito e Lenda. **(a testar)**
+- Dica de jogada (`suggest`): ligada só no Aprendiz, desligada nos outros níveis (decisão de 25/11/2026; o valor fica nos dados, em `suggestEnabled`).
 - Nos níveis altos, as cartas precisam eliminar vários itens de uma vez (grupos grandes e pistas parciais). Esse é um requisito do gerador, não da interface.
 - O texto de regra e a barra do relógio mostram os valores do nível, vindos dos dados: "Se errarem, o relógio avança 1 hora (2 ações)" é calculado, não escrito.
 
@@ -174,16 +174,16 @@ Quatro níveis com nomes do mundo dos mistérios. Todos os valores são **(inici
 
 - **Um aparelho:** todos em volta de um tablet ou notebook. O segredo só existe no próprio aparelho (a equipe coopera, então não há "passe o aparelho").
 - **Mesa:** uma tela grande mostra o mapa, a pista mais recente, as contagens ("4 de 6 lugares ainda possíveis") e a vez de cada jogador. Os celulares são o controle. Funciona como o modo online mais uma tela espelhada (assento de mesa). **A tela da mesa só é oferecida quando `Math.min(screen.width, screen.height) ≥ 600`** (tela física, não janela nem orientação). Em celular a opção não aparece, e abrir o endereço da mesa leva à tela do jogador com um aviso curto. É uma barreira de interface, não de segurança.
-- **Online:** sala com código de 6 caracteres e senha, do `packages/kit`. Cada pessoa vê o caderno, a pista mais recente e os botões. Só quem tem a vez age.
+- **Online:** sala com código de 6 caracteres, do `packages/kit`. O aparelho guarda o token do assento (a "senha" do assento), que permite voltar ao mesmo lugar. Cada pessoa vê o caderno, a pista mais recente e os botões. Só quem tem a vez age.
 - **Opinar:** fora da sua vez, o jogador marca uma sugestão (uma opção do menu de ações, um lugar, um suspeito ou uma dupla de acusação). Cada jogador tem **uma** sugestão ativa por vez, que some quando a ação é resolvida. As sugestões ficam fora do estado do jogo, com limite de frequência. **(a testar)**
-- **Conversa:** por voz, fora do app. Não há chat nem texto livre.
+- **Conversa:** por voz, fora do app. Não há chat; o único texto digitado é o apelido.
 - **Desconexão:**
   1. A equipe é avisada ("Raposa Curiosa desconectou, o bot assumiu").
   2. O bot entra após cerca de 20 s na vez da pessoa, ou no início do próximo turno dela.
-  3. A pessoa volta com o código e a senha (ou o token do assento) e retoma no início do próprio turno seguinte, nunca no meio do turno de um bot.
+  3. A pessoa volta pelo token do assento (guardado no aparelho) e retoma no início do próprio turno seguinte, nunca no meio do turno de um bot.
   4. O assento não é removido por inatividade.
 - **Bots:** completam a equipe e substituem quem desconecta. Usam só a informação pública (`PublicView`) e nunca a solução. O bot de partida usa a política "casual" por padrão. O bot "ideal" é usado nas simulações e na dica de jogada. **(a testar)**
-- **Apelidos:** montados por listas (adjetivo + animal, em PT-BR e EN). Sem texto livre. Ponto em aberto: no modo de um aparelho, permitir nomes digitados, já que nada sai do aparelho (seção 11).
+- **Apelidos:** digitados por cada pessoa, até 20 caracteres, diferentes dentro da sala (mesma dinâmica do Enchente na Vila). Bots recebem nomes neutros ("Bot 1", "Bot 2"). Nunca vão para log e somem quando a sala expira. Riscos em aberto (seção 11, item 8).
 
 ## 9. Metas de dificuldade e simulação
 
@@ -222,10 +222,10 @@ Na v1, o código **não** implementa papéis. O ponto de extensão está descrit
 2. Valores dos níveis, mistura de pistas e metas: tudo **(inicial)**, calibrar por simulação.
 3. A viabilidade dos níveis altos (Perito e Lenda) com custo 1 por suspeito e 2 por lugar: o gerador pode precisar de mais pistas de grupo ou de folga menor.
 4. Acusação final quando o relógio zera (hoje não existe). Avaliar se frustra.
-5. Dica de jogada ligada nos dois níveis fáceis.
+5. Dica de jogada: decidido em 25/11/2026, só no Aprendiz. Validar com crianças se ajuda ou atrapalha.
 6. Política do bot casual em partida (dica x jogada) e calibração com partidas reais.
 7. Sugestão única por jogador e a confirmação antes de cada ação: validar com crianças e adultos.
-8. Apelidos por listas no modo de um aparelho.
+8. Apelidos digitados (até 20 caracteres): uma criança pode digitar o nome real (dado pessoal, LGPD art. 14) ou uma palavra imprópria, que os outros jogadores veem. Avaliar com o advogado medidas como um aviso na tela ("não use seu nome completo") e um filtro de palavras.
 9. Mesa na TV sem toque: como abrir o caderno completo (controle remoto, teclado ou celular de quem controla).
 10. Textos das cartas gerados por modelos em PT-BR e EN: concordância (o/a, do/da, no/na) e listas ("A, B e C") precisam de formatadores. Validar a legibilidade para 8 anos.
 11. Nome público "Casos da Lupa": consulta ao INPI e parecer jurídico pelo dono do projeto.
@@ -239,7 +239,7 @@ Na v1, o código **não** implementa papéis. O ponto de extensão está descrit
 
 ## 13. Público, privacidade e conformidade
 
-- Todas as idades (8+), gratuito. Sem conta, sem chat, sem texto livre, sem compras, sem loot box, sem anúncios, sem rastreadores. Só apelidos gerados por listas. Nada de dado pessoal em logs.
+- Todas as idades (8+), gratuito. Sem conta, sem chat, sem compras, sem loot box, sem anúncios, sem rastreadores. O único texto digitado é o apelido (até 20 caracteres), que nunca vai para log e some quando a sala expira (riscos na seção 11, item 8). Nada de dado pessoal em logs.
 - Como o jogo pode ser acessado por crianças, a LGPD (art. 14, tratamento de dados de crianças e adolescentes) e o ECA Digital (Lei 15.211/2025) devem ser revisados pelo dono do projeto com um advogado antes da publicação. Este documento não é parecer jurídico.
 - Tom leve: mistério de bairro, sem terror, sem violência, sem sobrenatural pesado.
 - Inspirações gerais (séries e filmes de mistério em equipe) servem só como ideias de mecânica e de clima. Nada de nomes, personagens, cenas ou formatos de obras existentes.
@@ -277,6 +277,14 @@ Na v1, o código **não** implementa papéis. O ponto de extensão está descrit
 
 Decisão nova entra no topo, com data e motivo.
 
+- **25/11/2026 — Dica de jogada só no Aprendiz.** `suggestEnabled` ligado só no Aprendiz (antes: Aprendiz e Investigador). Os bots seguem como na seção 8: completam a equipe, substituem quem desconecta e são a régua da simulação.
+- **25/11/2026 — Apelido digitado, até 20 caracteres.** Mesma dinâmica do Enchente na Vila; substitui os apelidos por listas. O apelido é o único texto digitado, nunca vai para log e some quando a sala expira. Riscos para a revisão jurídica na seção 11, item 8.
+- **25/11/2026 — Stack da v1 confirmada.** Node 24 LTS, pnpm 12, TypeScript ~6.0 estrito (o TS 7 ainda não é aceito pelo `typescript-eslint` nem pelo `svelte-check`), ESLint com regras de arquitetura, Prettier sem ponto e vírgula, Vitest, fast-check, Playwright com axe-core, Svelte 5 + Vite, Cloudflare Workers + Durable Objects (SQLite). Segue o padrão do Enchente na Vila, o projeto mais recente.
+- **25/11/2026 — Zod 4 como validador de schema.** Aprovado como dependência de produção do motor, a partir da Etapa 1. Mesmo validador do Enchente; os tipos saem do schema.
+- **25/11/2026 — "Senha" da sala é o token do assento.** Não existe senha de sala. Entra-se pelo código; o aparelho guarda o token do assento (só o hash fica no servidor) e volta ao mesmo lugar com ele.
+- **25/11/2026 — Visão pública com todos os parâmetros do nível.** `PublicDifficultyParams` traz todos os campos de `DifficultyParams`: nenhum deles revela o mistério, e o bot ideal usa a mistura de pistas como informação a priori (spec, seção 9).
+- **25/11/2026 — Assinaturas da `GameDefinition`.** `newGame(config, seats, seed)` recebe os assentos; `botMove(view, seat)` recebe só a visão, e a política (`skill`) fica em `packages/bots`, com a casual como padrão de partida.
+- **25/11/2026 — Origem do `packages/kit`.** O `senhorio-web` não tem `packages/kit`; o `village-flood` já tem, extraído e generalizado do Senhorio. O kit é copiado do `village-flood` (com a origem citada nos arquivos) e adaptado à informação escondida: `viewFor` por destinatário, bot só com a visão e sugestão única por jogador. A Etapa 0 traz só a interface e as constantes; a sala completa entra na Etapa 4.
 - **25/11/2026 — Papéis depois da v1.** Habilidade grátis facilita o jogo e dobra a calibração. A v1 calibra a linha de base primeiro.
 - **25/11/2026 — Nome público "Casos da Lupa" (`magnifier-cases`).** Usa as palavras preferidas do dono do projeto (lupa, caso). Pendente de consulta ao INPI.
 - **25/11/2026 — Níveis e relógio derivado.** Quatro níveis aprovados. O fim é fixo (18:00) e o início depende das ações do nível. Metas por bot (seção 9) e simulação com testes reais do bot.
