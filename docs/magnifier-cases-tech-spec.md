@@ -170,8 +170,10 @@ interface DifficultyParams {
   excludeGroupSize: { min: number; max: number }
   includeRate: number                                // taxa de cartas only-*
   includeGroupSize: { min: number; max: number }     // inicial: 2..3
+  placeTargetRate: number                            // 0..1, cartas que falam de lugares (inicial: 0,5)
   minSlack: number
   suggestEnabled: boolean
+  maxAttempts: number                                // tentativas do gerador (inicial: 500)
 }
 
 interface ThemePack {

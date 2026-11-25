@@ -62,7 +62,7 @@ export function solve(
   const n = cast.suspects.length
   const total = n + cast.places.length
   if (total > MAX_CAST_ITEMS) throw new RangeError('elenco grande demais para o solucionador')
-  const all = total === 32 ? -1 >>> 0 : ((1 << total) >>> 0) - 1
+  const all = ((1 << total) >>> 0) - 1
   const masks = cards.map((c) => eliminationMask(c, cast) >>> 0)
   const costs = cards.map((c) => cardCost(c))
   const union = masks.reduce((acc, m) => (acc | m) >>> 0, 0)

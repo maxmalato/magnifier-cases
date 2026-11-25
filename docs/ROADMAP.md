@@ -11,7 +11,7 @@ A ordem é **motor, gerador, solucionador, bots e simulação antes de qualquer 
 | Etapa | Situação | Tag |
 | --- | --- | --- |
 | 0 – Fundação | Concluída | `v0.1-foundation` |
-| 1 – Motor, gerador e solucionador | Em andamento | `v0.2-engine` |
+| 1 – Motor, gerador e solucionador | Pronta para revisão (fecha com o CI verde na `main`) | `v0.2-engine` |
 | 2 – Bots e simulação | Não iniciada | `v0.3-bots-sim` |
 | 3 – Telas (um aparelho) | Não iniciada | `v0.4-local-ui` |
 | 4 – Online | Não iniciada | `v0.5-online` |
