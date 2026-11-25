@@ -6,9 +6,9 @@ Valores marcados **(inicial)** e regras marcadas **(a testar)** no documento de 
 
 ## 1. Objetivos e fora de escopo (v1)
 
-Objetivos: jogo cooperativo de dedução para 2 a 6 pessoas, nos modos um aparelho, mesa e online, como PWA para celular, tablet, desktop e navegador de Smart TV. Um tema (o bolo da festa), 10 suspeitos, 10 lugares, 4 níveis, gerador de mistérios com solucionador, bots (ideal, casual, aleatório) para simulação, testes e dica de jogada, e simulação em lote. Bots não jogam nas partidas.
+Objetivos: jogo cooperativo de dedução para 2 a 6 assentos (pessoas ou bots), nos modos um aparelho, mesa e online, como PWA para celular, tablet, desktop e navegador de Smart TV. Um tema (o bolo da festa), 10 suspeitos, 10 lugares, 4 níveis, gerador de mistérios com solucionador, bots (ideal, casual, aleatório) e simulação em lote.
 
-Fora de escopo da v1: contas, ranking, chat, texto livre (exceto o apelido, até 20 caracteres), bots nas partidas, papéis e habilidades (seção 12), outros temas, casos em capítulos, enigmas de código, pistas binárias (que relacionam culpado e lugar), cartas com mais de um efeito.
+Fora de escopo da v1: contas, ranking, chat, texto livre (exceto o apelido, até 20 caracteres), papéis e habilidades (seção 12), outros temas, casos em capítulos, enigmas de código, pistas binárias (que relacionam culpado e lugar), cartas com mais de um efeito.
 
 ## 2. Stack proposta
 
@@ -36,10 +36,11 @@ interface GameDefinition<State, Action, Event, Config, View> {
   transition(state: State, action: Action, ctx: Ctx): Result<State, Event>
   actorsOf(state: State): SeatId[]
   viewFor(state: State, seat: SeatId | 'table'): View   // NÃO é identidade neste jogo
+  botMove(view: View, seat: SeatId): Action             // só a visão pública
 }
 ```
 
-Diferença importante em relação ao `village-flood`: aqui existe informação escondida. `viewFor` remove a solução, a semente e o conteúdo das cartas fechadas. O servidor só envia o resultado de `viewFor`. Os bots (simulação e dica) recebem a visão pública, nunca o estado completo. Bots não jogam nas partidas, então a `GameDefinition` não tem `botMove`.
+Diferença importante em relação ao `village-flood`: aqui existe informação escondida. `viewFor` remove a solução, a semente e o conteúdo das cartas fechadas. O servidor só envia o resultado de `viewFor`. O bot recebe a visão pública, nunca o estado completo.
 
 ## 4. Domínio (`packages/engine`)
 
@@ -89,7 +90,7 @@ interface GameState {
 
 Ações (união discriminada): `move { placeId }`, `investigate`, `interrogate { suspectId }`, `accuse { suspectId, placeId }`.
 
-Eventos (UI, som e log): `moved`, `clue-found`, `testimony-given`, `candidates-changed`, `accused-wrong`, `clock-advanced`, `turn-started`, `player-away`, `player-returned`, `won`, `timed-out`, `revealed`.
+Eventos (UI, som e log): `moved`, `clue-found`, `testimony-given`, `candidates-changed`, `accused-wrong`, `clock-advanced`, `turn-started`, `bot-took-over`, `player-returned`, `won`, `timed-out`, `revealed`.
 
 Contrato: `transition(state, action, ctx)` é pura e devolve `{ ok, state, events, reason }`. Nunca muta a entrada. `ctx` traz o assento que age. Toda validação acontece aqui e no servidor.
 
@@ -203,22 +204,22 @@ Os valores iniciais da tabela da seção 7 do documento de regras entram em `Dif
 - A semente é gerada no servidor (fonte de aleatoriedade do ambiente). No modo local, no aparelho.
 - Sem contas. Apelido digitado, até 20 caracteres e único na sala (como no Enchente na Vila); nunca em log, apagado com a sala. Nada de dado pessoal em logs.
 
-## 9. Desconexão e bots (fora das partidas)
+## 9. Desconexão e bots
 
-Presença por assento, do `kit`: `connected` → `away` (a conexão caiu) → `connected` (voltou pelo token). Eventos `player-away` e `player-returned` alimentam o aviso. Sem bot para assumir: o que acontece com a vez de quem caiu está em aberto (regras, seção 11, item 12) e precisa ser decidido antes da Etapa 4.
+Máquina de estados por assento humano, do `kit`: `connected` → `away` → `bot-controlled` (após cerca de 20 s na vez dele, ou ao chegar o turno dele) → `returning` → `connected` (no início do turno dele). Eventos `bot-took-over` e `player-returned` alimentam o aviso.
 
-`packages/bots`, funções puras sobre `PublicView`, usadas na simulação, nos testes e na dica de jogada (nunca como jogador numa partida):
+`packages/bots`, funções puras sobre `PublicView`:
 
 - `botMove(view, seat, skill)`: `skill` é `'ideal' | 'casual' | 'random'`. Determinística para o mesmo estado e semente de decisão.
 - **Ideal:** mantém o conjunto de candidatos. Escolhe a carta com maior ganho esperado de eliminação por ação gasta (suspeito custa 1, lugar custa 2), usando as médias da mistura do nível (`DifficultyParams`) como informação a priori, nunca o conteúdo de cartas fechadas. Acusa quando resta um candidato, ou quando a chance de acertar e o relógio compensam o custo do erro. A política exata é definida e documentada na Etapa 2.
 - **Casual:** o ideal com defeitos configuráveis (`mistakeRate`, `ignorePartialRate`, `earlyAccuseRate`), calibrados com partidas reais.
 - **Aleatório:** linha de base. Abre cartas ao acaso e acusa quando restam poucos candidatos.
 - `suggest(view, seat)`: usa a política ideal, exibida como dica quando `suggestEnabled`.
-- A dica roda no servidor (online) ou no cliente (local), sempre a mesma função pura.
+- O bot roda no servidor (online) ou no cliente (local), sempre a mesma função pura.
 
 ## 10. UI (Svelte 5)
 
-Telas (alinhadas aos mockups em `docs/mockups/`): início (criar sala, entrar, jogar local), lobby (apelidos, nível), novo mistério (briefing), vez de alguém (escolher ação), nova pista, interrogatório, caderno, acusação, revelação, mesa (TV ou tablet).
+Telas (alinhadas aos mockups em `docs/mockups/`): início (criar sala, entrar, jogar local), lobby (apelidos, bots, nível), novo mistério (briefing), vez de alguém (escolher ação), nova pista, interrogatório, caderno, acusação, revelação, mesa (TV ou tablet).
 
 - Componentes: `ClockPill`, `ActionSegments` (barra com `actionsTotal` segmentos, não 8 fixos), `PlaceGrid` (grade do mapa, 3×2, 3×3 ou 4×3), `Notebook`, `ClueCard`, `SuggestionMarker`, `OptionList`.
 - O texto da regra e os números do relógio vêm de `DifficultyParams`. Nenhum valor de nível fica escrito na tela.
@@ -236,7 +237,7 @@ Telas (alinhadas aos mockups em `docs/mockups/`): início (criar sala, entrar, j
 - **Propriedades (fast-check):** a solução **sempre** pertence aos candidatos (toda pista é verdadeira); candidatos nunca aumentam; `transition` nunca muta a entrada; mesma semente e mesmas ações geram o mesmo resultado; nenhuma carta elimina a própria origem; nenhum `only-*` com grupo de tamanho 1; todo mistério gerado é único e tem `slack ≥ minSlack`; `viewFor` nunca vaza (ver abaixo).
 - **Vazamento:** construir um estado com marcadores únicos (strings sentinela) no texto de cartas fechadas, na solução, na semente e no `oracle`, serializar `viewFor` para cada assento e para a mesa, e garantir que nenhum marcador aparece. O mesmo teste roda no servidor sobre as mensagens enviadas.
 - **Simulação (`packages/sim`, fora do `pnpm test`):** 10.000 mistérios por nível × bot (ideal, casual, aleatório). Métricas: taxa de vitória, ações usadas, horário médio de resolução, causa do fim, taxa de rejeição do gerador, distribuição da folga, tempo de geração, e diferença ideal − aleatório (meta ≥ 25 pontos). Relatório em tabela e em JSON versionado. Uma versão reduzida roda na CI e **quebra o build** se um nível sair da meta.
-- **E2E (Playwright):** criar sala, entrar, jogar até vencer, errar uma acusação, tempo esgotado, opinar, desconexão e volta, mesa (em viewport de tablet; em celular a opção não aparece), um aparelho.
+- **E2E (Playwright):** criar sala, entrar, jogar até vencer, errar uma acusação, tempo esgotado, opinar, desconexão com bot assumindo e volta, mesa (em viewport de tablet; em celular a opção não aparece), um aparelho.
 - **Acessibilidade (axe-core):** todas as telas, nos temas claro e escuro.
 - **Aparelhos reais:** celular, tablet e navegador de Smart TV antes de fechar a etapa de mesa, inclusive celular com "site para computador" ligado.
 

@@ -83,4 +83,9 @@ export const guessGame: GameDefinition<
     ...(state.won ? { secret: state.secret } : {}),
   }),
   eventsFor: (events) => events,
+  botMove: (view) => {
+    let n = 1
+    while (view.guesses.includes(n)) n++
+    return { type: 'guess', n }
+  },
 }

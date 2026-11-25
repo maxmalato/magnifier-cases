@@ -59,9 +59,9 @@ Deixa o projeto pronto para receber código.
 
 ## Etapa 3 – Telas (um aparelho)
 
-`apps/web`, modo local.
+`apps/web`, modo local, com bots completando a equipe.
 
-- Telas fiéis aos mockups em `docs/mockups/`: novo mistério, vez de alguém, nova pista, interrogatório, caderno, acusação e revelação. Início e lobby (apelidos digitados, nível).
+- Telas fiéis aos mockups em `docs/mockups/`: novo mistério, vez de alguém, nova pista, interrogatório, caderno, acusação e revelação. Início e lobby (apelidos digitados, bots, nível).
 - Relógio e barra de ações vindos dos dados do nível. Confirmação antes de cada ação. Itens bloqueados com motivo.
 - i18n PT-BR e EN. Acessibilidade (`aria-live`, `prefers-reduced-motion`, estado sem depender de cor).
 
@@ -73,10 +73,10 @@ Deixa o projeto pronto para receber código.
 
 - Salas com código, assentos, token do assento (a "senha") guardado como hash, limites e expiração.
 - O servidor guarda a solução e envia só `PublicView`. Teste de vazamento nas mensagens.
-- Desconexão: aviso à equipe e volta do jogador pelo token. A vez de quem caiu segue a decisão do ponto em aberto (regras, seção 11, item 12).
+- Desconexão: bot assume, aviso à equipe, volta do jogador no início do próprio turno.
 - Opinar (sugestão única por jogador). `resync` na reconexão. O servidor valida toda ação.
 
-**Pronto quando:** E2E com dois ou mais navegadores cobrindo criar sala, entrar, jogar até o fim, opinar, desconexão e volta do jogador; teste de que ação de quem não é da vez é recusada; teste de que nenhuma mensagem contém a solução, a semente ou carta fechada.
+**Pronto quando:** E2E com dois ou mais navegadores cobrindo criar sala, entrar, jogar até o fim, opinar, desconexão com bot assumindo e volta do jogador; teste de que ação de quem não é da vez é recusada; teste de que nenhuma mensagem contém a solução, a semente ou carta fechada.
 
 ## Etapa 5 – Mesa e PWA
 

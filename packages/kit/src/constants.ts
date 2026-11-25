@@ -1,7 +1,7 @@
 // Constantes das salas (spec, seção 8).
 // Origem: village-flood, packages/kit/src/constants.ts (commit dc9b801), que por sua vez veio
 // do senhorio-web. Fora daqui: o limite de pings por turno (aqui a sugestão vem dos dados do
-// jogo) e os tempos de bot (aqui bots não jogam nas partidas; regras, registro de 25/11/2026).
+// jogo).
 
 /** 32 símbolos sem 0/O e 1/I, para ninguém confundir ao ditar o código. */
 export const ROOM_CODE_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
@@ -20,6 +20,16 @@ export const MAX_NAME_LENGTH = 20
  * Nas mensagens, `seat: TABLE_SEAT` é a mesa.
  */
 export const TABLE_SEAT = 'table'
+
+/** Tempos de bot e desconexão (configuráveis no servidor; os testes usam valores curtos). */
+export interface RoomTimings {
+  /** Espera na vez de quem caiu antes de o bot assumir (regras, seção 8: cerca de 20 s). */
+  readonly takeoverMs: number
+  /** Intervalo entre as jogadas de um bot, para a mesa e os celulares acompanharem. */
+  readonly botStepMs: number
+}
+
+export const defaultTimings: RoomTimings = { takeoverMs: 20_000, botStepMs: 900 }
 
 /** Código em maiúsculas, sem espaços, traços ou pontos; null se não for um código válido. */
 export function normalizeCode(input: string): string | null {

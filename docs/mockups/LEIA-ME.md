@@ -3,7 +3,7 @@
 - `source/` guarda o código-fonte das telas (`*.dc.html`) e o `canvas.json` com a ordem das pranchas. Serve de referência para cores, medidas e textos. Os arquivos não abrem sozinhos no navegador: dependem do visualizador onde foram criados.
 - Coloque aqui as telas exportadas (PNG ou PDF), se quiser: `overview.png`, `table.png`, `briefing.png`, `your-turn.png`, `clue.png`, `interrogation.png`, `notebook.png`, `accusation.png`, `reveal.png`.
 - Telas: visão geral, mesa (tela grande), novo mistério, vez de alguém (escolher ação), nova pista, interrogatório, caderno, acusação e revelação (vitória e tempo esgotado).
-- Telas que **ainda não existem** e devem ser desenhadas na Etapa 3 ou 4: início, lobby (apelidos, nível), opinar (sugestão), jogador desconectou, jogador voltou, aviso de mesa não disponível em celular.
+- Telas que **ainda não existem** e devem ser desenhadas na Etapa 3 ou 4: início, lobby (apelidos digitados, bots, nível), opinar (sugestão), bot assumiu, jogador voltou, aviso de mesa não disponível em celular.
 
 ## Os mockups usam um caso ilustrativo
 

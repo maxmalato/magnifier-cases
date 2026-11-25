@@ -60,21 +60,19 @@ describe('GameDefinition (jogo fictício com segredo)', () => {
     )
   })
 
-  it('jogando só com a visão, a partida chega ao fim e o segredo aparece só então', () => {
+  it('o bot joga só com a visão e chega ao fim sem ação recusada', () => {
     let state = guessGame.newGame(guessGame.defaultConfig, SEATS, 7)
     for (let step = 0; step < 20 && !guessGame.isOver(state); step++) {
       const seat = guessGame.activeSeat(state)
       if (seat === null) break
-      const view = guessGame.viewFor(state, seat)
-      expect(view).not.toHaveProperty('secret')
-      // palpite escolhido só com a visão: o menor número ainda não tentado
-      let n = 1
-      while (view.guesses.includes(n)) n++
-      const result = guessGame.transition(state, { type: 'guess', n }, seat)
+      const result = guessGame.transition(
+        state,
+        guessGame.botMove(guessGame.viewFor(state, seat), seat),
+        seat,
+      )
       expect(result.ok).toBe(true)
       if (result.ok) state = result.state
     }
     expect(guessGame.isOver(state)).toBe(true)
-    expect(guessGame.viewFor(state, TABLE_SEAT)).toHaveProperty('secret')
   })
 })

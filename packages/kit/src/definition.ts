@@ -2,7 +2,7 @@
 // Origem: village-flood, packages/kit/src/definition.ts (commit dc9b801), adaptada à
 // informação escondida (decisões de 25/11/2026 no registro das regras):
 // - o kit nunca envia o estado (S): cada destinatário recebe só `viewFor` (V);
-// - sem `botMove`: bots não jogam nas partidas (só na simulação, nos testes e na dica);
+// - o bot recebe a visão, nunca o estado;
 // - sem perfil de assento (papéis ficam para depois da v1).
 // A sala completa (lobby, partida, desconexão, sugestões, mesa) entra na Etapa 4.
 import type { TABLE_SEAT } from './constants.ts'
@@ -50,4 +50,6 @@ export interface GameDefinition<S, A, E, C, V> {
   viewFor(state: S, viewer: Viewer): V
   /** Eventos como o destinatário pode vê-los (nenhum evento leva segredo antes do fim). */
   eventsFor(events: readonly E[], viewer: Viewer): readonly E[]
+  /** Jogada do bot: função pura, só com a visão pública. */
+  botMove(view: V, seat: SeatId): A
 }
