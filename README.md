@@ -18,7 +18,7 @@ Aprendiz, Investigador, Perito e Lenda. O mapa e o relógio mudam com o nível.
 
 ## Situação
 
-Etapa 0 (fundação) pronta para revisão: o monorepo, as ferramentas e o CI estão configurados, ainda sem lógica de jogo. Veja `docs/ROADMAP.md`.
+Etapa 0 (fundação) concluída. Etapa 1 (motor, gerador e solucionador) em andamento. Veja `docs/ROADMAP.md`.
 
 ## Como rodar
 
