@@ -41,9 +41,16 @@ const purity = {
   ],
   'no-restricted-globals': [
     'error',
-    ...['window', 'document', 'navigator', 'localStorage', 'sessionStorage', 'fetch', 'crypto'].map(
-      (name) => ({ name, message: 'Pacote puro: sem APIs de navegador ou de rede.' }),
-    ),
+    ...[
+      'window',
+      'document',
+      'navigator',
+      'localStorage',
+      'sessionStorage',
+      'fetch',
+      'crypto',
+      'performance',
+    ].map((name) => ({ name, message: 'Pacote puro: sem APIs de navegador ou de rede.' })),
   ],
 }
 
@@ -90,16 +97,36 @@ export default defineConfig(
     },
   },
   // ---- Regras de arquitetura ----
+  // Nos testes dos pacotes puros, só a direção das dependências vale (eles podem medir tempo).
+  {
+    files: ['packages/{engine,content,kit,bots}/src/**/*.test.ts'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['@magnifier-cases/web', '@magnifier-cases/server', '@magnifier-cases/sim'],
+              message: layer('testes de pacote puro não importam a interface nem o servidor'),
+            },
+          ],
+        },
+      ],
+    },
+  },
   {
     files: ['packages/engine/src/**/*.ts'],
+    ignores: ['**/*.test.ts'],
     rules: { ...onlyImports([], 'o motor não depende de nenhum outro pacote'), ...purity },
   },
   {
     files: ['packages/content/src/**/*.ts'],
+    ignores: ['**/*.test.ts'],
     rules: { ...onlyImports(['engine'], 'o conteúdo só depende do motor'), ...purity },
   },
   {
     files: ['packages/kit/src/**/*.ts'],
+    ignores: ['**/*.test.ts'],
     rules: {
       ...onlyImports([], 'o kit é agnóstico de jogo e só conhece GameDefinition'),
       ...purity,
@@ -107,6 +134,7 @@ export default defineConfig(
   },
   {
     files: ['packages/bots/src/**/*.ts'],
+    ignores: ['**/*.test.ts'],
     rules: {
       ...onlyImports(['engine'], 'os bots só dependem do motor (e só veem PublicView)'),
       ...purity,
