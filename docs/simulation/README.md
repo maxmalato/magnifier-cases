@@ -82,5 +82,5 @@ Conclusão: com acusação que só custa tempo, acusar todas as duplas é a joga
 ## Para aprovar (portão da Etapa 3)
 
 - A calibração da tabela acima (aprovada em 25/11/2026).
-- O bot casual como aviso na CI até a Etapa 7 (`casualEnforced: false`).
+- O bot casual como aviso na CI até a Etapa 7 (`casualEnforced: false`) (aprovado em 25/11/2026).
 - Uma decisão sobre o item 12 (acusar dupla por dupla).
