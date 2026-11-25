@@ -1,0 +1,356 @@
+{
+  "meta": {
+    "label": "Linha de base (valores iniciais)",
+    "runs": 10000,
+    "baseSeed": 1,
+    "engine": "magnifier-cases/engine"
+  },
+  "targets": {
+    "levels": {
+      "apprentice": {
+        "idealMin": 0.98,
+        "casual": {
+          "min": 0.85,
+          "max": 0.95
+        }
+      },
+      "investigator": {
+        "idealMin": 0.9,
+        "casual": {
+          "min": 0.65,
+          "max": 0.8
+        }
+      },
+      "expert": {
+        "idealMin": 0.75,
+        "casual": {
+          "min": 0.45,
+          "max": 0.6
+        }
+      },
+      "legend": {
+        "idealMin": 0.55,
+        "casual": {
+          "min": 0.25,
+          "max": 0.4
+        }
+      }
+    },
+    "minIdealRandomGap": 0.25
+  },
+  "results": [
+    {
+      "level": "apprentice",
+      "mysteries": 10000,
+      "generationFailures": 0,
+      "avgAttempts": 4.9515,
+      "slack": {
+        "3": 4867,
+        "4": 3495,
+        "5": 1465,
+        "6": 173
+      },
+      "avgMinCost": 6.3056,
+      "avgGenerationMs": 0.05415777050000056,
+      "bots": [
+        {
+          "skill": "ideal",
+          "games": 10000,
+          "winRate": 0.9707,
+          "winRateCi95": {
+            "low": 0.9672094769090709,
+            "high": 0.9738290137443597
+          },
+          "avgActionsUsed": 5.915,
+          "avgSolvedAt": "15:54",
+          "endCauses": {
+            "won": 9707,
+            "timeout-actions": 0,
+            "timeout-accusation": 293
+          },
+          "avgWrongAccusations": 2.056,
+          "avgCardsOpened": 3.689
+        },
+        {
+          "skill": "casual",
+          "games": 10000,
+          "winRate": 0.9013,
+          "winRateCi95": {
+            "low": 0.8952991146998195,
+            "high": 0.906992676885525
+          },
+          "avgActionsUsed": 6.6646,
+          "avgSolvedAt": "16:09",
+          "endCauses": {
+            "won": 9013,
+            "timeout-actions": 0,
+            "timeout-accusation": 987
+          },
+          "avgWrongAccusations": 1.6348,
+          "avgCardsOpened": 4.0953
+        },
+        {
+          "skill": "random",
+          "games": 10000,
+          "winRate": 0.5172,
+          "winRateCi95": {
+            "low": 0.507401073666286,
+            "high": 0.5269857163044789
+          },
+          "avgActionsUsed": 9.0914,
+          "avgSolvedAt": "17:07",
+          "endCauses": {
+            "won": 5172,
+            "timeout-actions": 0,
+            "timeout-accusation": 4828
+          },
+          "avgWrongAccusations": 0.6146,
+          "avgCardsOpened": 5.557
+        }
+      ],
+      "idealRandomGap": 0.4535
+    },
+    {
+      "level": "investigator",
+      "mysteries": 10000,
+      "generationFailures": 0,
+      "avgAttempts": 2.5724,
+      "slack": {
+        "2": 4627,
+        "3": 4272,
+        "4": 1101
+      },
+      "avgMinCost": 5.3526,
+      "avgGenerationMs": 0.034747599400001994,
+      "bots": [
+        {
+          "skill": "ideal",
+          "games": 10000,
+          "winRate": 0.5583,
+          "winRateCi95": {
+            "low": 0.5485463015497865,
+            "high": 0.568008922595306
+          },
+          "avgActionsUsed": 6.7415,
+          "avgSolvedAt": "16:52",
+          "endCauses": {
+            "won": 5583,
+            "timeout-actions": 0,
+            "timeout-accusation": 4417
+          },
+          "avgWrongAccusations": 0.635,
+          "avgCardsOpened": 5.4279
+        },
+        {
+          "skill": "casual",
+          "games": 10000,
+          "winRate": 0.496,
+          "winRateCi95": {
+            "low": 0.4862037313161229,
+            "high": 0.505799340783699
+          },
+          "avgActionsUsed": 7.004,
+          "avgSolvedAt": "17:00",
+          "endCauses": {
+            "won": 4960,
+            "timeout-actions": 0,
+            "timeout-accusation": 5040
+          },
+          "avgWrongAccusations": 0.7238,
+          "avgCardsOpened": 5.162
+        },
+        {
+          "skill": "random",
+          "games": 10000,
+          "winRate": 0.27,
+          "winRateCi95": {
+            "low": 0.2613879401026093,
+            "high": 0.27878870563716324
+          },
+          "avgActionsUsed": 7.654,
+          "avgSolvedAt": "17:22",
+          "endCauses": {
+            "won": 2700,
+            "timeout-actions": 0,
+            "timeout-accusation": 7300
+          },
+          "avgWrongAccusations": 0.7496,
+          "avgCardsOpened": 4.4524
+        }
+      ],
+      "idealRandomGap": 0.2883
+    },
+    {
+      "level": "expert",
+      "mysteries": 10000,
+      "generationFailures": 0,
+      "avgAttempts": 1.3075,
+      "slack": {
+        "1": 1002,
+        "2": 2593,
+        "3": 4285,
+        "4": 2120
+      },
+      "avgMinCost": 5.2477,
+      "avgGenerationMs": 0.025449348199998438,
+      "bots": [
+        {
+          "skill": "ideal",
+          "games": 10000,
+          "winRate": 0.483,
+          "winRateCi95": {
+            "low": 0.473214072827842,
+            "high": 0.49279898359640195
+          },
+          "avgActionsUsed": 7.1604,
+          "avgSolvedAt": "17:08",
+          "endCauses": {
+            "won": 4830,
+            "timeout-actions": 0,
+            "timeout-accusation": 5170
+          },
+          "avgWrongAccusations": 0.6277,
+          "avgCardsOpened": 6.4186
+        },
+        {
+          "skill": "casual",
+          "games": 10000,
+          "winRate": 0.4093,
+          "winRateCi95": {
+            "low": 0.3996992055224095,
+            "high": 0.41897045434105723
+          },
+          "avgActionsUsed": 7.2648,
+          "avgSolvedAt": "17:06",
+          "endCauses": {
+            "won": 4093,
+            "timeout-actions": 0,
+            "timeout-accusation": 5907
+          },
+          "avgWrongAccusations": 0.714,
+          "avgCardsOpened": 5.7061
+        },
+        {
+          "skill": "random",
+          "games": 10000,
+          "winRate": 0.2138,
+          "winRateCi95": {
+            "low": 0.2058749452926422,
+            "high": 0.22194486344963135
+          },
+          "avgActionsUsed": 7.7205,
+          "avgSolvedAt": "17:21",
+          "endCauses": {
+            "won": 2138,
+            "timeout-actions": 0,
+            "timeout-accusation": 7862
+          },
+          "avgWrongAccusations": 0.8021,
+          "avgCardsOpened": 4.4718
+        }
+      ],
+      "idealRandomGap": 0.2692
+    },
+    {
+      "level": "legend",
+      "mysteries": 10000,
+      "generationFailures": 0,
+      "avgAttempts": 1.107,
+      "slack": {
+        "0": 289,
+        "1": 1418,
+        "2": 4272,
+        "3": 4021
+      },
+      "avgMinCost": 4.7975,
+      "avgGenerationMs": 0.02719519309999232,
+      "bots": [
+        {
+          "skill": "ideal",
+          "games": 10000,
+          "winRate": 0.3035,
+          "winRateCi95": {
+            "low": 0.2945653958757968,
+            "high": 0.31258552102796533
+          },
+          "avgActionsUsed": 6.6243,
+          "avgSolvedAt": "17:23",
+          "endCauses": {
+            "won": 3035,
+            "timeout-actions": 0,
+            "timeout-accusation": 6965
+          },
+          "avgWrongAccusations": 0.7149,
+          "avgCardsOpened": 5.8726
+        },
+        {
+          "skill": "casual",
+          "games": 10000,
+          "winRate": 0.2692,
+          "winRateCi95": {
+            "low": 0.26059638340256813,
+            "high": 0.2779808767571688
+          },
+          "avgActionsUsed": 6.6238,
+          "avgSolvedAt": "17:18",
+          "endCauses": {
+            "won": 2692,
+            "timeout-actions": 0,
+            "timeout-accusation": 7308
+          },
+          "avgWrongAccusations": 0.7519,
+          "avgCardsOpened": 5.2065
+        },
+        {
+          "skill": "random",
+          "games": 10000,
+          "winRate": 0.1396,
+          "winRateCi95": {
+            "low": 0.13294549008047837,
+            "high": 0.14653130611349577
+          },
+          "avgActionsUsed": 6.8326,
+          "avgSolvedAt": "17:24",
+          "endCauses": {
+            "won": 1396,
+            "timeout-actions": 0,
+            "timeout-accusation": 8604
+          },
+          "avgWrongAccusations": 0.8617,
+          "avgCardsOpened": 3.8398
+        }
+      ],
+      "idealRandomGap": 0.1639
+    }
+  ],
+  "issues": [
+    {
+      "level": "apprentice",
+      "message": "bot ideal 97.1% (meta: ≥ 98.0%)"
+    },
+    {
+      "level": "investigator",
+      "message": "bot ideal 55.8% (meta: ≥ 90.0%)"
+    },
+    {
+      "level": "investigator",
+      "message": "bot casual 49.6% (meta: 65.0%–80.0%)"
+    },
+    {
+      "level": "expert",
+      "message": "bot ideal 48.3% (meta: ≥ 75.0%)"
+    },
+    {
+      "level": "expert",
+      "message": "bot casual 40.9% (meta: 45.0%–60.0%)"
+    },
+    {
+      "level": "legend",
+      "message": "bot ideal 30.3% (meta: ≥ 55.0%)"
+    },
+    {
+      "level": "legend",
+      "message": "ideal − aleatório 16.4% (meta: ≥ 25.0%)"
+    }
+  ]
+}

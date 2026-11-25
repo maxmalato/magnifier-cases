@@ -88,7 +88,8 @@ describe('bots', () => {
   })
 
   it('acusar todas as duplas é seguro quando cabe no relógio', () => {
-    const view = viewFor(start('investigator', 1)) // erro custa 2
+    const base = viewFor(start('expert', 1))
+    const view = { ...base, params: { ...base.params, wrongAccusationCost: 2 } }
     expect(guessingIsSafe({ ...view, actionsLeft: 5 }, 3)).toBe(true) // 2 erros (4) + 1
     expect(guessingIsSafe({ ...view, actionsLeft: 4 }, 3)).toBe(false)
     expect(guessingIsSafe({ ...view, actionsLeft: 1 }, 1)).toBe(true)
