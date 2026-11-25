@@ -18,7 +18,38 @@ Aprendiz, Investigador, Perito e Lenda. O mapa e o relógio mudam com o nível.
 
 ## Situação
 
-Em planejamento. Veja `docs/ROADMAP.md`.
+Etapa 0 (fundação) pronta para revisão: o monorepo, as ferramentas e o CI estão configurados, ainda sem lógica de jogo. Veja `docs/ROADMAP.md`.
+
+## Como rodar
+
+Pré-requisitos: Node 24 (veja `.nvmrc`) e pnpm 12.
+
+```bash
+pnpm install
+pnpm test        # testes de unidade e de propriedades (Vitest + fast-check)
+pnpm lint        # ESLint (com as regras de arquitetura) e Prettier
+pnpm typecheck   # TypeScript estrito em todos os pacotes
+pnpm build       # site (Vite) e Worker (wrangler, sem publicar)
+pnpm e2e         # testes de ponta a ponta (Playwright + axe-core)
+pnpm simulate    # simulação com bots (Etapa 2; fora do pnpm test)
+pnpm --filter @magnifier-cases/web dev      # site em desenvolvimento
+pnpm --filter @magnifier-cases/server dev   # servidor local da Cloudflare
+```
+
+## Estrutura
+
+| Pasta               | Conteúdo                                                               |
+| ------------------- | ---------------------------------------------------------------------- |
+| `packages/engine`   | Motor de regras, gerador e solucionador (puro, sem I/O)                |
+| `packages/content`  | Tema, modelos de pista, textos PT-BR e EN e o nome público (`appName`) |
+| `packages/protocol` | Mensagens entre o aparelho e o servidor                                |
+| `packages/kit`      | Salas, assentos, reconexão, limites e modo mesa (agnóstico de jogo)    |
+| `packages/bots`     | Bots ideal, casual e aleatório (só com a visão pública)                |
+| `packages/sim`      | Simulação em lote                                                      |
+| `apps/web`          | Interface (Svelte 5 + Vite)                                            |
+| `apps/server`       | Cloudflare Worker + Durable Object por sala                            |
+
+As dependências apontam para dentro: a interface e o servidor dependem do motor, e o motor não depende de ninguém. O ESLint garante isso.
 
 ## Documentação
 

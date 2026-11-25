@@ -61,11 +61,15 @@ pnpm test
 pnpm lint
 pnpm typecheck
 pnpm build
-pnpm e2e
-pnpm --filter @magnifier-cases/sim simulate   # simulação com bots (fora do pnpm test)
+pnpm e2e                                      # Playwright + axe-core (apps/web)
+pnpm simulate                                 # simulação com bots (fora do pnpm test)
+pnpm --filter @magnifier-cases/web dev        # site em desenvolvimento
+pnpm --filter @magnifier-cases/server dev     # servidor local da Cloudflare
 ```
 
-(Ajuste os nomes dos pacotes na Etapa 0.)
+Pacotes: `@magnifier-cases/engine`, `content`, `protocol`, `kit`, `bots`, `sim`, `web` e `server`. O ESLint garante a direção das dependências e a pureza do motor, do conteúdo, do kit e dos bots (sem `Math.random`, `Date.now`, `console` nem APIs de navegador).
+
+No ambiente sem download de navegador, rode o E2E com `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` apontando para um Chromium já instalado.
 
 ## Regras de trabalho
 
