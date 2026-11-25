@@ -4,7 +4,7 @@ Instruções para o Claude Code neste repositório. Leia antes de qualquer taref
 
 ## O projeto
 
-Casos da Lupa (`magnifier-cases`): jogo **cooperativo de dedução** para o navegador, de 2 a 6 assentos (pessoas ou bots). No tema da v1, o bolo da festa sumiu. Um culpado e um esconderijo ficam em segredo. A equipe gasta ações de 30 minutos (investigar um lugar, interrogar um suspeito, ir a outro lugar) até as 18h e acusa um suspeito e um lugar. Todas as pistas são verdadeiras. Modos: um aparelho, mesa (tela grande + celulares, só em tela grande) e online (sala por código e senha). Roda em celular, tablet, desktop e Smart TV com navegador, como PWA. Todas as idades (8+).
+Casos da Lupa (`magnifier-cases`): jogo **cooperativo de dedução** para o navegador, de 2 a 6 assentos (pessoas ou bots). No tema da v1, o bolo da festa sumiu. Um culpado e um esconderijo ficam em segredo. A equipe gasta ações de 30 minutos (investigar um lugar, interrogar um suspeito, ir a outro lugar) até as 18h e acusa um suspeito e um lugar. Todas as pistas são verdadeiras. Modos: um aparelho, mesa (tela grande + celulares, só em tela grande) e online (sala por código; o aparelho guarda o token do assento). Roda em celular, tablet, desktop e Smart TV com navegador, como PWA. Todas as idades (8+).
 
 - Regras: `docs/magnifier-cases-rules.md`.
 - Especificação técnica: `docs/magnifier-cases-tech-spec.md`.

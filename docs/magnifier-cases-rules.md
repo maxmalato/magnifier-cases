@@ -174,13 +174,13 @@ Quatro níveis com nomes do mundo dos mistérios. Todos os valores são **(inici
 
 - **Um aparelho:** todos em volta de um tablet ou notebook. O segredo só existe no próprio aparelho (a equipe coopera, então não há "passe o aparelho").
 - **Mesa:** uma tela grande mostra o mapa, a pista mais recente, as contagens ("4 de 6 lugares ainda possíveis") e a vez de cada jogador. Os celulares são o controle. Funciona como o modo online mais uma tela espelhada (assento de mesa). **A tela da mesa só é oferecida quando `Math.min(screen.width, screen.height) ≥ 600`** (tela física, não janela nem orientação). Em celular a opção não aparece, e abrir o endereço da mesa leva à tela do jogador com um aviso curto. É uma barreira de interface, não de segurança.
-- **Online:** sala com código de 6 caracteres e senha, do `packages/kit`. Cada pessoa vê o caderno, a pista mais recente e os botões. Só quem tem a vez age.
+- **Online:** sala com código de 6 caracteres, do `packages/kit`. O aparelho guarda o token do assento (a "senha" do assento), que permite voltar ao mesmo lugar. Cada pessoa vê o caderno, a pista mais recente e os botões. Só quem tem a vez age.
 - **Opinar:** fora da sua vez, o jogador marca uma sugestão (uma opção do menu de ações, um lugar, um suspeito ou uma dupla de acusação). Cada jogador tem **uma** sugestão ativa por vez, que some quando a ação é resolvida. As sugestões ficam fora do estado do jogo, com limite de frequência. **(a testar)**
 - **Conversa:** por voz, fora do app. Não há chat nem texto livre.
 - **Desconexão:**
   1. A equipe é avisada ("Raposa Curiosa desconectou, o bot assumiu").
   2. O bot entra após cerca de 20 s na vez da pessoa, ou no início do próximo turno dela.
-  3. A pessoa volta com o código e a senha (ou o token do assento) e retoma no início do próprio turno seguinte, nunca no meio do turno de um bot.
+  3. A pessoa volta pelo token do assento (guardado no aparelho) e retoma no início do próprio turno seguinte, nunca no meio do turno de um bot.
   4. O assento não é removido por inatividade.
 - **Bots:** completam a equipe e substituem quem desconecta. Usam só a informação pública (`PublicView`) e nunca a solução. O bot de partida usa a política "casual" por padrão. O bot "ideal" é usado nas simulações e na dica de jogada. **(a testar)**
 - **Apelidos:** montados por listas (adjetivo + animal, em PT-BR e EN). Sem texto livre. Ponto em aberto: no modo de um aparelho, permitir nomes digitados, já que nada sai do aparelho (seção 11).
@@ -277,6 +277,12 @@ Na v1, o código **não** implementa papéis. O ponto de extensão está descrit
 
 Decisão nova entra no topo, com data e motivo.
 
+- **25/11/2026 — Stack da v1 confirmada.** Node 24 LTS, pnpm 12, TypeScript ~6.0 estrito (o TS 7 ainda não é aceito pelo `typescript-eslint` nem pelo `svelte-check`), ESLint com regras de arquitetura, Prettier sem ponto e vírgula, Vitest, fast-check, Playwright com axe-core, Svelte 5 + Vite, Cloudflare Workers + Durable Objects (SQLite). Segue o padrão do Enchente na Vila, o projeto mais recente.
+- **25/11/2026 — Zod 4 como validador de schema.** Aprovado como dependência de produção do motor, a partir da Etapa 1. Mesmo validador do Enchente; os tipos saem do schema.
+- **25/11/2026 — "Senha" da sala é o token do assento.** Não existe senha de sala. Entra-se pelo código; o aparelho guarda o token do assento (só o hash fica no servidor) e volta ao mesmo lugar com ele.
+- **25/11/2026 — Visão pública com todos os parâmetros do nível.** `PublicDifficultyParams` traz todos os campos de `DifficultyParams`: nenhum deles revela o mistério, e o bot ideal usa a mistura de pistas como informação a priori (spec, seção 9).
+- **25/11/2026 — Assinaturas da `GameDefinition`.** `newGame(config, seats, seed)` recebe os assentos; `botMove(view, seat)` recebe só a visão, e a política (`skill`) fica em `packages/bots`, com a casual como padrão de partida.
+- **25/11/2026 — Origem do `packages/kit`.** O `senhorio-web` não tem `packages/kit`; o `village-flood` já tem, extraído e generalizado do Senhorio. O kit é copiado do `village-flood` (com a origem citada nos arquivos) e adaptado à informação escondida: `viewFor` por destinatário, bot só com a visão, sugestão única por jogador e apelidos por listas. A Etapa 0 traz só a interface e as constantes; a sala completa entra na Etapa 4.
 - **25/11/2026 — Papéis depois da v1.** Habilidade grátis facilita o jogo e dobra a calibração. A v1 calibra a linha de base primeiro.
 - **25/11/2026 — Nome público "Casos da Lupa" (`magnifier-cases`).** Usa as palavras preferidas do dono do projeto (lupa, caso). Pendente de consulta ao INPI.
 - **25/11/2026 — Níveis e relógio derivado.** Quatro níveis aprovados. O fim é fixo (18:00) e o início depende das ações do nível. Metas por bot (seção 9) e simulação com testes reais do bot.

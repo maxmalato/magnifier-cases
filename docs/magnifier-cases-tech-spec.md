@@ -32,7 +32,7 @@ packages/sim        CLI de simulação em lote e relatórios
 ```ts
 interface GameDefinition<State, Action, Event, Config, View> {
   id: string
-  newGame(config: Config, seed: number): State
+  newGame(config: Config, seats: SeatId[], seed: number): State
   transition(state: State, action: Action, ctx: Ctx): Result<State, Event>
   actorsOf(state: State): SeatId[]
   viewFor(state: State, seat: SeatId | 'table'): View   // NÃO é identidade neste jogo
@@ -99,7 +99,7 @@ Visão pública:
 ```ts
 interface PublicView {
   level: LevelId
-  params: PublicDifficultyParams       // sem nada que revele o mistério
+  params: PublicDifficultyParams       // todos os campos de DifficultyParams (decisão de 25/11/2026)
   cast: { suspects: SuspectId[]; places: PlaceId[] }
   teamAt: PlaceId | 'square'
   actionsLeft: number; clock: string   // "15:30", derivado
@@ -198,7 +198,7 @@ Os valores iniciais da tabela da seção 7 do documento de regras entram em `Dif
 
 ## 8. Protocolo e salas
 
-- Reaproveitar o protocolo do `kit`: código de sala de 6 caracteres, senha, token de assento guardado como hash SHA-256, limite de 40 mensagens por 10 s, expiração de 12 h, assento de mesa.
+- Reaproveitar o protocolo do `kit`: código de sala de 6 caracteres, token de assento (a "senha" do assento) guardado como hash SHA-256, limite de 40 mensagens por 10 s, expiração de 12 h, assento de mesa.
 - Mensagens: `action`, `state` (sempre o resultado de `viewFor`), `resync` (visão completa na reconexão), `suggest` (opinar: efêmera, fora do estado, uma por jogador, limpa quando a ação é resolvida, com limite de frequência) e eventos de desconexão.
 - O servidor guarda o estado completo (com a solução) e **só envia `PublicView`**. Nenhuma mensagem, log ou erro pode conter a solução, a semente, o `oracle` ou o conteúdo de cartas fechadas.
 - A semente é gerada no servidor (fonte de aleatoriedade do ambiente). No modo local, no aparelho.

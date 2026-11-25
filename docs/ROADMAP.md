@@ -10,7 +10,7 @@ A ordem é **motor, gerador, solucionador, bots e simulação antes de qualquer 
 
 | Etapa | Situação | Tag |
 | --- | --- | --- |
-| 0 – Fundação | Não iniciada | `v0.1-foundation` |
+| 0 – Fundação | Em andamento | `v0.1-foundation` |
 | 1 – Motor, gerador e solucionador | Não iniciada | `v0.2-engine` |
 | 2 – Bots e simulação | Não iniciada | `v0.3-bots-sim` |
 | 3 – Telas (um aparelho) | Não iniciada | `v0.4-local-ui` |
@@ -71,7 +71,7 @@ Deixa o projeto pronto para receber código.
 
 `packages/kit`, `apps/server`, `packages/protocol`.
 
-- Salas com código e senha, assentos, token como hash, limites e expiração.
+- Salas com código, assentos, token do assento (a "senha") guardado como hash, limites e expiração.
 - O servidor guarda a solução e envia só `PublicView`. Teste de vazamento nas mensagens.
 - Desconexão: bot assume, aviso à equipe, volta do jogador no início do próprio turno.
 - Opinar (sugestão única por jogador). `resync` na reconexão. O servidor valida toda ação.

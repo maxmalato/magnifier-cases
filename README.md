@@ -10,7 +10,7 @@ Roda em celular, tablet, desktop e Smart TV com navegador, como PWA.
 
 - **Um aparelho:** todos em volta de um tablet ou notebook.
 - **Mesa:** uma tela grande mostra o caderno e os celulares são o controle. Só em telas grandes (tablet, notebook, TV).
-- **Online:** sala com código e senha, cada pessoa no seu aparelho.
+- **Online:** sala com código, cada pessoa no seu aparelho.
 
 ## Níveis
 

@@ -10,7 +10,7 @@ It runs on phones, tablets, desktops and Smart TVs with a browser, as a PWA.
 
 - **One device:** everyone gathers around a tablet or notebook.
 - **Table:** a large screen shows the notebook and phones act as controllers. Large screens only (tablet, notebook, TV).
-- **Online:** a room with a code and a password, each person on their own device.
+- **Online:** a room with a code, each person on their own device.
 
 ## Levels
 
