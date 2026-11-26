@@ -18,7 +18,7 @@ Apprentice, Investigator, Expert and Legend. The map and the clock change with t
 
 ## Status
 
-Stage 3 (one-device screens) ready for review: you can play a full game on a phone, tablet or computer, with bots filling the team, in Portuguese or English. Online, table mode and PWA come in the next stages. See `docs/ROADMAP.md` (in Portuguese).
+Stage 4 (online) ready for review: besides the one-device mode, you can create a room, send the code to people on other devices, make suggestions outside your turn and get back into the room if the connection drops (a bot plays in your place meanwhile). Table mode and PWA come in the next stage. See `docs/ROADMAP.md` (in Portuguese).
 
 ## How to run
 
@@ -34,7 +34,7 @@ pnpm e2e         # end-to-end tests (Playwright + axe-core)
 pnpm simulate    # bot simulation: 10,000 mysteries per level and bot (not part of pnpm test)
 pnpm simulate:check  # reduced CI simulation: fails if a level misses its target
 pnpm --filter @magnifier-cases/web dev      # website in development mode
-pnpm --filter @magnifier-cases/server dev   # local Cloudflare server
+pnpm --filter @magnifier-cases/server dev   # local Cloudflare server (online rooms; run it with the website)
 ```
 
 ## Structure

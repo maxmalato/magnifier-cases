@@ -18,7 +18,7 @@ Aprendiz, Investigador, Perito e Lenda. O mapa e o relógio mudam com o nível.
 
 ## Situação
 
-Etapa 3 (telas no modo de um aparelho) pronta para revisão: dá para jogar uma partida inteira num celular, tablet ou computador, com bots completando a equipe, em português ou inglês. Online, mesa e PWA vêm nas próximas etapas. Veja `docs/ROADMAP.md`.
+Etapa 4 (online) pronta para revisão: além do modo de um aparelho, dá para criar uma sala, mandar o código para quem está em outro aparelho, opinar fora da vez e voltar à sala se a conexão cair (um bot joga no lugar enquanto isso). Mesa e PWA vêm na próxima etapa. Veja `docs/ROADMAP.md`.
 
 ## Como rodar
 
@@ -34,7 +34,7 @@ pnpm e2e         # testes de ponta a ponta (Playwright + axe-core)
 pnpm simulate    # simulação com bots: 10.000 mistérios por nível e bot (fora do pnpm test)
 pnpm simulate:check  # simulação reduzida da CI: quebra se um nível sair da meta
 pnpm --filter @magnifier-cases/web dev      # site em desenvolvimento
-pnpm --filter @magnifier-cases/server dev   # servidor local da Cloudflare
+pnpm --filter @magnifier-cases/server dev   # servidor local da Cloudflare (salas online; rode junto com o site)
 ```
 
 ## Estrutura
