@@ -11,6 +11,8 @@
   import Icon from '../ui/Icon.svelte'
   import NoticeBar from '../ui/NoticeBar.svelte'
   import PlaceGrid from '../ui/PlaceGrid.svelte'
+  import QrCode from '../ui/QrCode.svelte'
+  import { roomLink } from '../online/link.ts'
   import { suggestionText } from '../text.ts'
   import { duration, t, ui } from '../locale.svelte.ts'
   import { appName } from '@magnifier-cases/content'
@@ -74,6 +76,10 @@
       <div class="card join">
         <p class="join-text">{t('table.joinHere')}</p>
         <p class="code" aria-label={room.code.split('').join(' ')}>{code}</p>
+        <p class="join-text small">{t('table.scan')}</p>
+        <div class="qr-box">
+          <QrCode text={roomLink(room.code)} label={t('table.qrLabel', { code })} size={220} />
+        </div>
         <p class="join-text small">{t('table.firstCommands')}</p>
       </div>
       <div class="panel players">
@@ -415,6 +421,11 @@
     font-size: clamp(3rem, 8vw, 7rem);
     letter-spacing: 0.08em;
     line-height: 1;
+  }
+  .qr-box {
+    display: flex;
+    justify-content: center;
+    margin: 12px 0;
   }
   .players p {
     margin: 8px 0 0;

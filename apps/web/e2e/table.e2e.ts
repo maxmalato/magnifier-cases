@@ -36,6 +36,8 @@ test('mesa e dois celulares jogam até o fim', async ({ browser }) => {
   await tv.goto('/')
   await tv.getByRole('button', { name: 'Abrir a mesa (tela grande)' }).click()
   const code = (await tv.locator('.code').innerText()).replace('·', '')
+  // QR code com o link da sala, para os celulares entrarem pela câmera
+  await expect(tv.getByRole('img', { name: /^QR code com o link da sala / })).toBeVisible()
   await noViolations(tv, 'lobby da mesa')
 
   const { page: ana, context: anaContext } = await phone(browser, code, 'Ana')

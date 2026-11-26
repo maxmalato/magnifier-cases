@@ -153,6 +153,8 @@ const ptBR = {
   'home.backToTable': 'Voltar para a mesa {code}',
 
   'table.joinHere': 'Entrem pelo celular: abram o jogo, toquem em "Entrar com código" e digitem',
+  'table.scan': 'Ou apontem a câmera do celular para o QR code:',
+  'table.qrLabel': 'QR code com o link da sala {code}',
   'table.firstCommands': 'Quem entrar primeiro comanda a sala: escolhe o nível e começa a partida.',
   'table.players': 'Detetives na sala',
   'table.nobody': 'Ninguém entrou ainda.',
@@ -388,6 +390,8 @@ const en: Record<MessageKey, string> = {
   'home.backToTable': 'Back to table {code}',
 
   'table.joinHere': 'Join from your phone: open the game, tap "Join with a code" and type',
+  'table.scan': 'Or point the phone camera at the QR code:',
+  'table.qrLabel': 'QR code with the link to room {code}',
   'table.firstCommands': 'Whoever joins first runs the room: picks the level and starts the game.',
   'table.players': 'Detectives in the room',
   'table.nobody': 'Nobody has joined yet.',
