@@ -5,8 +5,16 @@
   import type { PublicView } from '@magnifier-cases/engine'
   import { t, ui } from '../locale.svelte.ts'
 
-  let { view, onpick }: { view: PublicView; onpick?: ((placeId: string) => void) | undefined } =
-    $props()
+  let {
+    view,
+    onpick,
+    large = false,
+  }: {
+    view: PublicView
+    onpick?: ((placeId: string) => void) | undefined
+    /** Tamanho da tela da mesa (TV, notebook ou tablet). */
+    large?: boolean
+  } = $props()
 
   const cells = $derived.by(() => {
     const all = [...view.cast.places]
@@ -26,7 +34,7 @@
   }
 </script>
 
-<div class="grid" style:grid-template-columns="repeat({columns}, minmax(0, 1fr))">
+<div class="grid" class:large style:grid-template-columns="repeat({columns}, minmax(0, 1fr))">
   {#each cells as id (id)}
     {@const s = status(id)}
     {@const name = nameOf(id, ui.locale)}
@@ -92,6 +100,20 @@
   }
   .tile.off .note {
     color: var(--off);
+  }
+  .large {
+    gap: 12px;
+  }
+  .large .tile {
+    min-height: 108px;
+    border-radius: 16px;
+    padding: 12px 14px;
+  }
+  .large .name {
+    font-size: 1.375rem;
+  }
+  .large .note {
+    font-size: 1rem;
   }
   button.tile:hover {
     border-color: var(--accent);

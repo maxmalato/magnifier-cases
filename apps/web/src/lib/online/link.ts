@@ -22,6 +22,8 @@ export function codeFromUrl(search = location.search): string | null {
 export interface SavedRoom {
   code: string
   token: string
+  /** Este aparelho é a mesa (tela grande) da sala. */
+  table?: boolean
 }
 
 export function savedRoom(): SavedRoom | null {
@@ -34,7 +36,7 @@ export function savedRoom(): SavedRoom | null {
       typeof (value as SavedRoom).token === 'string'
     ) {
       const room = value as SavedRoom
-      return { code: room.code, token: room.token }
+      return { code: room.code, token: room.token, ...(room.table === true ? { table: true } : {}) }
     }
   } catch {
     // sem armazenamento ou valor corrompido

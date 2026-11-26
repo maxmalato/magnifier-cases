@@ -2,7 +2,7 @@
   // Início → (um aparelho) montar a equipe → novo mistério → partida;
   //        → (online) criar ou entrar na sala → lobby online → partida.
   import { partyCake } from '@magnifier-cases/content'
-  import { difficultyOf, type LevelId } from '@magnifier-cases/engine'
+  import { canShowTable, difficultyOf, type LevelId } from '@magnifier-cases/engine'
   import { LocalGame, type Seat } from './lib/game/local-game.svelte.ts'
   import { cleanName, type SeatDraft } from './lib/game/setup.ts'
   import { codeFromUrl, forgetRoom, savedRoom } from './lib/online/link.ts'
@@ -14,6 +14,8 @@
   import Lobby from './lib/screens/Lobby.svelte'
   import OnlineEntry from './lib/screens/OnlineEntry.svelte'
   import OnlineLobby from './lib/screens/OnlineLobby.svelte'
+  import TableScreen from './lib/screens/TableScreen.svelte'
+  import { createTableRoom } from './lib/online/api.ts'
   import Header from './lib/ui/Header.svelte'
   import type { MessageKey } from './i18n.ts'
 
@@ -22,6 +24,13 @@
 
   type Screen = 'home' | 'lobby' | 'briefing' | 'game' | 'create' | 'join' | 'online'
   const invited = codeFromUrl()
+  /**
+   * A mesa só existe em tela grande: menor lado da tela FÍSICA ≥ 600 px (window.screen, não a
+   * janela). É uma barreira de interface, não de segurança.
+   */
+  const tableAllowed = canShowTable(window.screen)
+  const wantsTable = new URLSearchParams(location.search).has('mesa')
+  let tableBlocked = $state(wantsTable && !tableAllowed)
   let screen = $state<Screen>(invited ? 'join' : 'home')
   let level = $state<LevelId>('apprentice')
   let seats = $state<SeatDraft[]>([
@@ -85,6 +94,18 @@
     screen = 'online'
   }
 
+  async function openTable() {
+    try {
+      const { code, token } = await createTableRoom({ level: 'apprentice' })
+      enterRoom(code, { token })
+    } catch {
+      // sem servidor: fica na tela inicial
+    }
+  }
+
+  // ?mesa numa tela grande abre a mesa direto
+  if (wantsTable && tableAllowed) void openTable()
+
   function leaveRoom() {
     online?.leave()
     online = null
@@ -111,8 +132,11 @@
     onplay={() => (screen = 'lobby')}
     oncreate={() => (screen = 'create')}
     onjoin={() => (screen = 'join')}
-    savedCode={saved?.code ?? null}
+    savedCode={saved && (!saved.table || tableAllowed) ? saved.code : null}
+    savedIsTable={saved?.table === true}
     onrejoin={() => saved && enterRoom(saved.code, { token: saved.token })}
+    ontable={tableAllowed ? openTable : undefined}
+    {tableBlocked}
   />
 {:else if screen === 'lobby'}
   <Lobby bind:level bind:seats onstart={newMystery} onback={() => (screen = 'home')} />
@@ -149,6 +173,8 @@
         {t('reveal.home')}
       </button>
     </main>
+  {:else if online.isTable}
+    <TableScreen game={online} onclose={leaveRoom} />
   {:else if !online.room || (online.room.status !== 'lobby' && !online.room.game)}
     <main class="screen">
       <Header />
