@@ -2,13 +2,24 @@
   // Revelação (vitória ou tempo esgotado): solução, as pistas que bastavam (conjunto de custo
   // mínimo do solucionador) e a dica gerada delas. Sem punição.
   import { formatList, nameOf, renderClue, themeText } from '@magnifier-cases/content'
-  import type { LocalGame } from '../game/local-game.svelte.ts'
+  import type { GameController } from '../game/controller.ts'
   import Avatar from '../ui/Avatar.svelte'
   import Header from '../ui/Header.svelte'
   import { t, ui } from '../locale.svelte.ts'
 
-  let { game, onagain, onhome }: { game: LocalGame; onagain: () => void; onhome: () => void } =
-    $props()
+  let {
+    game,
+    onagain,
+    onhome,
+    waitText,
+  }: {
+    game: GameController
+    /** Novo mistério; ausente no online para quem não comanda a sala. */
+    onagain?: (() => void) | undefined
+    onhome: () => void
+    /** Texto de espera no lugar do botão de novo mistério. */
+    waitText?: string | undefined
+  } = $props()
   const view = $derived(game.view)
   const reveal = $derived(view.reveal)
   const won = $derived(view.phase === 'won')
@@ -65,7 +76,13 @@
     {/if}
   {/if}
 
-  <button type="button" class="btn btn-primary" onclick={onagain}>{t('reveal.newMystery')}</button>
+  {#if onagain}
+    <button type="button" class="btn btn-primary" onclick={onagain}>
+      {t('reveal.newMystery')}
+    </button>
+  {:else if waitText}
+    <p class="no-blame" role="status">{waitText}</p>
+  {/if}
   <button type="button" class="btn" onclick={onhome}>{t('reveal.home')}</button>
 </main>
 

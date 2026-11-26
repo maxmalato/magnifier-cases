@@ -45,7 +45,7 @@ describe('partida local', () => {
   it('interrogar abre a tela da pista com número, mudanças e próxima vez', () => {
     const { g } = game()
     const suspectId = g.view.cast.suspects[0] as string
-    expect(g.act({ type: 'interrogate', suspectId })).toBeNull()
+    expect(g.tryAct({ type: 'interrogate', suspectId })).toBeNull()
     expect(g.overlay?.kind).toBe('clue')
     if (g.overlay?.kind === 'clue') {
       expect(g.overlay.number).toBe(1)
@@ -53,7 +53,9 @@ describe('partida local', () => {
       expect(g.overlay.next?.name).toBe('Bruno')
     }
     // com a tela aberta, ninguém joga
-    expect(g.act({ type: 'move', placeId: g.view.cast.places[0] as string })).toBe('not-your-turn')
+    expect(g.tryAct({ type: 'move', placeId: g.view.cast.places[0] as string })).toBe(
+      'not-your-turn',
+    )
     g.dismiss()
     expect(g.overlay).toBeNull()
     expect(g.active.name).toBe('Bruno')
@@ -62,7 +64,7 @@ describe('partida local', () => {
   it('ir a outro lugar deixa um aviso curto, sem tela por cima', () => {
     const { g } = game()
     const placeId = g.view.cast.places[1] as string
-    expect(g.act({ type: 'move', placeId })).toBeNull()
+    expect(g.tryAct({ type: 'move', placeId })).toBeNull()
     expect(g.overlay).toBeNull()
     expect(g.lastMove?.placeId).toBe(placeId)
   })
@@ -72,10 +74,10 @@ describe('partida local', () => {
     const wrong = legalActions(g.view).find((a) => a.type === 'accuse')
     expect(wrong).toBeDefined()
     // acusa até errar (a primeira dupla pode ser a certa, mas a chance é pequena com 25 duplas)
-    if (wrong && g.act(wrong) === null && !g.isOver) {
+    if (wrong && g.tryAct(wrong) === null && !g.isOver) {
       expect(g.overlay?.kind).toBe('wrong')
       g.dismiss()
-      expect(g.act(wrong)).toBe('already-accused')
+      expect(g.tryAct(wrong)).toBe('already-accused')
     }
   })
 
@@ -91,7 +93,7 @@ describe('partida local', () => {
     )
     g.start()
     expect(clock.pending()).toBe(0) // vez da Ana
-    g.act({ type: 'move', placeId: g.view.cast.places[0] as string })
+    g.tryAct({ type: 'move', placeId: g.view.cast.places[0] as string })
     expect(g.isBotTurn).toBe(true)
     expect(clock.pending()).toBe(1)
     clock.tick()
@@ -110,7 +112,7 @@ describe('partida local', () => {
       if (g.overlay) g.dismiss()
       const action = legalActions(g.view).find((a) => a.type !== 'accuse')
       if (!action) break
-      g.act(action)
+      g.tryAct(action)
     }
     if (g.overlay) g.dismiss()
     expect(g.isOver).toBe(true)

@@ -2,12 +2,12 @@
   // Novo mistério: o caso, o relógio do nível (dos dados), o elenco sorteado e a ordem das vezes.
   import { formatItem, themeText, titleOf } from '@magnifier-cases/content'
   import { startTime } from '@magnifier-cases/engine'
-  import type { LocalGame } from '../game/local-game.svelte.ts'
+  import type { GameController } from '../game/controller.ts'
   import Header from '../ui/Header.svelte'
   import Icon from '../ui/Icon.svelte'
   import { t, tn, ui } from '../locale.svelte.ts'
 
-  let { game, onstart }: { game: LocalGame; onstart: () => void } = $props()
+  let { game, onstart }: { game: GameController; onstart: () => void } = $props()
   const view = $derived(game.view)
 </script>
 

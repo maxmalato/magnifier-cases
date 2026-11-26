@@ -2,7 +2,7 @@
   // Nova pista ou depoimento. "OK" só fecha esta tela neste aparelho: o estado já mudou e a
   // pista fica no caderno.
   import { formatItem, nameOf, renderClue, titleOf } from '@magnifier-cases/content'
-  import type { LocalGame, Overlay } from '../game/local-game.svelte.ts'
+  import type { GameController, Overlay } from '../game/controller.ts'
   import ActionSegments from '../ui/ActionSegments.svelte'
   import Avatar from '../ui/Avatar.svelte'
   import Header from '../ui/Header.svelte'
@@ -13,7 +13,8 @@
     game,
     overlay,
     onok,
-  }: { game: LocalGame; overlay: Extract<Overlay, { kind: 'clue' }>; onok: () => void } = $props()
+  }: { game: GameController; overlay: Extract<Overlay, { kind: 'clue' }>; onok: () => void } =
+    $props()
   const view = $derived(game.view)
   const card = $derived(overlay.card)
   let okButton: HTMLButtonElement | undefined = $state()

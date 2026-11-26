@@ -1,6 +1,6 @@
 <script lang="ts">
   import { titleOf } from '@magnifier-cases/content'
-  import type { LocalGame } from '../game/local-game.svelte.ts'
+  import type { GameController } from '../game/controller.ts'
   import Header from '../ui/Header.svelte'
   import { t, ui } from '../locale.svelte.ts'
 
@@ -8,7 +8,8 @@
     game,
     onpick,
     onback,
-  }: { game: LocalGame; onpick: (suspectId: string) => void; onback: () => void } = $props()
+  }: { game: GameController; onpick: (suspectId: string) => void; onback: () => void } = $props()
+
   const view = $derived(game.view)
   const closed = (id: string) =>
     view.unopened.some((u) => u.source.type === 'suspect' && u.source.id === id)

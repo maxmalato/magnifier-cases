@@ -1,8 +1,22 @@
 <script lang="ts">
   import { appName, locales, type Locale } from '@magnifier-cases/content'
+  import { formatCode } from '@magnifier-cases/kit'
   import { setLocale, t, ui } from '../locale.svelte.ts'
 
-  let { onplay }: { onplay: () => void } = $props()
+  let {
+    onplay,
+    oncreate,
+    onjoin,
+    savedCode,
+    onrejoin,
+  }: {
+    onplay: () => void
+    oncreate: () => void
+    onjoin: () => void
+    /** Sala guardada neste aparelho (para voltar pelo token). */
+    savedCode: string | null
+    onrejoin: () => void
+  } = $props()
   const languageNames: Record<Locale, string> = { 'pt-BR': 'Português', en: 'English' }
 </script>
 
@@ -16,6 +30,13 @@
   <div class="actions">
     <button type="button" class="btn btn-primary" onclick={onplay}>{t('home.playLocal')}</button>
     <p class="hint">{t('home.playLocalHint')}</p>
+    <button type="button" class="btn" onclick={oncreate}>{t('home.createRoom')}</button>
+    <button type="button" class="btn" onclick={onjoin}>{t('home.joinRoom')}</button>
+    {#if savedCode}
+      <button type="button" class="btn" onclick={onrejoin}>
+        {t('home.backToRoom', { code: formatCode(savedCode) })}
+      </button>
+    {/if}
     <p class="hint">{t('home.moreSoon')}</p>
   </div>
 

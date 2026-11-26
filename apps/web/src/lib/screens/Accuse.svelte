@@ -2,17 +2,20 @@
   // Acusação: um suspeito e um lugar. Itens descartados ficam bloqueados com o motivo; a dupla
   // já acusada também. O texto da regra vem dos dados do nível (nada fixo na tela).
   import { formatItem, nameOf, themeText } from '@magnifier-cases/content'
-  import type { LocalGame } from '../game/local-game.svelte.ts'
+  import type { GameController } from '../game/controller.ts'
   import Header from '../ui/Header.svelte'
   import Icon from '../ui/Icon.svelte'
   import { duration, t, ui } from '../locale.svelte.ts'
 
   let {
     game,
+    mode = 'act',
     onaccuse,
     onback,
   }: {
-    game: LocalGame
+    game: GameController
+    /** act: acusar de verdade; suggest: sugerir a dupla (online, fora da própria vez). */
+    mode?: 'act' | 'suggest'
     onaccuse: (suspectId: string, placeId: string) => void
     onback: () => void
   } = $props()
@@ -89,12 +92,14 @@
     disabled={suspect === null || place === null || tried}
     onclick={() => suspect && place && onaccuse(suspect, place)}
   >
-    {suspect && place
-      ? t('accuse.button', {
-          suspect: formatItem(suspect, ui.locale),
-          place: formatItem(place, ui.locale, 'in'),
-        })
-      : t('accuse.choose')}
+    {mode === 'suggest'
+      ? t('suggest.pair')
+      : suspect && place
+        ? t('accuse.button', {
+            suspect: formatItem(suspect, ui.locale),
+            place: formatItem(place, ui.locale, 'in'),
+          })
+        : t('accuse.choose')}
   </button>
   <button type="button" class="btn" onclick={onback}>{t('accuse.back')}</button>
 </main>

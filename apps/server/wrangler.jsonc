@@ -17,5 +17,12 @@
     "not_found_handling": "single-page-application",
     "run_worker_first": ["/api/*"],
   },
-  // Etapa 4: um Durable Object (SQLite) por sala, com os tempos de bot e desconexão em "vars".
+  // Tempos das salas (ms): o bot assume após TAKEOVER_MS na vez de quem caiu; BOT_STEP_MS entre
+  // as jogadas de bot. Os testes usam valores curtos (--var / miniflare bindings).
+  "vars": { "TAKEOVER_MS": "20000", "BOT_STEP_MS": "900" },
+  // Uma instância de Room por sala (Durable Object com SQLite, o do plano gratuito)
+  "durable_objects": {
+    "bindings": [{ "name": "ROOMS", "class_name": "Room" }],
+  },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["Room"] }],
 }

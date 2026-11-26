@@ -4,11 +4,11 @@
   // depende só de cor: riscado + tarja.
   import { nameOf, renderClue } from '@magnifier-cases/content'
   import type { NotebookEntry } from '@magnifier-cases/engine'
-  import type { LocalGame } from '../game/local-game.svelte.ts'
+  import type { GameController } from '../game/controller.ts'
   import Header from '../ui/Header.svelte'
   import { t, ui } from '../locale.svelte.ts'
 
-  let { game, onback }: { game: LocalGame; onback: () => void } = $props()
+  let { game, onback }: { game: GameController; onback: () => void } = $props()
   const view = $derived(game.view)
 
   function groupSize(entry: NotebookEntry): number | null {

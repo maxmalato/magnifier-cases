@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@magnifier-cases/engine": "workspace:*",
-    "@magnifier-cases/kit": "workspace:*"
+    "@magnifier-cases/kit": "workspace:*",
+    "zod": "^4.6.6"
   }
 }
