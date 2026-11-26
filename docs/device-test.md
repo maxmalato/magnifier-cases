@@ -30,6 +30,7 @@ Observação: o PWA (instalar e jogar sem internet) só funciona em `localhost` 
 | Celular | Abrir o endereço com `?mesa` no fim | Aviso curto: "A tela da mesa só abre em telas grandes". |
 | Tablet | Abrir a tela inicial | Com o botão "Abrir a mesa". Abrir a mesa e entrar com dois celulares. |
 | Notebook | Abrir a mesa | Código grande; os celulares entram pelo código; a partida aparece na tela grande. |
+| Celular | Apontar a câmera para o QR code da mesa (ou do lobby online) | Abre o jogo já na sala, pedindo só o apelido. Testar com a TV a uns 2 m. |
 | Smart TV (navegador) | Abrir a mesa | Letras legíveis do sofá; caderno compacto visível sem tocar em nada; dá para ler a pista mais recente. Anotar a marca, o modelo e o navegador da TV. |
 | Celulares na mesa | Jogar uma partida até o fim | Quem tem a vez joga no celular; os outros sugerem; a mesa mostra a sugestão, a pista e a vez. |
 | Celular na mesa | Fechar o navegador no meio da vez | A mesa avisa "desconectou" e, depois de uns 20 s, "o bot assumiu". Voltar pelo botão "Voltar para a sala". |
