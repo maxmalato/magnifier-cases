@@ -12,7 +12,10 @@
     "e2e": "playwright test"
   },
   "dependencies": {
-    "@magnifier-cases/content": "workspace:*"
+    "@magnifier-cases/bots": "workspace:*",
+    "@magnifier-cases/content": "workspace:*",
+    "@magnifier-cases/engine": "workspace:*",
+    "@magnifier-cases/kit": "workspace:*"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.14.1",

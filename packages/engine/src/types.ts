@@ -131,9 +131,22 @@ export interface HintData {
   readonly minCost: number
 }
 
+/** Carta-chave na revelação: o conteúdo fica público só depois do fim da partida. */
+export interface RevealedCard {
+  readonly id: CardId
+  readonly source: CardSource
+  readonly effect: ClueEffect
+  readonly textKey: string
+  readonly slots: Slots
+  /** Já tinha sido aberta pela equipe? */
+  readonly opened: boolean
+}
+
 export interface Reveal {
   readonly solution: Solution
   readonly keyCardIds: readonly CardId[]
+  /** As cartas do conjunto de custo mínimo, com o texto (para mostrar "as pistas que bastavam"). */
+  readonly keyCards: readonly RevealedCard[]
   readonly hint: HintData
 }
 

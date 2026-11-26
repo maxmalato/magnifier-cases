@@ -5,6 +5,7 @@ import { START_PLACE_ID, type Slots } from '@magnifier-cases/engine'
 import type { Locale } from './i18n.ts'
 import { names, type Noun } from './party-cake/names.ts'
 import { clueTexts } from './party-cake/texts.ts'
+import { themeTexts } from './party-cake/ui.ts'
 import { partyCake } from './party-cake/theme.ts'
 
 /** Forma do nome: def ("a Padaria"), of ("da Padaria"), in ("na Padaria"), to ("à Padaria"). */
@@ -77,6 +78,28 @@ const PLACEHOLDER = /\{(\w+)(?:\|(\w+))?(?:\|(\w+))?\}/g
 const capitalize = (text: string, locale: Locale) =>
   text.charAt(0).toLocaleUpperCase(locale) + text.slice(1)
 
+/** Preenche os marcadores de um texto com listas de ids, na forma e ligação pedidas. */
+export function renderText(
+  template: string,
+  slots: Readonly<Record<string, readonly string[]>>,
+  locale: Locale,
+  where = 'texto',
+): string {
+  const rendered = template.replace(
+    PLACEHOLDER,
+    (_match, slot: string, form = 'def', joiner = 'and') => {
+      const ids = slots[slot]
+      if (!ids) throw new RangeError(`marcador sem valor: {${slot}} em ${where}`)
+      if (!(forms as readonly string[]).includes(form))
+        throw new RangeError(`forma desconhecida: ${form}`)
+      if (!(joiners as readonly string[]).includes(joiner))
+        throw new RangeError(`ligação desconhecida: ${joiner}`)
+      return formatList(ids, locale, form as Form, joiner as Joiner)
+    },
+  )
+  return capitalize(rendered, locale)
+}
+
 /** Texto de uma carta aberta no idioma pedido. */
 export function renderClue(
   card: { readonly textKey: string; readonly slots: Slots },
@@ -86,17 +109,16 @@ export function renderClue(
   if (!text) throw new RangeError(`modelo sem texto: ${card.textKey}`)
   const listed = card.slots.suspects ?? card.slots.places ?? []
   const template = listed.length === 1 && text.one ? text.one : text.other
-  const rendered = template.replace(
-    PLACEHOLDER,
-    (_match, slot: string, form = 'def', joiner = 'and') => {
-      const ids = card.slots[slot]
-      if (!ids) throw new RangeError(`marcador sem valor: {${slot}} em ${card.textKey}`)
-      if (!(forms as readonly string[]).includes(form))
-        throw new RangeError(`forma desconhecida: ${form}`)
-      if (!(joiners as readonly string[]).includes(joiner))
-        throw new RangeError(`ligação desconhecida: ${joiner}`)
-      return formatList(ids, locale, form as Form, joiner as Joiner)
-    },
-  )
-  return capitalize(rendered, locale)
+  return renderText(template, card.slots, locale, card.textKey)
+}
+
+/** Texto do tema para a interface: themeText('theme.revealHideout', 'pt-BR', { hideout: ['school'] }). */
+export function themeText(
+  key: string,
+  locale: Locale,
+  slots: Readonly<Record<string, readonly string[]>> = {},
+): string {
+  const template = themeTexts[locale][key]
+  if (template === undefined) throw new RangeError(`texto do tema sem tradução: ${key}`)
+  return renderText(template, slots, locale, key)
 }

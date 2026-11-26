@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { formatItem, formatList, nameOf, renderClue, titleOf } from './format.ts'
+import { formatItem, formatList, nameOf, renderClue, themeText, titleOf } from './format.ts'
+import { themeTexts } from './party-cake/ui.ts'
 import { locales } from './i18n.ts'
 import { partyCake } from './party-cake/theme.ts'
 
@@ -92,5 +93,29 @@ describe('textos das pistas', () => {
     const card = { textKey: 'clue.smells-cinnamon', slots: { source: ['bakery'] } }
     expect(renderClue(card, 'pt-BR')).toBe('A Padaria cheira a canela.')
     expect(renderClue(card, 'en')).toBe('The Bakery smells of cinnamon.')
+  })
+})
+
+describe('textos do tema', () => {
+  it('revelação com concordância nos dois idiomas', () => {
+    expect(themeText('theme.revealCulprit', 'pt-BR', { culprit: ['dog-biscuit'] })).toBe(
+      'Foi o Biscoito!',
+    )
+    expect(themeText('theme.revealCulprit', 'en', { culprit: ['dog-biscuit'] })).toBe(
+      'It was Biscuit!',
+    )
+    expect(themeText('theme.revealHideout', 'pt-BR', { hideout: ['lucia-backyard'] })).toBe(
+      'O bolo estava no Quintal da Lúcia.',
+    )
+    expect(themeText('theme.revealHideout', 'en', { hideout: ['bakery'] })).toBe(
+      'The cake was at the Bakery.',
+    )
+  })
+
+  it('os dois idiomas têm as mesmas chaves e marcadores', () => {
+    const marks = (t: string) => [...t.matchAll(/\{(\w+)/g)].map((m) => m[1]).sort()
+    expect(Object.keys(themeTexts.en).sort()).toEqual(Object.keys(themeTexts['pt-BR']).sort())
+    for (const [key, text] of Object.entries(themeTexts['pt-BR']))
+      expect(marks(themeTexts.en[key] ?? '')).toEqual(marks(text))
   })
 })

@@ -86,8 +86,24 @@ export function hintOf(state: GameState): HintData {
   return { keyCardIds: state.oracle.keyCardIds, minCost: state.oracle.minCost }
 }
 
+/** Revelação: só quando a partida acaba (quem chama garante). */
 function revealOf(state: GameState): Reveal {
-  return { solution: state.solution, keyCardIds: state.oracle.keyCardIds, hint: hintOf(state) }
+  const keyCards = state.cards
+    .filter((c) => state.oracle.keyCardIds.includes(c.id))
+    .map(({ id, source, effect, textKey, slots, opened }) => ({
+      id,
+      source,
+      effect,
+      textKey,
+      slots,
+      opened,
+    }))
+  return {
+    solution: state.solution,
+    keyCardIds: state.oracle.keyCardIds,
+    keyCards,
+    hint: hintOf(state),
+  }
 }
 
 const refuse = (reason: Extract<TransitionResult, { ok: false }>['reason']): TransitionResult => ({

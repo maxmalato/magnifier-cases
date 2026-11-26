@@ -11,6 +11,8 @@ export default defineConfig({
   reporter: process.env.CI ? 'github' : 'list',
   use: {
     baseURL: 'http://localhost:4173',
+    // idioma principal do jogo; o teste da página inicial cobre o inglês
+    locale: 'pt-BR',
     trace: 'off',
     ...(executablePath ? { launchOptions: { executablePath } } : {}),
   },
