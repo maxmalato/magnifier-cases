@@ -34,7 +34,7 @@ pnpm e2e         # testes de ponta a ponta (Playwright + axe-core)
 pnpm simulate    # simulação com bots: 10.000 mistérios por nível e bot (fora do pnpm test)
 pnpm simulate:check  # simulação reduzida da CI: quebra se um nível sair da meta
 pnpm --filter @magnifier-cases/web dev      # site em desenvolvimento
-pnpm --filter @magnifier-cases/server dev   # servidor local da Cloudflare (salas online; rode junto com o site)
+pnpm dev:online # compila o site e sobe o servidor local da Cloudflare: abra http://localhost:8787 (online e um aparelho)
 ```
 
 ## Estrutura

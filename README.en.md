@@ -34,7 +34,7 @@ pnpm e2e         # end-to-end tests (Playwright + axe-core)
 pnpm simulate    # bot simulation: 10,000 mysteries per level and bot (not part of pnpm test)
 pnpm simulate:check  # reduced CI simulation: fails if a level misses its target
 pnpm --filter @magnifier-cases/web dev      # website in development mode
-pnpm --filter @magnifier-cases/server dev   # local Cloudflare server (online rooms; run it with the website)
+pnpm dev:online # builds the website and starts the local Cloudflare server: open http://localhost:8787 (online and one device)
 ```
 
 ## Structure
