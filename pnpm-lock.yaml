@@ -217,6 +217,18 @@ importers:
 
   apps/server:
     dependencies:
+      '@magnifier-cases/bots':
+        specifier: workspace:*
+        version: link:../../packages/bots
+      '@magnifier-cases/content':
+        specifier: workspace:*
+        version: link:../../packages/content
+      '@magnifier-cases/engine':
+        specifier: workspace:*
+        version: link:../../packages/engine
+      '@magnifier-cases/kit':
+        specifier: workspace:*
+        version: link:../../packages/kit
       '@magnifier-cases/protocol':
         specifier: workspace:*
         version: link:../../packages/protocol
@@ -293,6 +305,9 @@ importers:
       '@magnifier-cases/kit':
         specifier: workspace:*
         version: link:../kit
+      zod:
+        specifier: ^4.6.6
+        version: 4.6.6
 
   packages/sim:
     dependencies:
