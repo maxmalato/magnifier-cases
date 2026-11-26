@@ -4,19 +4,19 @@ O roadmap pede este teste antes de fechar a etapa da mesa. Os testes automático
 
 ## Como subir
 
-No computador, na mesma rede Wi-Fi dos aparelhos:
+No computador, na mesma rede Wi-Fi dos aparelhos, compile o site:
 
 ```bash
-pnpm dev:online
+pnpm --filter @magnifier-cases/web build
 ```
 
-Em outro terminal (para os aparelhos acessarem o computador):
+Depois suba o servidor aceitando conexões da rede:
 
 ```bash
-pnpm --filter @magnifier-cases/server dev -- --ip 0.0.0.0 --port 8788
+pnpm --filter @magnifier-cases/server dev -- --ip 0.0.0.0
 ```
 
-Nos aparelhos, abra `http://IP-DO-COMPUTADOR:8788` (o IP aparece em `ipconfig`, como "Endereço IPv4"). O Windows pode pedir para liberar o acesso na rede.
+Em todos os aparelhos (TV, tablet e celulares), abra `http://IP-DO-COMPUTADOR:8787`. O IP aparece no comando `ipconfig`, como "Endereço IPv4". O Windows pode pedir para liberar o acesso na rede.
 
 Observação: o PWA (instalar e jogar sem internet) só funciona em `localhost` ou em `https`. Pela rede local, sem `https`, o resto pode ser testado; a instalação fica para quando o jogo estiver publicado (Etapa 7) ou num teste no próprio computador.
 
