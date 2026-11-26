@@ -18,7 +18,23 @@ import {
   type SuggestionView,
 } from '../game/controller.ts'
 import { t } from '../locale.svelte.ts'
+import type { MessageKey } from '../../i18n.ts'
 import { RoomConnection } from './connection.svelte.ts'
+
+/** Recusas conhecidas do servidor durante a partida; as outras viram um aviso genérico. */
+const KNOWN_ERRORS = new Set([
+  'tooManySuggestions',
+  'yourTurn',
+  'notYourTurn',
+  'invalidSuggestion',
+  'notYourControl',
+  'tooManyRequests',
+  'refused',
+])
+
+function errorText(code: string): string {
+  return t((KNOWN_ERRORS.has(code) ? `error.${code}` : 'error.generic') as MessageKey)
+}
 
 /** Quanto tempo o aviso de conexão fica na tela (ms). */
 const NOTICE_MS = 8000
@@ -31,8 +47,9 @@ export class OnlineGame implements GameController {
   lastMove: { seat: Seat; placeId: string } | null = $state(null)
   /** Avisos de conexão na tela (os mais recentes; cada um some sozinho). */
   notices: string[] = $state([])
-  /** Recusa da sala (código i18n "error.*"), mostrada perto dos botões. */
+  /** Recusa da sala (código do servidor), mostrada na faixa de avisos ou no lobby. */
   error: string | null = $state(null)
+  #errorTimer: ReturnType<typeof setTimeout> | null = null
   /** Timers dos avisos (não é estado da tela: só para limpar ao sair). */
   #noticeTimers: ReturnType<typeof setTimeout>[] = []
   readonly online: OnlineControls
@@ -41,9 +58,7 @@ export class OnlineGame implements GameController {
     this.connection = new RoomConnection(code, who, {
       onUpdate: (events, room, by) => this.#present(events, room, by),
       onNotice: (notice, room) => this.#announce(notice, room),
-      onError: (errorCode) => {
-        this.error = errorCode
-      },
+      onError: (errorCode) => this.#fail(errorCode),
     })
     // eslint-disable-next-line @typescript-eslint/no-this-alias -- getters do objeto abaixo
     const game = this
@@ -59,6 +74,15 @@ export class OnlineGame implements GameController {
       },
       get canSuggest() {
         return game.canSuggest
+      },
+      get suggestionsLeft() {
+        return game.suggestionsLeft
+      },
+      get suggestionLimit() {
+        return game.room?.suggestionLimit ?? 0
+      },
+      get error() {
+        return game.error ? errorText(game.error) : null
       },
       get mySuggestion() {
         return game.suggestions.find((s) => s.seat.id === game.mySeat)?.target ?? null
@@ -141,6 +165,13 @@ export class OnlineGame implements GameController {
     return !this.isOver && this.mySeat !== null && this.view.activeSeat !== this.mySeat
   }
 
+  /** Quantas vezes este aparelho ainda pode marcar ou trocar a sugestão nesta jogada. */
+  get suggestionsLeft(): number {
+    const room = this.room
+    if (!room || this.mySeat === null) return 0
+    return Math.max(0, room.suggestionLimit - (room.suggestionChanges[this.mySeat] ?? 0))
+  }
+
   get suggestions(): SuggestionView[] {
     const list: SuggestionView[] = []
     for (const s of this.room?.suggestions ?? []) {
@@ -188,7 +219,17 @@ export class OnlineGame implements GameController {
   leave() {
     this.connection.leave()
   }
+  /** Recusa do servidor: aparece por alguns segundos (nada falha em silêncio). */
+  #fail(code: string) {
+    this.error = code
+    if (this.#errorTimer) clearTimeout(this.#errorTimer)
+    this.#errorTimer = setTimeout(() => {
+      this.error = null
+    }, NOTICE_MS)
+  }
+
   close() {
+    if (this.#errorTimer) clearTimeout(this.#errorTimer)
     for (const timer of this.#noticeTimers) clearTimeout(timer)
     this.#noticeTimers = []
     this.connection.close()

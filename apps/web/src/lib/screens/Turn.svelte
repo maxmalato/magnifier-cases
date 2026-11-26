@@ -8,7 +8,7 @@
   import Header from '../ui/Header.svelte'
   import Icon from '../ui/Icon.svelte'
   import PlaceGrid from '../ui/PlaceGrid.svelte'
-  import { duration, t, ui } from '../locale.svelte.ts'
+  import { duration, t, tn, ui } from '../locale.svelte.ts'
 
   let {
     game,
@@ -31,6 +31,10 @@
   const human = $derived(game.canAct)
   /** Online, fora da própria vez: os botões viram sugestões (opinar). */
   const suggesting = $derived(!game.canAct && !game.isBotTurn && (game.online?.canSuggest ?? false))
+  /** Acabaram as trocas de sugestão desta jogada (o limite fica visível, nunca em silêncio). */
+  const exhausted = $derived(suggesting && (game.online?.suggestionsLeft ?? 0) <= 0)
+  /** Pode sugerir agora (fora da vez e ainda com trocas). */
+  const canPropose = $derived(suggesting && !exhausted)
   const mine = $derived(game.online?.mySuggestion ?? null)
   const suggested = (option: 'investigate' | 'interrogate' | 'move' | 'accuse') =>
     mine?.kind === 'option' && mine.option === option
@@ -38,7 +42,7 @@
   /** Na vez: faz a ação; fora dela (online): sugere a opção. */
   function choose(option: 'investigate' | 'interrogate' | 'move', run: () => void) {
     if (human) run()
-    else if (suggesting) game.online?.suggest({ kind: 'option', option })
+    else if (canPropose) game.online?.suggest({ kind: 'option', option })
   }
   const here = $derived(view.teamAt)
   const hereClosed = $derived(
@@ -89,6 +93,13 @@
       <p role="status" aria-live="polite">{t('turn.botThinking', { name: game.active.name })}</p>
     {:else if suggesting}
       <p role="status" aria-live="polite">{t('suggest.hint', { name: game.active.name })}</p>
+      {#if exhausted}
+        <p class="limit" role="status">
+          {t('suggest.none', { n: game.online?.suggestionLimit ?? 0 })}
+        </p>
+      {:else}
+        <p class="left">{tn('suggest.left', game.online?.suggestionsLeft ?? 0)}</p>
+      {/if}
     {/if}
   </div>
 
@@ -108,7 +119,7 @@
       {view}
       onpick={human
         ? (placeId) => onask({ type: 'move', placeId })
-        : suggesting
+        : canPropose
           ? (placeId) => game.online?.suggest({ kind: 'place', id: placeId })
           : undefined}
     />
@@ -118,7 +129,7 @@
     <button
       type="button"
       class="option"
-      disabled={!suggesting && (!human || !hereClosed)}
+      disabled={suggesting ? exhausted : !human || !hereClosed}
       aria-pressed={suggesting ? suggested('investigate') : undefined}
       onclick={() => choose('investigate', () => onask({ type: 'investigate' }))}
     >
@@ -139,7 +150,7 @@
     <button
       type="button"
       class="option"
-      disabled={(!human && !suggesting) || !anyoneToAsk}
+      disabled={(!human && !canPropose) || !anyoneToAsk}
       onclick={() => onchoose('suspect')}
     >
       <Icon name="chat" size={26} />
@@ -155,7 +166,7 @@
     <button
       type="button"
       class="option"
-      disabled={!human && !suggesting}
+      disabled={!human && !canPropose}
       aria-pressed={suggesting ? suggested('move') : undefined}
       onclick={() => choose('move', () => onchoose('place'))}
     >
@@ -178,7 +189,7 @@
 
   <div class="row">
     <button type="button" class="btn" onclick={onnotebook}>{t('turn.notebook')}</button>
-    <button type="button" class="btn" disabled={!human && !suggesting} onclick={onaccuse}>
+    <button type="button" class="btn" disabled={!human && !canPropose} onclick={onaccuse}>
       {t('turn.accuse')}
     </button>
   </div>
@@ -191,6 +202,16 @@
   .who p {
     margin: 2px 0 0;
     color: var(--text-soft);
+  }
+  .limit,
+  .left {
+    margin: 4px 0 0;
+    font-weight: 800;
+  }
+  .limit {
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: 2px solid var(--accent-text);
   }
   .moved,
   .last,

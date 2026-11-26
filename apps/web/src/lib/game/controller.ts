@@ -60,6 +60,12 @@ export interface OnlineControls {
   readonly suggestions: readonly SuggestionView[]
   /** Este aparelho pode opinar agora (fora da própria vez, com a partida rolando). */
   readonly canSuggest: boolean
+  /** Quantas vezes ainda dá para marcar ou trocar a sugestão nesta jogada. */
+  readonly suggestionsLeft: number
+  /** Limite de trocas por jogada (dados). */
+  readonly suggestionLimit: number
+  /** Última recusa do servidor, já traduzida (some sozinha). */
+  readonly error: string | null
   readonly mySuggestion: SuggestionTarget | null
   suggest(target: SuggestionTarget): void
   unsuggest(): void

@@ -32,7 +32,12 @@
   let page = $state<'turn' | 'suspect' | 'place' | 'notebook' | 'accuse'>('turn')
   let asking = $state<Action | null>(null)
   /** Online, fora da própria vez: as escolhas viram sugestões. */
-  const suggesting = $derived(!game.canAct && (game.online?.canSuggest ?? false) && !game.isBotTurn)
+  const suggesting = $derived(
+    !game.canAct &&
+      (game.online?.canSuggest ?? false) &&
+      (game.online?.suggestionsLeft ?? 0) > 0 &&
+      !game.isBotTurn,
+  )
 
   // sem poder jogar nem sugerir (vez de bot, fim), volta para a tela principal
   $effect(() => {

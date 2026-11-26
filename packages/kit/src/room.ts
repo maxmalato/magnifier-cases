@@ -102,6 +102,10 @@ export interface RoomView<V, C> {
   /** Visão do jogo para este destinatário (viewFor). */
   readonly game: V | null
   readonly suggestions: readonly Suggestion[]
+  /** Quantas vezes cada jogador já marcou ou trocou a sugestão nesta vez (para avisar o limite). */
+  readonly suggestionChanges: Readonly<Record<SeatId, number>>
+  /** Limite de trocas de sugestão por vez (dados do jogo). */
+  readonly suggestionLimit: number
   readonly table: { readonly connected: boolean } | null
 }
 
@@ -155,6 +159,8 @@ export function viewOf<S, A, E, C, V>(
     config: record.config,
     game: record.game === null ? null : def.viewFor(record.game, viewer),
     suggestions: record.suggestions,
+    suggestionChanges: record.suggestionChanges,
+    suggestionLimit: def.maxSuggestionChangesPerTurn,
     table: record.table ? { connected: record.table.connected } : null,
   }
 }

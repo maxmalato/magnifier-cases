@@ -1,6 +1,7 @@
 // Salas online com dois navegadores (Etapa 4): criar, entrar, opinar, jogar até o fim,
 // desconexão com bot assumindo e volta do jogador.
 import AxeBuilder from '@axe-core/playwright'
+import { roomParams } from '@magnifier-cases/protocol'
 import { expect, test, type Browser, type Page } from '@playwright/test'
 
 async function createRoom(page: Page, name: string): Promise<string> {
@@ -130,6 +131,53 @@ test('desconexão: o bot assume e a pessoa volta pelo token', async ({ page: ana
   await expect(back.getByRole('heading', { name: 'Vez de Bruno' })).toBeVisible()
   await expect(back.getByRole('button', { name: 'Interrogar alguém' })).toBeEnabled()
   await expect(ana.getByText('Bruno voltou!')).toBeVisible()
+  await context.close()
+})
+
+test('opinar tem limite visível: a contagem cai e, no fim, os botões ficam bloqueados com o motivo', async ({
+  page: ana,
+  browser,
+}) => {
+  const limit = roomParams.maxSuggestionChangesPerTurn
+  const code = await createRoom(ana, 'Ana')
+  const { page: bruno, context } = await joinRoom(browser, code, 'Bruno')
+  await ana.getByRole('button', { name: 'Começar a partida' }).click()
+  await expect(
+    bruno.getByText(`Você ainda pode sugerir ${limit} vezes nesta jogada.`),
+  ).toBeVisible()
+  // Bruno troca de sugestão até esgotar (alternando entre duas opções)
+  for (let i = 0; i < limit; i++) {
+    const option = i % 2 === 0 ? /Ir a outro lugar/ : /Interrogar alguém/
+    if (i % 2 === 0) await bruno.getByRole('button', { name: option }).click()
+    else {
+      await bruno.getByRole('button', { name: option }).click()
+      await bruno.locator('.item:not([disabled])').first().click()
+    }
+    const left = limit - i - 1
+    if (left > 0)
+      await expect(
+        bruno.getByText(
+          left === 1
+            ? 'Você ainda pode sugerir 1 vez nesta jogada.'
+            : `Você ainda pode sugerir ${left} vezes nesta jogada.`,
+        ),
+      ).toBeVisible()
+  }
+  await expect(
+    bruno.getByText(`Você já usou as ${limit} sugestões desta jogada.`, { exact: false }),
+  ).toBeVisible()
+  await expect(bruno.getByRole('button', { name: /Ir a outro lugar/ })).toBeDisabled()
+  await expect(bruno.getByRole('button', { name: 'Interrogar alguém' })).toBeDisabled()
+  await expect(bruno.getByRole('button', { name: 'Acusar agora' })).toBeDisabled()
+  // tirar a sugestão continua possível; na jogada seguinte a contagem volta
+  await expect(bruno.getByRole('button', { name: 'Tirar minha sugestão' })).toBeEnabled()
+  await interrogate(ana)
+  await bruno.getByRole('button', { name: 'OK' }).click()
+  await interrogate(bruno)
+  await ana.getByRole('button', { name: 'OK' }).click()
+  await expect(
+    bruno.getByText(`Você ainda pode sugerir ${limit} vezes nesta jogada.`),
+  ).toBeVisible()
   await context.close()
 })
 

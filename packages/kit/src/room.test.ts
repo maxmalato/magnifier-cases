@@ -168,6 +168,14 @@ describe('sugestões (opinar)', () => {
     for (let n = 1; n <= def.maxSuggestionChangesPerTurn; n++)
       room = okRecord(suggest(def, room, 'seat-2', n, 11 + n))
     expect(suggest(def, room, 'seat-2', 9, 20).error).toBe('tooManySuggestions')
+    // cada aparelho vê quantas já usou e o limite, para avisar antes de bater nele
+    const view = viewOf(def, room, 'seat-2')
+    expect(view.suggestionChanges['seat-2']).toBe(def.maxSuggestionChangesPerTurn)
+    expect(view.suggestionLimit).toBe(def.maxSuggestionChangesPerTurn)
+    // tirar a sugestão não conta; a vez nova zera a conta
+    room = okRecord(unsuggest(room, 'seat-2', 21))
+    room = okRecord(act(def, room, 'seat-1', { type: 'guess', n: 1 }, 22, timings))
+    expect(viewOf(def, room, 'seat-2').suggestionChanges).toEqual({})
   })
 })
 

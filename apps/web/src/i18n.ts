@@ -184,6 +184,10 @@ const ptBR = {
   'suggest.place': 'ir {place}',
   'suggest.pairText': 'acusar {suspect} {place}',
   'suggest.mine': 'sua sugestão',
+  'suggest.left.one': 'Você ainda pode sugerir 1 vez nesta jogada.',
+  'suggest.left.other': 'Você ainda pode sugerir {n} vezes nesta jogada.',
+  'suggest.none':
+    'Você já usou as {n} sugestões desta jogada. Depois da próxima jogada, dá para sugerir de novo.',
 
   'reveal.waitHost': 'Esperando {name} pedir um novo mistério.',
 
@@ -200,6 +204,12 @@ const ptBR = {
   'error.notEnoughSeats': 'A partida precisa de pelo menos 2 detetives.',
   'error.someoneAway': 'Alguém da sala está desconectado.',
   'error.generic': 'Algo deu errado. Tentem de novo.',
+  'error.tooManySuggestions': 'Você já usou todas as sugestões desta jogada.',
+  'error.yourTurn': 'É a sua vez: em vez de sugerir, joguem!',
+  'error.notYourTurn': 'Ainda não é a sua vez.',
+  'error.invalidSuggestion': 'Essa sugestão não vale nesta partida.',
+  'error.notYourControl': 'O bot está jogando no seu lugar até a sua próxima vez.',
+  'error.refused': 'O jogo não aceitou essa jogada.',
 
   'duration.minutes': '{n} min',
   'duration.hours.one': '1 hora',
@@ -388,6 +398,10 @@ const en: Record<MessageKey, string> = {
   'suggest.place': 'go {place}',
   'suggest.pairText': 'accuse {suspect} {place}',
   'suggest.mine': 'your suggestion',
+  'suggest.left.one': 'You can still suggest 1 more time in this play.',
+  'suggest.left.other': 'You can still suggest {n} more times in this play.',
+  'suggest.none':
+    'You already used the {n} suggestions for this play. After the next play, you can suggest again.',
 
   'reveal.waitHost': 'Waiting for {name} to ask for a new mystery.',
 
@@ -404,6 +418,12 @@ const en: Record<MessageKey, string> = {
   'error.notEnoughSeats': 'The game needs at least 2 detectives.',
   'error.someoneAway': 'Someone in the room is disconnected.',
   'error.generic': 'Something went wrong. Try again.',
+  'error.tooManySuggestions': 'You already used all the suggestions for this play.',
+  'error.yourTurn': 'It is your turn: play instead of suggesting!',
+  'error.notYourTurn': 'It is not your turn yet.',
+  'error.invalidSuggestion': 'That suggestion does not count in this game.',
+  'error.notYourControl': 'A bot is playing for you until your next turn.',
+  'error.refused': 'The game did not accept that move.',
 
   'duration.minutes': '{n} min',
   'duration.hours.one': '1 hour',

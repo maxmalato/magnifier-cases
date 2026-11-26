@@ -9,6 +9,7 @@
 
 <div class="notices" role="status" aria-live="polite">
   {#if online?.reconnecting}<p class="notice warn">{t('online.reconnecting')}</p>{/if}
+  {#if online?.error}<p class="notice warn">{online.error}</p>{/if}
   {#each online?.notices ?? [] as notice, i (i)}<p class="notice">{notice}</p>{/each}
 </div>
 
