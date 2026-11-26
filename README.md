@@ -18,7 +18,7 @@ Aprendiz, Investigador, Perito e Lenda. O mapa e o relógio mudam com o nível.
 
 ## Situação
 
-Etapa 4 (online) pronta para revisão: além do modo de um aparelho, dá para criar uma sala, mandar o código para quem está em outro aparelho, opinar fora da vez e voltar à sala se a conexão cair (um bot joga no lugar enquanto isso). Mesa e PWA vêm na próxima etapa. Veja `docs/ROADMAP.md`.
+Etapa 5 (mesa e PWA) pronta para revisão: os três modos funcionam (um aparelho, online e mesa, com a tela grande mostrando o jogo e os celulares como controle), e o jogo pode ser instalado e jogado sem internet no modo de um aparelho. Falta o teste em aparelho real. Veja `docs/ROADMAP.md`.
 
 ## Como rodar
 
