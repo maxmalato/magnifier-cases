@@ -11,6 +11,10 @@
     "typecheck": "wrangler types && tsc -p tsconfig.json"
   },
   "dependencies": {
+    "@magnifier-cases/bots": "workspace:*",
+    "@magnifier-cases/content": "workspace:*",
+    "@magnifier-cases/engine": "workspace:*",
+    "@magnifier-cases/kit": "workspace:*",
     "@magnifier-cases/protocol": "workspace:*"
   },
   "devDependencies": {
