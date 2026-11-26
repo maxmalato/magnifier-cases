@@ -14,8 +14,8 @@ A ordem é **motor, gerador, solucionador, bots e simulação antes de qualquer 
 | 1 – Motor, gerador e solucionador | Concluída | `v0.2-engine` |
 | 2 – Bots e simulação | Concluída | `v0.3-bots-sim` |
 | 3 – Telas (um aparelho) | Concluída | `v0.4-local-ui` |
-| 4 – Online | Pronta para revisão (fecha com o CI verde na `main`) | `v0.5-online` |
-| 5 – Mesa e PWA | Não iniciada | `v0.6-table-pwa` |
+| 4 – Online | Concluída | `v0.5-online` |
+| 5 – Mesa e PWA | Em andamento | `v0.6-table-pwa` |
 | 6 – Acabamento | Não iniciada | `v0.9-polish` |
 | 7 – Calibração com partidas reais e publicação | Não iniciada | `v1.0` |
 
