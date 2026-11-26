@@ -2,7 +2,7 @@ import { defineConfig, devices } from '@playwright/test'
 
 // Caminho opcional de um Chromium já instalado (ex.: ambientes sem download de navegador).
 const executablePath = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH
-const ONLINE = /online\.e2e\.ts/
+const ONLINE = /(online|table)\.e2e\.ts/
 
 export default defineConfig({
   testDir: './e2e',
