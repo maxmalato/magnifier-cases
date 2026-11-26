@@ -254,6 +254,9 @@ importers:
       '@magnifier-cases/kit':
         specifier: workspace:*
         version: link:../../packages/kit
+      '@magnifier-cases/protocol':
+        specifier: workspace:*
+        version: link:../../packages/protocol
     devDependencies:
       '@axe-core/playwright':
         specifier: ^4.14.1

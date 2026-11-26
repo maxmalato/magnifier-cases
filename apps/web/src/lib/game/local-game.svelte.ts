@@ -3,6 +3,7 @@
 // jogam sozinhos na vez deles, com a política casual, depois que a equipe fecha a tela da
 // última jogada. Nenhuma regra é calculada aqui: tudo passa pelo motor.
 import { botMove, suggest, type Decision } from '@magnifier-cases/bots'
+import { changesBetween, type GameController, type Overlay, type Seat } from './controller.ts'
 import {
   newGame,
   transition,
@@ -12,48 +13,11 @@ import {
   type DifficultyParams,
   type GameEvent,
   type GameState,
-  type OpenedCard,
   type PublicView,
   type RefusalReason,
   type SeatId,
   type ThemePack,
 } from '@magnifier-cases/engine'
-
-export interface Seat {
-  readonly id: SeatId
-  readonly name: string
-  readonly kind: 'human' | 'bot'
-}
-
-/** O que mudou no caderno com uma pista (para a tela "caderno atualizado"). */
-export interface NotebookChange {
-  readonly id: string
-  readonly domain: 'suspects' | 'places'
-  readonly change: 'discarded' | 'in-group'
-  /** Tamanho do grupo, para "um dos N". */
-  readonly groupSize?: number
-}
-
-/** Tela por cima do jogo depois de uma jogada. "OK" só fecha a tela; o estado já mudou. */
-export type Overlay =
-  | {
-      readonly kind: 'clue'
-      readonly via: 'investigate' | 'interrogate'
-      readonly seat: Seat
-      readonly card: OpenedCard
-      /** Número da pista na ordem em que foi aberta. */
-      readonly number: number
-      readonly changes: readonly NotebookChange[]
-      readonly next: Seat | null
-    }
-  | {
-      readonly kind: 'wrong'
-      readonly seat: Seat
-      readonly suspectId: string
-      readonly placeId: string
-      readonly minutes: number
-      readonly next: Seat | null
-    }
 
 export interface LocalGameOptions {
   readonly params: DifficultyParams
@@ -74,24 +38,9 @@ const defaultWait = (ms: number, run: () => void) => {
   return () => clearTimeout(id)
 }
 
-function changesBetween(before: CandidateLists, after: CandidateLists, card: OpenedCard) {
-  const changes: NotebookChange[] = []
-  for (const domain of ['suspects', 'places'] as const) {
-    for (const id of before[domain]) {
-      if (!after[domain].includes(id)) changes.push({ id, domain, change: 'discarded' })
-    }
-  }
-  const e = card.effect
-  if (e.kind === 'only-suspects' || e.kind === 'only-places') {
-    const domain = e.kind === 'only-suspects' ? 'suspects' : 'places'
-    for (const id of e.ids)
-      if (after[domain].includes(id))
-        changes.push({ id, domain, change: 'in-group', groupSize: e.ids.length })
-  }
-  return changes
-}
+export type { Overlay, Seat } from './controller.ts'
 
-export class LocalGame {
+export class LocalGame implements GameController {
   /** SECRETO: nunca sai daqui; as telas usam `view`. */
   #state: GameState = $state.raw() as unknown as GameState
   readonly seats: readonly Seat[]
@@ -131,14 +80,24 @@ export class LocalGame {
     return this.view.phase !== 'playing'
   }
 
+  /** No modo de um aparelho, quem joga é a pessoa da vez (bots jogam sozinhos). */
+  get canAct(): boolean {
+    return !this.isBotTurn && !this.isOver && this.overlay === null
+  }
+
   /** Dica de jogada (só nos níveis que ligam a dica). */
   hint(): Decision | null {
     if (this.isBotTurn || this.isOver) return null
     return suggest(this.view, this.active.id)
   }
 
-  /** Jogada de uma pessoa. Devolve o motivo da recusa, ou null se aceita. */
-  act(action: Action): RefusalReason | null {
+  /** Jogada de uma pessoa (a tela só oferece ações permitidas). */
+  act(action: Action): void {
+    this.tryAct(action)
+  }
+
+  /** Como `act`, devolvendo o motivo da recusa (ou null se aceita). Usado nos testes. */
+  tryAct(action: Action): RefusalReason | null {
     if (this.isBotTurn || this.overlay) return 'not-your-turn'
     return this.#apply(action)
   }

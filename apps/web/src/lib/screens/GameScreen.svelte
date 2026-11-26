@@ -1,9 +1,12 @@
 <script lang="ts">
-  // Conduz a partida: vez de alguém, escolhas, confirmação, telas de resultado e revelação.
+  // Conduz a partida: vez de alguém, escolhas, confirmação, telas de resultado e revelação. Vale
+  // para a partida deste aparelho e para a online; no online, fora da própria vez, as escolhas
+  // viram sugestões (opinar).
   import { formatItem } from '@magnifier-cases/content'
   import type { Action } from '@magnifier-cases/engine'
-  import type { LocalGame } from '../game/local-game.svelte.ts'
+  import type { GameController } from '../game/controller.ts'
   import ConfirmDialog from '../ui/ConfirmDialog.svelte'
+  import NoticeBar from '../ui/NoticeBar.svelte'
   import Accuse from './Accuse.svelte'
   import ChoosePlace from './ChoosePlace.svelte'
   import ChooseSuspect from './ChooseSuspect.svelte'
@@ -14,15 +17,29 @@
   import WrongResult from './WrongResult.svelte'
   import { duration, t, ui } from '../locale.svelte.ts'
 
-  let { game, onagain, onhome }: { game: LocalGame; onagain: () => void; onhome: () => void } =
-    $props()
+  let {
+    game,
+    onagain,
+    onhome,
+    waitText,
+  }: {
+    game: GameController
+    onagain?: (() => void) | undefined
+    onhome: () => void
+    waitText?: string | undefined
+  } = $props()
 
   let page = $state<'turn' | 'suspect' | 'place' | 'notebook' | 'accuse'>('turn')
   let asking = $state<Action | null>(null)
+  /** Online, fora da própria vez: as escolhas viram sugestões. */
+  const suggesting = $derived(!game.canAct && (game.online?.canSuggest ?? false) && !game.isBotTurn)
 
-  // a vez de um bot (ou o fim da partida) sempre volta para a tela principal
+  // sem poder jogar nem sugerir (vez de bot, fim), volta para a tela principal
   $effect(() => {
-    if (game.isBotTurn || game.isOver) page = page === 'notebook' ? page : 'turn'
+    if (game.isOver || (!game.canAct && !suggesting)) {
+      if (page !== 'notebook') page = 'turn'
+      asking = null
+    }
   })
 
   // a cada tela nova, o topo da página
@@ -54,14 +71,31 @@
     game.act(action)
   }
 
+  function pickSuspect(suspectId: string) {
+    if (game.canAct) asking = { type: 'interrogate', suspectId }
+    else {
+      game.online?.suggest({ kind: 'suspect', id: suspectId })
+      page = 'turn'
+    }
+  }
+
+  function pickPlace(placeId: string) {
+    if (game.canAct) asking = { type: 'move', placeId }
+    else {
+      game.online?.suggest({ kind: 'place', id: placeId })
+      page = 'turn'
+    }
+  }
+
   function accuse(suspectId: string, placeId: string) {
     page = 'turn'
-    game.act({ type: 'accuse', suspectId, placeId })
+    if (game.canAct) game.act({ type: 'accuse', suspectId, placeId })
+    else game.online?.suggest({ kind: 'pair', suspectId, placeId })
   }
 </script>
 
 {#if game.isOver}
-  <Reveal {game} {onagain} {onhome} />
+  <Reveal {game} {onagain} {onhome} {waitText} />
 {:else if game.overlay?.kind === 'clue'}
   <ClueResult {game} overlay={game.overlay} onok={() => game.dismiss()} />
 {:else if game.overlay?.kind === 'wrong'}
@@ -69,19 +103,16 @@
 {:else if page === 'notebook'}
   <Notebook {game} onback={() => (page = 'turn')} />
 {:else if page === 'suspect'}
-  <ChooseSuspect
-    {game}
-    onpick={(suspectId) => (asking = { type: 'interrogate', suspectId })}
-    onback={() => (page = 'turn')}
-  />
+  <ChooseSuspect {game} onpick={pickSuspect} onback={() => (page = 'turn')} />
 {:else if page === 'place'}
-  <ChoosePlace
+  <ChoosePlace {game} onpick={pickPlace} onback={() => (page = 'turn')} />
+{:else if page === 'accuse'}
+  <Accuse
     {game}
-    onpick={(placeId) => (asking = { type: 'move', placeId })}
+    mode={game.canAct ? 'act' : 'suggest'}
+    onaccuse={accuse}
     onback={() => (page = 'turn')}
   />
-{:else if page === 'accuse'}
-  <Accuse {game} onaccuse={accuse} onback={() => (page = 'turn')} />
 {:else}
   <Turn
     {game}
@@ -91,6 +122,8 @@
     onaccuse={() => (page = 'accuse')}
   />
 {/if}
+
+<NoticeBar online={game.online} />
 
 {#if asking}
   <ConfirmDialog

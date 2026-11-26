@@ -1,7 +1,7 @@
 <script lang="ts">
   // Acusação errada: diz só que a dupla está errada, sem dizer qual metade, e quanto custou.
   import { formatItem } from '@magnifier-cases/content'
-  import type { LocalGame, Overlay } from '../game/local-game.svelte.ts'
+  import type { GameController, Overlay } from '../game/controller.ts'
   import ActionSegments from '../ui/ActionSegments.svelte'
   import Header from '../ui/Header.svelte'
   import { duration, t, ui } from '../locale.svelte.ts'
@@ -10,7 +10,8 @@
     game,
     overlay,
     onok,
-  }: { game: LocalGame; overlay: Extract<Overlay, { kind: 'wrong' }>; onok: () => void } = $props()
+  }: { game: GameController; overlay: Extract<Overlay, { kind: 'wrong' }>; onok: () => void } =
+    $props()
   const view = $derived(game.view)
   let okButton: HTMLButtonElement | undefined = $state()
   $effect(() => okButton?.focus())

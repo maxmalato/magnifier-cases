@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { LocalGame } from '../game/local-game.svelte.ts'
+  import type { GameController } from '../game/controller.ts'
   import Header from '../ui/Header.svelte'
   import PlaceGrid from '../ui/PlaceGrid.svelte'
   import { t } from '../locale.svelte.ts'
@@ -8,7 +8,7 @@
     game,
     onpick,
     onback,
-  }: { game: LocalGame; onpick: (placeId: string) => void; onback: () => void } = $props()
+  }: { game: GameController; onpick: (placeId: string) => void; onback: () => void } = $props()
 </script>
 
 <main class="screen">
