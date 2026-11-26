@@ -4,7 +4,7 @@
 // - o kit nunca envia o estado (S): cada destinatário recebe só `viewFor` (V);
 // - o bot recebe a visão, nunca o estado;
 // - sem perfil de assento (papéis ficam para depois da v1).
-// A sala completa (lobby, partida, desconexão, sugestões, mesa) entra na Etapa 4.
+// A sala (lobby, partida, desconexão, sugestões e mesa) fica em room.ts.
 import type { TABLE_SEAT } from './constants.ts'
 
 /** Identificador opaco de um assento (ex.: "seat-1"). */
@@ -30,6 +30,10 @@ export interface GameDefinition<S, A, E, C, V> {
   /** Validam o que chega do aparelho. Null: recusado. */
   parseConfig(raw: unknown): C | null
   parseAction(raw: unknown): A | null
+  /** Alvo de uma sugestão (opinar) fora da vez, validado contra a partida. Null: recusado. */
+  parseSuggestion(state: S, raw: unknown): string | null
+  /** Quantas vezes cada jogador pode marcar ou trocar a sugestão num mesmo turno (dados). */
+  readonly maxSuggestionChangesPerTurn: number
 
   /** Partida nova. A semente vem do servidor (ou do aparelho, no modo local) e é secreta. */
   newGame(config: C, seats: readonly SeatId[], seed: number): S

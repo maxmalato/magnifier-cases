@@ -40,6 +40,11 @@ export const guessGame: GameDefinition<
     typeof raw === 'object' && raw !== null && Number.isInteger((raw as GuessConfig).max)
       ? { max: (raw as GuessConfig).max }
       : null,
+  parseSuggestion: (state, raw) =>
+    typeof raw === 'number' && Number.isInteger(raw) && !state.guesses.includes(raw)
+      ? `guess:${raw}`
+      : null,
+  maxSuggestionChangesPerTurn: 3,
   parseAction: (raw) => {
     const a = raw as GuessAction | null
     return a?.type === 'guess' && Number.isInteger(a.n) ? { type: 'guess', n: a.n } : null
