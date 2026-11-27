@@ -9,7 +9,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "typecheck": "svelte-check --tsconfig ./tsconfig.json --fail-on-warnings",
-    "e2e": "playwright test"
+    "e2e": "playwright test",
+    "perf": "node scripts/perf.mjs"
   },
   "dependencies": {
     "@magnifier-cases/bots": "workspace:*",
