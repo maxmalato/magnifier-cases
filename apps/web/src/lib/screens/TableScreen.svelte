@@ -104,7 +104,14 @@
     {@const reveal = view.reveal}
     <section class="reveal" role="status" aria-live="polite">
       <Avatar name={nameOf(reveal.solution.culpritId, ui.locale)} size={120} />
-      <span class="label">{view.phase === 'won' ? t('reveal.solved') : t('reveal.timeout')}</span>
+      <span class="label">
+        {view.phase === 'won'
+          ? t('reveal.solved')
+          : view.phase === 'ended'
+            ? t('reveal.ended')
+            : t('reveal.timeout')}
+      </span>
+      {#if view.phase === 'ended'}<p class="lead">{t('reveal.endedLead')}</p>{/if}
       <h1>
         {themeText('theme.revealCulprit', ui.locale, { culprit: [reveal.solution.culpritId] })}
       </h1>

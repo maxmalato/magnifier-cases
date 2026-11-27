@@ -103,6 +103,28 @@ test('mesa e dois celulares jogam até o fim', async ({ browser }) => {
   await Promise.all([tvContext.close(), anaContext.close(), brunoContext.close()])
 })
 
+test('encerrar pelo celular de quem comanda: a mesa mostra a resposta', async ({ browser }) => {
+  const tvContext = await browser.newContext(TV)
+  const tv = await tvContext.newPage()
+  await tv.goto('/')
+  await tv.getByRole('button', { name: 'Abrir a mesa (tela grande)' }).click()
+  const code = (await tv.locator('.code').innerText()).replace('·', '')
+  const { page: ana, context: anaContext } = await phone(browser, code, 'Ana')
+  const { page: bruno, context: brunoContext } = await phone(browser, code, 'Bruno')
+  await ana.getByRole('button', { name: 'Começar a partida' }).click()
+  await expect(tv.getByText('decidindo agora')).toBeVisible()
+  // a mesa não tem o botão; Bruno também não (quem comanda é Ana)
+  await expect(tv.getByRole('button', { name: 'Encerrar partida' })).toHaveCount(0)
+  await expect(bruno.getByRole('heading', { name: 'Vez de Ana' })).toBeVisible()
+  await expect(bruno.getByRole('button', { name: 'Encerrar partida' })).toHaveCount(0)
+  await ana.getByRole('button', { name: 'Encerrar partida' }).click()
+  await ana.getByRole('dialog').getByRole('button', { name: 'Encerrar', exact: true }).click()
+  await expect(tv.getByText('Partida encerrada')).toBeVisible()
+  await expect(tv.getByText('As pistas que levavam até a resposta')).toBeVisible()
+  await noViolations(tv, 'mesa depois de encerrar')
+  await Promise.all([tvContext.close(), anaContext.close(), brunoContext.close()])
+})
+
 test('em celular a mesa não aparece e o endereço da mesa mostra um aviso', async ({ browser }) => {
   const context = await browser.newContext({ ...devices['Pixel 7'], locale: 'pt-BR' })
   const page = await context.newPage()

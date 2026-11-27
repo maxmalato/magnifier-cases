@@ -7,6 +7,7 @@ import { changesBetween, type GameController, type Overlay, type Seat } from './
 import { cueFor } from '../sound/cues.ts'
 import { sound } from '../sound/player.svelte.ts'
 import {
+  endGame,
   newGame,
   transition,
   viewFor,
@@ -147,6 +148,21 @@ export class LocalGame implements GameController {
     sound.play(cueFor(events))
     // fim de partida: a tela de revelação substitui qualquer sobreposição
     if (this.isOver) this.overlay = null
+  }
+
+  get canEnd(): boolean {
+    return !this.isOver
+  }
+
+  /** Encerra a partida (decisão de 27/11/2026): o bot para e a revelação aparece. */
+  end(): void {
+    const result = endGame(this.#state)
+    if (!result.ok) return
+    this.#cancelBot?.()
+    this.#cancelBot = null
+    this.#state = result.state
+    this.overlay = null
+    this.lastMove = null
   }
 
   /** "OK": fecha a tela neste aparelho. A pista continua no caderno. */

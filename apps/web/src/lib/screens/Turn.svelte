@@ -16,6 +16,7 @@
     onchoose,
     onnotebook,
     onaccuse,
+    onend,
   }: {
     game: GameController
     /** Pede confirmação de uma ação que gasta tempo. */
@@ -23,6 +24,8 @@
     onchoose: (what: 'suspect' | 'place') => void
     onnotebook: () => void
     onaccuse: () => void
+    /** Pede confirmação para encerrar a partida (só aparece para quem pode). */
+    onend: () => void
   } = $props()
 
   const view = $derived(game.view)
@@ -193,6 +196,10 @@
       {t('turn.accuse')}
     </button>
   </div>
+
+  {#if game.canEnd}
+    <button type="button" class="btn end" onclick={onend}>{t('end.button')}</button>
+  {/if}
 </main>
 
 <style>
@@ -267,6 +274,12 @@
     font-size: 0.875rem;
     font-weight: 700;
     color: var(--card-muted);
+  }
+  /* encerrar fica separado e discreto, para não ser tocado sem querer (e sempre pede confirmação) */
+  .end {
+    margin-top: 12px;
+    border-style: dashed;
+    color: var(--text-muted);
   }
   .row {
     display: flex;

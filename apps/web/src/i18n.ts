@@ -135,6 +135,13 @@ const ptBR = {
 
   'reveal.solved': 'Mistério resolvido',
   'reveal.timeout': 'Tempo esgotado',
+  'reveal.ended': 'Partida encerrada',
+  'reveal.endedLead': 'Vocês encerraram a partida. Esta era a resposta:',
+  'end.button': 'Encerrar partida',
+  'end.title': 'Encerrar a partida?',
+  'end.text': 'O mistério termina agora e o jogo mostra a resposta.',
+  'end.textOnline': 'O mistério termina para todos na sala. O jogo mostra a resposta.',
+  'end.yes': 'Encerrar',
   'reveal.keyClues': 'As pistas que levavam até a resposta',
   'reveal.hint': 'Juntas, as pistas {list} já deixavam uma única resposta.',
   'reveal.notOpened': 'não aberta',
@@ -236,6 +243,7 @@ const ptBR = {
   'error.invalidSuggestion': 'Essa sugestão não vale nesta partida.',
   'error.notYourControl': 'O bot está jogando no seu lugar até a sua próxima vez.',
   'error.refused': 'O jogo não aceitou essa jogada.',
+  'error.onlyHost': 'Só quem comanda a sala pode fazer isso.',
 
   'duration.minutes': '{n} min',
   'duration.hours.one': '1 hora',
@@ -375,6 +383,13 @@ const en: Record<MessageKey, string> = {
 
   'reveal.solved': 'Mystery solved',
   'reveal.timeout': 'Time is up',
+  'reveal.ended': 'Game ended',
+  'reveal.endedLead': 'You ended the game. This was the answer:',
+  'end.button': 'End game',
+  'end.title': 'End the game?',
+  'end.text': 'The mystery ends now and the game shows the answer.',
+  'end.textOnline': 'The mystery ends for everyone in the room. The game shows the answer.',
+  'end.yes': 'End game',
   'reveal.keyClues': 'The clues that led to the answer',
   'reveal.hint': 'Together, the clues {list} already left a single answer.',
   'reveal.notOpened': 'not opened',
@@ -476,6 +491,7 @@ const en: Record<MessageKey, string> = {
   'error.invalidSuggestion': 'That suggestion does not count in this game.',
   'error.notYourControl': 'A bot is playing for you until your next turn.',
   'error.refused': 'The game did not accept that move.',
+  'error.onlyHost': 'Only the person running the room can do that.',
 
   'duration.minutes': '{n} min',
   'duration.hours.one': '1 hour',

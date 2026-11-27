@@ -202,3 +202,27 @@ for (const colorScheme of ['light', 'dark'] as const) {
     expect((await new AxeBuilder({ page }).analyze()).violations, 'lobby online').toEqual([])
   })
 }
+
+test('encerrar: só quem comanda a sala vê o botão, e todos veem a resposta', async ({
+  page: ana,
+  browser,
+}) => {
+  const code = await createRoom(ana, 'Ana')
+  const { page: bruno, context } = await joinRoom(browser, code, 'Bruno')
+  await ana.getByRole('button', { name: 'Começar a partida' }).click()
+  await expect(bruno.getByRole('heading', { name: 'Vez de Ana' })).toBeVisible()
+  await expect(bruno.getByRole('button', { name: 'Encerrar partida' })).toHaveCount(0)
+  await ana.getByRole('button', { name: 'Encerrar partida' }).click()
+  await expect(
+    ana.getByText('O mistério termina para todos na sala.', { exact: false }),
+  ).toBeVisible()
+  await ana.getByRole('button', { name: 'Encerrar', exact: true }).click()
+  for (const page of [ana, bruno]) {
+    await expect(page.getByText('Partida encerrada')).toBeVisible()
+    await expect(page.getByText('Vocês encerraram a partida. Esta era a resposta:')).toBeVisible()
+  }
+  // quem comanda pode pedir um novo mistério; Bruno espera
+  await expect(ana.getByRole('button', { name: 'Novo mistério' })).toBeVisible()
+  await expect(bruno.getByText('Esperando Ana pedir um novo mistério.')).toBeVisible()
+  await context.close()
+})

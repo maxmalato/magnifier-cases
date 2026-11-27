@@ -106,6 +106,33 @@ describe('partida local', () => {
     g.destroy()
   })
 
+  it('encerrar: o bot para, a tela fecha e a revelação aparece', () => {
+    const clock = manualClock()
+    const { g } = game(
+      [
+        { id: 'seat-1', name: 'Ana', kind: 'human' },
+        { id: 'seat-2', name: 'Bot 1', kind: 'bot' },
+      ],
+      3,
+      clock,
+    )
+    g.start()
+    g.tryAct({ type: 'move', placeId: g.view.cast.places[0] as string })
+    expect(clock.pending()).toBe(1) // o bot ia jogar
+    const actionsLeft = g.view.actionsLeft
+    expect(g.canEnd).toBe(true)
+    g.end()
+    expect(g.isOver).toBe(true)
+    expect(g.view.phase).toBe('ended')
+    expect(g.view.actionsLeft).toBe(actionsLeft)
+    expect(g.view.reveal?.solution).toBeDefined()
+    expect(g.canEnd).toBe(false)
+    // a jogada do bot que estava agendada não acontece
+    clock.tick()
+    expect(g.view.turn).toBe(1)
+    g.destroy()
+  })
+
   it('a partida termina e a revelação aparece na visão', () => {
     const { g } = game()
     for (let i = 0; i < 40 && !g.isOver; i++) {

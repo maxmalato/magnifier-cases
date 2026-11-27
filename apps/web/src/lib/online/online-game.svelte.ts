@@ -30,6 +30,7 @@ const KNOWN_ERRORS = new Set([
   'notYourTurn',
   'invalidSuggestion',
   'notYourControl',
+  'onlyHost',
   'tooManyRequests',
   'refused',
 ])
@@ -189,6 +190,19 @@ export class OnlineGame implements GameController {
       if (seat && target) list.push({ seat, target })
     }
     return list
+  }
+
+  /** Só quem comanda a sala (ou qualquer pessoa, se quem comanda caiu), como no servidor. */
+  get canEnd(): boolean {
+    const room = this.room
+    if (!room || this.isOver || this.isTable || this.mySeat === null) return false
+    if (room.host === this.mySeat) return true
+    const host = room.seats.find((s) => s.seat === room.host)
+    return !host || host.presence !== 'connected'
+  }
+
+  end(): void {
+    this.connection.send({ type: 'end' })
   }
 
   hint(): Decision | null {
