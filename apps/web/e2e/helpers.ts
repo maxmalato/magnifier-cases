@@ -130,3 +130,61 @@ export async function smallTargets(page: Page): Promise<string[]> {
 export async function expectTargets(page: Page, where: string) {
   expect(await smallTargets(page), where).toEqual([])
 }
+
+/** Acusa uma dupla diferente a cada volta. "skipped": a dupla já tinha sido acusada. */
+async function accuseRound(player: Page, round: number): Promise<'accused' | 'skipped' | false> {
+  const quick = { timeout: 3000 }
+  try {
+    await player.getByRole('button', { name: 'Acusar agora' }).click(quick)
+    const suspects = player.locator('fieldset').nth(0).locator('.opt:not([disabled])')
+    const places = player.locator('fieldset').nth(1).locator('.opt:not([disabled])')
+    await suspects.first().waitFor(quick)
+    const n = await suspects.count()
+    await suspects.nth(round % n).click(quick)
+    await places.nth(Math.floor(round / n) % (await places.count())).click(quick)
+    const accuse = player.getByRole('button', { name: /^Acusar / })
+    if (await accuse.isEnabled()) {
+      await accuse.click(quick)
+      return 'accused'
+    }
+    await player.getByRole('button', { name: 'Voltar' }).click(quick)
+    return 'skipped'
+  } catch {
+    // outra tela cobriu a da vez no meio (o resultado da jogada anterior): volta e tenta de novo
+    const back = player.getByRole('button', { name: 'Voltar' })
+    if (await back.isVisible()) await back.click().catch(() => undefined)
+    return false
+  }
+}
+
+/**
+ * Online e mesa: quem tem a vez acusa uma dupla diferente até a partida acabar. Quem joga é
+ * achado pela própria tela (só quem tem a vez vê "A equipe está…"), nunca pela tela de outra
+ * pessoa, que pode estar atrasada.
+ */
+export async function accuseUntilEnd(players: readonly Page[], ended: () => Promise<boolean>) {
+  const end = /Mistério resolvido|Tempo esgotado/
+  let round = 0
+  for (let tries = 0; tries < 400 && !(await ended()); tries++) {
+    for (const page of players) {
+      const ok = page.getByRole('button', { name: 'OK' })
+      if ((await ok.count()) > 0) await ok.click().catch(() => undefined)
+    }
+    let player: Page | null = null
+    for (const page of players) {
+      if (await page.getByText(/^A equipe está /).isVisible()) player = page
+    }
+    if (!player) {
+      await players[0]?.waitForTimeout(100)
+      continue
+    }
+    const result = await accuseRound(player, round)
+    if (result) round++
+    if (result === 'accused') {
+      // espera a resposta da sala: a tela de erro (OK) ou a revelação
+      await expect(player.getByRole('button', { name: 'OK' }).or(player.getByText(end)).first())
+        .toBeVisible({ timeout: 10_000 })
+        .catch(() => undefined)
+    }
+  }
+}

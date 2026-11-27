@@ -2,7 +2,7 @@
 // servidor local da Cloudflare (projeto "online"). A tela da mesa só existe em tela grande.
 import AxeBuilder from '@axe-core/playwright'
 import { devices, expect, test, type Browser, type Page } from '@playwright/test'
-import { expectTargets, settle } from './helpers.ts'
+import { accuseUntilEnd, expectTargets, settle } from './helpers.ts'
 
 const TV = {
   viewport: { width: 1280, height: 720 },
@@ -29,26 +29,6 @@ async function phone(browser: Browser, code: string, name: string) {
   await page.getByLabel('Apelido').fill(name)
   await page.getByRole('button', { name: 'Entrar', exact: true }).click()
   return { context, page }
-}
-
-/** Acusa uma dupla diferente a cada volta; false se outra tela cobriu a da vez no meio. */
-async function accuseRound(player: Page, round: number): Promise<boolean> {
-  const quick = { timeout: 3000 }
-  try {
-    await player.getByRole('button', { name: 'Acusar agora' }).click(quick)
-    const suspects = player.locator('fieldset').nth(0).locator('.opt:not([disabled])')
-    const places = player.locator('fieldset').nth(1).locator('.opt:not([disabled])')
-    await suspects.first().waitFor(quick)
-    const n = await suspects.count()
-    await suspects.nth(round % n).click(quick)
-    await places.nth(Math.floor(round / n) % (await places.count())).click(quick)
-    const accuse = player.getByRole('button', { name: /^Acusar / })
-    if (await accuse.isEnabled()) await accuse.click(quick)
-    else await player.getByRole('button', { name: 'Voltar' }).click(quick)
-    return true
-  } catch {
-    return false
-  }
 }
 
 test('mesa e dois celulares jogam até o fim', async ({ browser }) => {
@@ -91,26 +71,7 @@ test('mesa e dois celulares jogam até o fim', async ({ browser }) => {
 
   // joga até o fim acusando duplas diferentes
   const end = /Mistério resolvido|Tempo esgotado/
-  for (let round = 0; round < 80; round++) {
-    if ((await tv.getByText(end).count()) > 0) break
-    for (const page of [ana, bruno]) {
-      const ok = page.getByRole('button', { name: 'OK' })
-      if ((await ok.count()) > 0) await ok.click()
-    }
-    const heading = await ana.getByRole('heading', { level: 1 }).innerText()
-    if (!heading.startsWith('Vez de')) continue
-    const player = heading === 'Vez de Ana' ? ana : bruno
-    // A tela de resultado da jogada anterior pode chegar a este celular depois da leitura acima
-    // e cobrir a tela da vez: nesse caso, tenta de novo na próxima volta (que toca em OK).
-    if (!(await accuseRound(player, round))) continue
-    await expect(
-      tv
-        .getByText(end)
-        .or(tv.getByText(/não foi essa dupla/))
-        .or(tv.getByText('decidindo agora'))
-        .first(),
-    ).toBeVisible()
-  }
+  await accuseUntilEnd([ana, bruno], async () => (await tv.getByText(end).count()) > 0)
   await expect(tv.getByText(end)).toBeVisible()
   await expect(tv.getByText('As pistas que levavam até a resposta')).toBeVisible()
   await noViolations(tv, 'revelação na mesa')
