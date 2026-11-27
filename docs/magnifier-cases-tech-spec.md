@@ -84,13 +84,13 @@ interface GameState {
   actionsLeft: number
   seats: SeatId[]; activeSeat: SeatId; turn: number
   wrongAccusations: { suspectId: SuspectId; placeId: PlaceId; atAction: number; seat: SeatId }[]
-  phase: 'playing' | 'won' | 'timeout'
+  phase: 'playing' | 'won' | 'timeout' | 'ended'
 }
 ```
 
 Ações (união discriminada): `move { placeId }`, `investigate`, `interrogate { suspectId }`, `accuse { suspectId, placeId }`.
 
-Eventos (UI, som e log): `moved`, `clue-found`, `testimony-given`, `candidates-changed`, `accused-wrong`, `clock-advanced`, `turn-started`, `bot-took-over`, `player-returned`, `won`, `timed-out`, `revealed`.
+Eventos (UI, som e log): `moved`, `clue-found`, `testimony-given`, `candidates-changed`, `accused-wrong`, `clock-advanced`, `turn-started`, `bot-took-over`, `player-returned`, `won`, `timed-out`, `ended`, `revealed`.
 
 Contrato: `transition(state, action, ctx)` é pura e devolve `{ ok, state, events, reason }`. Nunca muta a entrada. `ctx` traz o assento que age. Toda validação acontece aqui e no servidor.
 
@@ -109,7 +109,7 @@ interface PublicView {
   candidates: { suspects: SuspectId[]; places: PlaceId[] }
   notebook: { suspects: NotebookEntry[]; places: NotebookEntry[] }
   wrongAccusations: { suspectId: SuspectId; placeId: PlaceId }[]
-  phase: 'playing' | 'won' | 'timeout'
+  phase: 'playing' | 'won' | 'timeout' | 'ended'
   reveal?: { solution: Solution; keyCardIds: CardId[]; hint: HintData }   // só quando phase !== 'playing'
 }
 interface NotebookEntry { id: string; status: 'open' | 'eliminated'; byCardIds: CardId[]; inGroupOf: CardId[] }
@@ -128,6 +128,7 @@ interface NotebookEntry { id: string; status: 'open' | 'eliminated'; byCardIds: 
   - `accuse`: só se `actionsLeft ≥ 1` e a dupla estiver entre os candidatos e ainda não acusada. Acerto: `phase = 'won'`, sem custo. Erro: registra a acusação, `actionsLeft −= wrongAccusationCost`.
   - Depois de qualquer ação: se `actionsLeft ≤ 0` e `phase === 'playing'`, `phase = 'timeout'`. Se a fase mudou para `won` ou `timeout`, emitir `revealed`.
   - Passa a vez ao próximo assento (ordem fixa) quando a fase continua `playing`.
+- `endGame(state)`: encerra a partida a pedido da equipe (botão "Encerrar partida"). Não é uma jogada: não depende de quem tem a vez e não gasta tempo. `phase = 'ended'`; emite `ended` e `revealed`. Recusa (`game-over`) se a partida já acabou. No online, o kit só aceita a mensagem `end` de quem comanda a sala; a mesa não pode enviá-la.
 - `hint(state): HintData`: calculada a partir de `oracle.keyCardIds` ("as pistas N e M juntas já deixavam um único resultado"). Nunca uma dica genérica.
 
 ## 6. Gerador e solucionador de mistérios

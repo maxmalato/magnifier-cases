@@ -102,6 +102,7 @@ Deixa o projeto pronto para receber código.
 - Revisão de acessibilidade com testes novos (`e2e/a11y.e2e.ts`): alvos de toque de 44 px em todas as telas (local, online e mesa), jogada inteira pelo teclado, reduzir movimento, telas em 320 px sem rolagem lateral e botão Som lembrado no aparelho. O axe-core agora espera as animações terminarem.
 - Leitura fácil: pistas divididas em frases curtas e testes que limitam as frases (pistas, tema e interface, nos dois idiomas).
 - Medições de desempenho com CPU 6× mais lenta e rede 3G, todas dentro das metas (`pnpm --filter @magnifier-cases/web perf`).
+- Botão "Encerrar partida" em todos os modos (pedido do dono em 27/11/2026): com confirmação, revela a resposta; no online e na mesa, só quem comanda a sala encerra.
 - Checklist em `docs/quality-checklist.md`.
 - `README.md` e `README.en.md` finais.
 
