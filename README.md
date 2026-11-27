@@ -28,7 +28,7 @@ Detalhes e medições em [`docs/quality-checklist.md`](docs/quality-checklist.md
 
 ## Situação
 
-Etapa 6 (acabamento) concluída: sons, animações, revisão de acessibilidade, leitura fácil, medições de desempenho e o botão "Encerrar partida" em todos os modos. Os três modos funcionam (um aparelho, online e mesa, com a tela grande mostrando o jogo e os celulares como controle, que entram pelo código ou pelo QR code), e o jogo pode ser instalado e jogado sem internet no modo de um aparelho. Próxima: Etapa 7 (partidas reais e publicação). Veja `docs/ROADMAP.md`.
+Etapa 6 (acabamento) concluída: sons, animações, revisão de acessibilidade, leitura fácil, medições de desempenho e o botão "Encerrar partida" em todos os modos. Os três modos funcionam (um aparelho, online e mesa, com a tela grande mostrando o jogo e os celulares como controle, que entram pelo código ou pelo QR code), e o jogo pode ser instalado e jogado sem internet no modo de um aparelho. Etapa 7 (partidas reais e publicação) em andamento: a publicação na Cloudflare está preparada e o roteiro das partidas de teste está em `docs/playtests/README.md`. Veja `docs/ROADMAP.md`.
 
 ## Como rodar
 
@@ -46,6 +46,7 @@ pnpm simulate:check  # simulação reduzida da CI: quebra se um nível sair da m
 pnpm --filter @magnifier-cases/web dev      # site em desenvolvimento
 pnpm dev:online # compila o site e sobe o servidor local da Cloudflare: abra http://localhost:8787 (online e um aparelho)
 pnpm --filter @magnifier-cases/web perf     # medições de desempenho (CPU 6× e 3G; rode o build antes)
+pnpm cf:deploy   # publica na Cloudflare à mão (veja docs/deploy.md)
 ```
 
 ## Estrutura
@@ -71,6 +72,8 @@ As dependências apontam para dentro: a interface e o servidor dependem do motor
 - [Checklist de acessibilidade e desempenho](docs/quality-checklist.md)
 - [Teste em aparelho real](docs/device-test.md)
 - [Relatórios da simulação](docs/simulation/README.md)
+- [Publicação na Cloudflare](docs/deploy.md)
+- [Partidas de teste com pessoas](docs/playtests/README.md)
 - [Instruções para o Claude Code](CLAUDE.md)
 
 ## Privacidade
