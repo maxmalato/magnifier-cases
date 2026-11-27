@@ -28,7 +28,7 @@ Detalhes e medições em [`docs/quality-checklist.md`](docs/quality-checklist.md
 
 ## Situação
 
-Etapa 6 (acabamento) pronta para revisão: sons, animações, revisão de acessibilidade, leitura fácil e medições de desempenho. Os três modos funcionam (um aparelho, online e mesa, com a tela grande mostrando o jogo e os celulares como controle, que entram pelo código ou pelo QR code), e o jogo pode ser instalado e jogado sem internet no modo de um aparelho. Próxima: Etapa 7 (partidas reais e publicação). Veja `docs/ROADMAP.md`.
+Etapa 6 (acabamento) concluída: sons, animações, revisão de acessibilidade, leitura fácil, medições de desempenho e o botão "Encerrar partida" em todos os modos. Os três modos funcionam (um aparelho, online e mesa, com a tela grande mostrando o jogo e os celulares como controle, que entram pelo código ou pelo QR code), e o jogo pode ser instalado e jogado sem internet no modo de um aparelho. Próxima: Etapa 7 (partidas reais e publicação). Veja `docs/ROADMAP.md`.
 
 ## Como rodar
 

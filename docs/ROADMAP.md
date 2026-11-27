@@ -16,7 +16,7 @@ A ordem é **motor, gerador, solucionador, bots e simulação antes de qualquer 
 | 3 – Telas (um aparelho) | Concluída | `v0.4-local-ui` |
 | 4 – Online | Concluída | `v0.5-online` |
 | 5 – Mesa e PWA | Concluída | `v0.6-table-pwa` |
-| 6 – Acabamento | Pronta para revisão | `v0.9-polish` |
+| 6 – Acabamento | Concluída | `v0.9-polish` |
 | 7 – Calibração com partidas reais e publicação | Não iniciada | `v1.0` |
 
 ## Etapa 0 – Fundação

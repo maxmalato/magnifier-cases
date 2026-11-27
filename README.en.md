@@ -28,7 +28,7 @@ Details and measurements in [`docs/quality-checklist.md`](docs/quality-checklist
 
 ## Status
 
-Stage 6 (polish) ready for review: sounds, animations, accessibility review, easy reading and performance measurements. All three modes work (one device, online and table, with the big screen showing the game and phones as controllers, joining by code or QR code), and the game can be installed and played offline in one-device mode. Next: Stage 7 (real games and release). See `docs/ROADMAP.md` (in Portuguese).
+Stage 6 (polish) done: sounds, animations, accessibility review, easy reading, performance measurements and an "End game" button in every mode. All three modes work (one device, online and table, with the big screen showing the game and phones as controllers, joining by code or QR code), and the game can be installed and played offline in one-device mode. Next: Stage 7 (real games and release). See `docs/ROADMAP.md` (in Portuguese).
 
 ## How to run
 
