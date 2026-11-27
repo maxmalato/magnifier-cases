@@ -4,6 +4,8 @@
 // última jogada. Nenhuma regra é calculada aqui: tudo passa pelo motor.
 import { botMove, suggest, type Decision } from '@magnifier-cases/bots'
 import { changesBetween, type GameController, type Overlay, type Seat } from './controller.ts'
+import { cueFor } from '../sound/cues.ts'
+import { sound } from '../sound/player.svelte.ts'
 import {
   newGame,
   transition,
@@ -142,6 +144,7 @@ export class LocalGame implements GameController {
         }
       }
     }
+    sound.play(cueFor(events))
     // fim de partida: a tela de revelação substitui qualquer sobreposição
     if (this.isOver) this.overlay = null
   }

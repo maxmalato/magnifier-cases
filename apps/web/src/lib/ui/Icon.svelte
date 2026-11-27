@@ -8,6 +8,8 @@
     check: 'M5 12l5 5L20 7',
     book: 'M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3zM5 17a3 3 0 0 1 3-3h11',
     pointer: 'M12 3v4M12 17v4M3 12h4M17 12h4M12 9a3 3 0 1 0 0 6a3 3 0 0 0 0-6z',
+    'sound-on': 'M4 9h4l5-4v14l-5-4H4zM16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12',
+    'sound-off': 'M4 9h4l5-4v14l-5-4H4zM17 9l5 6M22 9l-5 6',
   } as const
 
   let { name, size = 24 }: { name: keyof typeof paths; size?: number } = $props()
