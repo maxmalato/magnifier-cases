@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { difficultyOf } from './data.ts'
-import { legalActions, newGame, parseAction, transition, viewFor } from './game.ts'
+import { endGame, legalActions, newGame, parseAction, transition, viewFor } from './game.ts'
 import { clockAt } from './rules.ts'
 import { testTheme, makeState } from './testing.ts'
 import type { Action, GameState, TransitionResult } from './types.ts'
@@ -184,6 +184,41 @@ describe('acusação', () => {
     const r = ok(transition(s, { type: 'interrogate', suspectId: 'teacher-rita' }, A))
     expect(r.state.phase).toBe('timeout')
     expect(r.events.at(-1)).toMatchObject({ type: 'revealed' })
+  })
+})
+
+describe('encerrar a partida', () => {
+  it('termina na hora, sem gastar tempo, e revela a resposta', () => {
+    const state = play(makeState(), [{ type: 'interrogate', suspectId: 'baker-ze' }])
+    const r = ok(endGame(state))
+    expect(r.state.phase).toBe('ended')
+    expect(r.state.actionsLeft).toBe(state.actionsLeft)
+    expect(r.events.map((e) => e.type)).toEqual(['ended', 'revealed'])
+    const view = viewFor(r.state)
+    expect(view.reveal?.solution).toEqual(state.solution)
+    expect(view.clock).toBe(viewFor(state).clock)
+    expect(legalActions(view)).toEqual([])
+  })
+
+  it('não depende de quem tem a vez e não muta o estado', () => {
+    const state = makeState({ activeSeat: 'seat-2' })
+    const copy = structuredClone(state)
+    expect(endGame(state).ok).toBe(true)
+    expect(state).toEqual(copy)
+  })
+
+  it('partida que já acabou não pode ser encerrada de novo', () => {
+    const ended = ok(endGame(makeState())).state
+    expect(endGame(ended)).toMatchObject({ ok: false, reason: 'game-over' })
+    expect(transition(ended, { type: 'investigate' }, A)).toMatchObject({ reason: 'game-over' })
+    const timedOut = ok(
+      transition(
+        makeState({ actionsLeft: 1 }),
+        { type: 'interrogate', suspectId: 'teacher-rita' },
+        A,
+      ),
+    ).state
+    expect(endGame(timedOut)).toMatchObject({ ok: false, reason: 'game-over' })
   })
 })
 

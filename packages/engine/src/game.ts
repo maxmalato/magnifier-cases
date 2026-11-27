@@ -246,6 +246,21 @@ export function transition(state: GameState, action: Action, ctx: Ctx): Transiti
   return { ok: true, state: next, events }
 }
 
+/**
+ * Encerra a partida antes do fim, a pedido da equipe (decisão de 27/11/2026): não é uma jogada
+ * (não depende de quem tem a vez) e não gasta tempo. A partida termina e a resposta é revelada.
+ * Quem pode pedir é decidido fora do motor (no online, só quem comanda a sala).
+ */
+export function endGame(state: GameState): TransitionResult {
+  if (state.phase !== 'playing') return refuse('game-over')
+  const next: GameState = { ...state, phase: 'ended' }
+  return {
+    ok: true,
+    state: next,
+    events: [{ type: 'ended' }, { type: 'revealed', reveal: revealOf(next) }],
+  }
+}
+
 // ---------- Quem age ----------
 
 /** Quem pode agir agora (o servidor recusa ação de qualquer outro). */

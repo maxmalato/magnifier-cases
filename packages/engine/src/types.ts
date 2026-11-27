@@ -73,7 +73,8 @@ export interface WrongAccusation {
   readonly seat: SeatId
 }
 
-export type Phase = 'playing' | 'won' | 'timeout'
+/** `ended`: a equipe encerrou a partida antes do fim (o jogo revela a resposta). */
+export type Phase = 'playing' | 'won' | 'timeout' | 'ended'
 
 export interface GameState {
   readonly level: LevelId
@@ -170,6 +171,8 @@ export type GameEvent =
       readonly placeId: PlaceId
     }
   | { readonly type: 'timed-out' }
+  /** A equipe encerrou a partida antes do fim. */
+  | { readonly type: 'ended' }
   | { readonly type: 'revealed'; readonly reveal: Reveal }
 
 /** Motivos de recusa: só códigos, nunca dados do mistério. */
