@@ -11,6 +11,9 @@ const ptBR = {
   'app.back': 'Voltar',
   'app.ok': 'OK',
   'app.clock': 'Relógio: {time}',
+  'app.sound': 'Som',
+  'app.soundOn': 'Som: ligado',
+  'app.soundOff': 'Som: desligado',
 
   'home.playLocal': 'Jogar neste aparelho',
   'home.playLocalHint': 'De 2 a 6 detetives em volta da mesma tela. Bots completam a equipe.',
@@ -124,7 +127,7 @@ const ptBR = {
   'accuse.discarded': 'descartado',
   'accuse.tried': 'Já acusaram essa dupla. Escolham outra.',
   'accuse.rule':
-    'Se errarem, o relógio avança {duration} e vocês continuam investigando. Se acertarem, o mistério termina na hora.',
+    'Se errarem, o relógio avança {duration}. Depois, vocês continuam investigando. Se acertarem, o mistério termina na hora.',
   'accuse.ruleLast': 'Se errarem, o tempo acaba e o jogo revela a resposta.',
   'accuse.choose': 'Escolham um suspeito e um lugar',
   'accuse.button': 'Acusar {suspect} {place}',
@@ -149,7 +152,7 @@ const ptBR = {
   'home.openTable': 'Abrir a mesa (tela grande)',
   'home.openTableHint': 'A tela grande mostra o jogo; cada um joga no próprio celular.',
   'home.tableOnlyBig':
-    'A tela da mesa só abre em telas grandes (tablet, notebook ou TV). Neste aparelho, entrem como jogador.',
+    'A tela da mesa só abre em telas grandes: tablet, notebook ou TV. Neste aparelho, entrem como jogador.',
   'home.backToTable': 'Voltar para a mesa {code}',
 
   'table.joinHere': 'Entrem pelo celular: abram o jogo, toquem em "Entrar com código" e digitem',
@@ -248,6 +251,9 @@ const en: Record<MessageKey, string> = {
   'app.back': 'Back',
   'app.ok': 'OK',
   'app.clock': 'Clock: {time}',
+  'app.sound': 'Sound',
+  'app.soundOn': 'Sound: on',
+  'app.soundOff': 'Sound: off',
 
   'home.playLocal': 'Play on this device',
   'home.playLocalHint': '2 to 6 detectives around the same screen. Bots fill the team.',
@@ -361,8 +367,8 @@ const en: Record<MessageKey, string> = {
   'accuse.discarded': 'ruled out',
   'accuse.tried': 'You already accused this pair. Choose another one.',
   'accuse.rule':
-    'If you are wrong, the clock moves forward {duration} and you keep investigating. If you are right, the mystery ends right away.',
-  'accuse.ruleLast': 'If you are wrong, time runs out and the game shows the answer.',
+    'If you are wrong, the clock moves forward {duration}. Then you keep investigating. If you are right, the mystery ends right away.',
+  'accuse.ruleLast': 'If you are wrong, time runs out. Then the game shows the answer.',
   'accuse.choose': 'Choose a suspect and a place',
   'accuse.button': 'Accuse {suspect} {place}',
   'accuse.back': 'Back',
@@ -386,7 +392,7 @@ const en: Record<MessageKey, string> = {
   'home.openTable': 'Open the table (big screen)',
   'home.openTableHint': 'The big screen shows the game; everyone plays on their own phone.',
   'home.tableOnlyBig':
-    'The table screen only opens on big screens (tablet, notebook or TV). On this device, join as a player.',
+    'The table screen only opens on big screens: tablet, notebook or TV. On this device, join as a player.',
   'home.backToTable': 'Back to table {code}',
 
   'table.joinHere': 'Join from your phone: open the game, tap "Join with a code" and type',

@@ -62,17 +62,17 @@ describe('textos das pistas', () => {
       slots: { source: ['baker-ze'], suspects: ['miss-lucia'] },
     }
     expect(renderClue(one, 'pt-BR')).toBe(
-      'A Dona Lúcia passou a tarde toda comigo, então não levou o bolo.',
+      'A Dona Lúcia passou a tarde toda comigo. Então não levou o bolo.',
     )
     const two = {
       ...one,
       slots: { source: ['baker-ze'], suspects: ['miss-lucia', 'teacher-rita'] },
     }
     expect(renderClue(two, 'pt-BR')).toBe(
-      'A Dona Lúcia e a Profª Rita passaram a tarde toda comigo, então não levaram o bolo.',
+      'A Dona Lúcia e a Profª Rita passaram a tarde toda comigo. Então não levaram o bolo.',
     )
     expect(renderClue(two, 'en')).toBe(
-      'Miss Lúcia and Teacher Rita spent the whole afternoon with me, so none of them took the cake.',
+      'Miss Lúcia and Teacher Rita spent the whole afternoon with me. So none of them took the cake.',
     )
   })
 

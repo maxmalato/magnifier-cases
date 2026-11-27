@@ -14,34 +14,34 @@ type Texts = Readonly<Record<string, ClueText>>
 
 const ptBR: Texts = {
   'clue.with-me-afternoon': {
-    one: '{suspects} passou a tarde toda comigo, então não levou o bolo.',
-    other: '{suspects} passaram a tarde toda comigo, então não levaram o bolo.',
+    one: '{suspects} passou a tarde toda comigo. Então não levou o bolo.',
+    other: '{suspects} passaram a tarde toda comigo. Então não levaram o bolo.',
   },
   'clue.decorating-square': {
-    one: 'Eu vi {suspects} enfeitando a praça o tempo todo, então não levou o bolo.',
-    other: 'Eu vi {suspects} enfeitando a praça o tempo todo, então não levaram o bolo.',
+    one: 'Eu vi {suspects} enfeitando a praça o tempo todo. Então não levou o bolo.',
+    other: 'Eu vi {suspects} enfeitando a praça o tempo todo. Então não levaram o bolo.',
   },
   'clue.party-photo': {
-    one: 'Achei uma foto da festa aqui: {suspects} aparece nela a tarde toda, então não levou o bolo.',
+    one: 'Achei uma foto da festa aqui: {suspects} aparece nela a tarde toda. Então não levou o bolo.',
     other:
-      'Achei uma foto da festa aqui: {suspects} aparecem nela a tarde toda, então não levaram o bolo.',
+      'Achei uma foto da festa aqui: {suspects} aparecem nela a tarde toda. Então não levaram o bolo.',
   },
   'clue.ice-cream-line': {
-    one: 'Um bilhete aqui diz que {suspects} ficou na fila do sorvete a tarde toda, então não levou o bolo.',
+    one: 'Um bilhete aqui diz: {suspects} ficou na fila do sorvete a tarde toda. Então não levou o bolo.',
     other:
-      'Um bilhete aqui diz que {suspects} ficaram na fila do sorvete a tarde toda, então não levaram o bolo.',
+      'Um bilhete aqui diz: {suspects} ficaram na fila do sorvete a tarde toda. Então não levaram o bolo.',
   },
   'clue.spent-afternoon-at': {
-    one: 'Passei a tarde toda {places|in} e o bolo não está lá.',
-    other: 'Passei a tarde {places|in|and}, e o bolo não está em nenhum desses lugares.',
+    one: 'Passei a tarde toda {places|in}. O bolo não está lá.',
+    other: 'Passei a tarde {places|in|and}. O bolo não está em nenhum desses lugares.',
   },
   'clue.nobody-went-in': {
-    one: 'Hoje ninguém entrou {places|in}, então o bolo não está lá.',
-    other: 'Hoje ninguém entrou {places|in|nor}, então o bolo não está em nenhum desses lugares.',
+    one: 'Hoje ninguém entrou {places|in}. Então o bolo não está lá.',
+    other: 'Hoje ninguém entrou {places|in|nor}. Então o bolo não está em nenhum desses lugares.',
   },
   'clue.view-from-here': {
-    one: 'Daqui dá para ver {places} e o bolo não está lá.',
-    other: 'Daqui dá para ver {places}, e o bolo não está em nenhum desses lugares.',
+    one: 'Daqui dá para ver {places}. O bolo não está lá.',
+    other: 'Daqui dá para ver {places}. O bolo não está em nenhum desses lugares.',
   },
   'clue.map-not-there': {
     other: 'Um mapa aqui mostra que o bolo não está {places|in|nor}.',
@@ -78,34 +78,34 @@ const ptBR: Texts = {
 
 const en: Texts = {
   'clue.with-me-afternoon': {
-    one: '{suspects} spent the whole afternoon with me, so they did not take the cake.',
-    other: '{suspects} spent the whole afternoon with me, so none of them took the cake.',
+    one: '{suspects} spent the whole afternoon with me. So they did not take the cake.',
+    other: '{suspects} spent the whole afternoon with me. So none of them took the cake.',
   },
   'clue.decorating-square': {
-    one: 'I saw {suspects} decorating the square the whole time, so they did not take the cake.',
-    other: 'I saw {suspects} decorating the square the whole time, so none of them took the cake.',
+    one: 'I saw {suspects} decorating the square the whole time. So they did not take the cake.',
+    other: 'I saw {suspects} decorating the square the whole time. So none of them took the cake.',
   },
   'clue.party-photo': {
-    one: 'I found a party photo here: {suspects} is in it all afternoon, so they did not take the cake.',
+    one: 'I found a party photo here: {suspects} is in it all afternoon. So they did not take the cake.',
     other:
-      'I found a party photo here: {suspects} are in it all afternoon, so none of them took the cake.',
+      'I found a party photo here: {suspects} are in it all afternoon. So none of them took the cake.',
   },
   'clue.ice-cream-line': {
-    one: 'A note here says {suspects} waited in the ice cream line all afternoon, so they did not take the cake.',
+    one: 'A note here says: {suspects} waited in the ice cream line all afternoon. So they did not take the cake.',
     other:
-      'A note here says {suspects} waited in the ice cream line all afternoon, so none of them took the cake.',
+      'A note here says: {suspects} waited in the ice cream line all afternoon. So none of them took the cake.',
   },
   'clue.spent-afternoon-at': {
-    one: 'I spent the whole afternoon {places|in}, and the cake is not there.',
-    other: 'I spent the afternoon {places|in|and}, and the cake is in none of those places.',
+    one: 'I spent the whole afternoon {places|in}. The cake is not there.',
+    other: 'I spent the afternoon {places|in|and}. The cake is in none of those places.',
   },
   'clue.nobody-went-in': {
-    one: 'Nobody went into {places} today, so the cake is not there.',
-    other: 'Nobody went into {places|def|or} today, so the cake is in none of those places.',
+    one: 'Nobody went into {places} today. So the cake is not there.',
+    other: 'Nobody went into {places|def|or} today. So the cake is in none of those places.',
   },
   'clue.view-from-here': {
-    one: 'From here you can see {places}, and the cake is not there.',
-    other: 'From here you can see {places}, and the cake is in none of those places.',
+    one: 'From here you can see {places}. The cake is not there.',
+    other: 'From here you can see {places}. The cake is in none of those places.',
   },
   'clue.map-not-there': {
     other: 'A map here shows that the cake is not {places|in|nor}.',
