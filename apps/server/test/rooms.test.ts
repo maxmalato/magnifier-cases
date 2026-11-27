@@ -175,6 +175,21 @@ describe('salas', () => {
     await ana.room((r) => r.suggestions.length === 0 && r.game?.activeSeat === bruno.seat)
   })
 
+  it('encerrar: só quem comanda a sala, para todos, e a resposta é revelada', async () => {
+    const { code, ana, bruno } = await startedRoom()
+    bruno.send({ type: 'end' })
+    expect((await bruno.waitFor(isError)).code).toBe('onlyHost')
+    const { solution } = await secretOf(code)
+    // Ana comanda a sala e encerra (a vez nem precisa ser dela)
+    ana.send({ type: 'end' })
+    const room = await bruno.room((r) => r.status === 'over')
+    expect(room.game?.phase).toBe('ended')
+    expect(room.game?.reveal?.solution).toEqual(solution)
+    // depois de encerrar, quem comanda pode jogar de novo
+    ana.send({ type: 'again' })
+    await bruno.room((r) => r.status === 'lobby')
+  })
+
   it('desconexão: o bot assume a vez de quem caiu e a pessoa volta pelo token', async () => {
     const { code, ana, bruno } = await startedRoom()
     await bruno.room((r) => r.game?.activeSeat === ana.seat)

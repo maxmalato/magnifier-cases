@@ -39,6 +39,11 @@ export interface GameDefinition<S, A, E, C, V> {
   newGame(config: C, seats: readonly SeatId[], seed: number): S
   /** Pura: nunca muta a entrada. O motor valida a regra; o kit valida quem pode agir. */
   transition(state: S, action: A, seat: SeatId): TransitionOutcome<S, E>
+  /**
+   * Encerra a partida antes do fim (botão "Encerrar partida"). Pura. Não é uma jogada: quem pode
+   * pedir é decidido pelo kit (só quem comanda a sala), não por quem tem a vez.
+   */
+  endGame(state: S): TransitionOutcome<S, E>
   /** Assento dono do turno; null quando a partida acabou. */
   activeSeat(state: S): SeatId | null
   /** Quem pode agir agora (o servidor recusa qualquer outro). */

@@ -15,6 +15,7 @@ export type GuessAction = { readonly type: 'guess'; readonly n: number }
 export type GuessEvent =
   | { readonly type: 'missed'; readonly n: number }
   | { readonly type: 'won'; readonly secret: number }
+  | { readonly type: 'ended'; readonly secret: number }
 export interface GuessConfig {
   readonly max: number
 }
@@ -73,6 +74,14 @@ export const guessGame: GameDefinition<
       events: [{ type: 'missed', n: action.n }],
     }
   },
+  endGame: (state) =>
+    state.won
+      ? { ok: false, reason: 'over' }
+      : {
+          ok: true,
+          state: { ...state, won: true },
+          events: [{ type: 'ended', secret: state.secret }],
+        },
   activeSeat: (state) =>
     state.won ? null : (state.seats[state.turn % state.seats.length] ?? null),
   actorsOf: (state) => {

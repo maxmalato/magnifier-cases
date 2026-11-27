@@ -21,6 +21,8 @@ export type ClientMessage =
   /** Pede o estado completo de novo (reconexão, aba voltando do segundo plano). */
   | { type: 'resync' }
   | { type: 'again' }
+  /** Encerrar a partida para todos (só quem comanda a sala); o jogo revela a resposta. */
+  | { type: 'end' }
   | { type: 'leave' }
 
 /** O que a mesa pode mandar: ela só mostra a partida. */
@@ -75,6 +77,7 @@ export function parseClientMessage(raw: string): ClientMessage | null {
     case 'unsuggest':
     case 'resync':
     case 'again':
+    case 'end':
     case 'leave':
       return { type: v.type }
     default:
