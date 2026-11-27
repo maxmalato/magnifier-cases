@@ -36,3 +36,7 @@ Observação: o PWA (instalar e jogar sem internet) só funciona em `localhost` 
 | Celular na mesa | Fechar o navegador no meio da vez | A mesa avisa "desconectou" e, depois de uns 20 s, "o bot assumiu". Voltar pelo botão "Voltar para a sala". |
 
 Anote o que estranhar (texto pequeno, botão difícil de tocar, algo que não aparece) e mande para a próxima sessão.
+
+## Resultado
+
+- 27/11/2026: roteiro executado pelo dono do projeto em aparelhos reais, sem problemas encontrados. Etapa 5 fechada.

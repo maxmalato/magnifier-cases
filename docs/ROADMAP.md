@@ -15,7 +15,7 @@ A ordem é **motor, gerador, solucionador, bots e simulação antes de qualquer 
 | 2 – Bots e simulação | Concluída | `v0.3-bots-sim` |
 | 3 – Telas (um aparelho) | Concluída | `v0.4-local-ui` |
 | 4 – Online | Concluída | `v0.5-online` |
-| 5 – Mesa e PWA | Pronta para revisão (falta o teste em aparelho real: `docs/device-test.md`) | `v0.6-table-pwa` |
+| 5 – Mesa e PWA | Concluída | `v0.6-table-pwa` |
 | 6 – Acabamento | Não iniciada | `v0.9-polish` |
 | 7 – Calibração com partidas reais e publicação | Não iniciada | `v1.0` |
 

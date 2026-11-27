@@ -18,7 +18,7 @@ Aprendiz, Investigador, Perito e Lenda. O mapa e o relógio mudam com o nível.
 
 ## Situação
 
-Etapa 5 (mesa e PWA) pronta para revisão: os três modos funcionam (um aparelho, online e mesa, com a tela grande mostrando o jogo e os celulares como controle, que entram pelo código ou pelo QR code), e o jogo pode ser instalado e jogado sem internet no modo de um aparelho. Falta o teste em aparelho real. Veja `docs/ROADMAP.md`.
+Etapa 5 (mesa e PWA) concluída: os três modos funcionam (um aparelho, online e mesa, com a tela grande mostrando o jogo e os celulares como controle, que entram pelo código ou pelo QR code), e o jogo pode ser instalado e jogado sem internet no modo de um aparelho. Testado em aparelho real. Próxima: Etapa 6 (acabamento). Veja `docs/ROADMAP.md`.
 
 ## Como rodar
 

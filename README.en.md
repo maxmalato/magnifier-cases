@@ -18,7 +18,7 @@ Apprentice, Investigator, Expert and Legend. The map and the clock change with t
 
 ## Status
 
-Stage 5 (table and PWA) ready for review: all three modes work (one device, online and table, with the big screen showing the game and phones as controllers, joining by code or QR code), and the game can be installed and played offline in one-device mode. The real-device test is still pending. See `docs/ROADMAP.md` (in Portuguese).
+Stage 5 (table and PWA) done: all three modes work (one device, online and table, with the big screen showing the game and phones as controllers, joining by code or QR code), and the game can be installed and played offline in one-device mode. Tested on real devices. Next: Stage 6 (polish). See `docs/ROADMAP.md` (in Portuguese).
 
 ## How to run
 
