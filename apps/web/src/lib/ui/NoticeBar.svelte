@@ -15,9 +15,9 @@
 </script>
 
 <div class="notices {placement}" role="status" aria-live="polite">
-  {#if online?.reconnecting}<p class="notice warn">{t('online.reconnecting')}</p>{/if}
-  {#if online?.error}<p class="notice warn">{online.error}</p>{/if}
-  {#each online?.notices ?? [] as notice, i (i)}<p class="notice">{notice}</p>{/each}
+  {#if online?.reconnecting}<p class="notice warn anim-slide">{t('online.reconnecting')}</p>{/if}
+  {#if online?.error}<p class="notice warn anim-slide">{online.error}</p>{/if}
+  {#each online?.notices ?? [] as notice, i (i)}<p class="notice anim-slide">{notice}</p>{/each}
 </div>
 
 <style>
