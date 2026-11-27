@@ -2,6 +2,7 @@
 // servidor local da Cloudflare (projeto "online"). A tela da mesa só existe em tela grande.
 import AxeBuilder from '@axe-core/playwright'
 import { devices, expect, test, type Browser, type Page } from '@playwright/test'
+import { expectTargets, settle } from './helpers.ts'
 
 const TV = {
   viewport: { width: 1280, height: 720 },
@@ -13,6 +14,7 @@ const TV = {
 async function noViolations(page: Page, where: string) {
   for (const colorScheme of ['light', 'dark'] as const) {
     await page.emulateMedia({ colorScheme })
+    await settle(page)
     expect(
       (await new AxeBuilder({ page }).analyze()).violations,
       `${where} (${colorScheme})`,
@@ -39,6 +41,7 @@ test('mesa e dois celulares jogam até o fim', async ({ browser }) => {
   // QR code com o link da sala, para os celulares entrarem pela câmera
   await expect(tv.getByRole('img', { name: /^QR code com o link da sala / })).toBeVisible()
   await noViolations(tv, 'lobby da mesa')
+  await expectTargets(tv, 'lobby da mesa')
 
   const { page: ana, context: anaContext } = await phone(browser, code, 'Ana')
   const { page: bruno, context: brunoContext } = await phone(browser, code, 'Bruno')
@@ -51,6 +54,8 @@ test('mesa e dois celulares jogam até o fim', async ({ browser }) => {
   await expect(tv.getByText('Ana escolhe a ação no celular', { exact: false })).toBeVisible()
   await expect(tv.getByText('Nenhuma pista ainda.', { exact: false })).toBeVisible()
   await noViolations(tv, 'partida na mesa')
+  await expectTargets(tv, 'partida na mesa')
+  await expectTargets(bruno, 'celular de quem sugere')
 
   // Bruno sugere; a mesa mostra a sugestão
   await bruno.getByRole('button', { name: /Ir a outro lugar/ }).click()

@@ -3,6 +3,7 @@
 import AxeBuilder from '@axe-core/playwright'
 import { roomParams } from '@magnifier-cases/protocol'
 import { expect, test, type Browser, type Page } from '@playwright/test'
+import { expectTargets, settle } from './helpers.ts'
 
 async function createRoom(page: Page, name: string): Promise<string> {
   await page.goto('/')
@@ -186,13 +187,18 @@ for (const colorScheme of ['light', 'dark'] as const) {
     await page.emulateMedia({ colorScheme })
     await page.goto('/')
     await page.getByRole('button', { name: 'Criar sala online' }).click()
+    await settle(page)
     expect((await new AxeBuilder({ page }).analyze()).violations, 'criar sala').toEqual([])
+    await expectTargets(page, 'criar sala')
     await page.getByRole('button', { name: 'Voltar' }).click()
     await page.getByRole('button', { name: 'Entrar com código' }).click()
+    await settle(page)
     expect((await new AxeBuilder({ page }).analyze()).violations, 'entrar').toEqual([])
     await page.getByRole('button', { name: 'Voltar' }).click()
     await createRoom(page, 'Ana')
     await expect(page.getByRole('img', { name: /^QR code com o link da sala / })).toBeVisible()
+    await expectTargets(page, 'lobby online')
+    await settle(page)
     expect((await new AxeBuilder({ page }).analyze()).violations, 'lobby online').toEqual([])
   })
 }
