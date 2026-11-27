@@ -13,6 +13,7 @@
     "format": "prettier --write .",
     "typecheck": "pnpm -r --parallel typecheck",
     "build": "pnpm --filter @magnifier-cases/web build && pnpm --filter @magnifier-cases/server build",
+    "cf:deploy": "pnpm build && pnpm --filter @magnifier-cases/server exec wrangler deploy",
     "dev:online": "pnpm --filter @magnifier-cases/web build && pnpm --filter @magnifier-cases/server dev",
     "e2e": "pnpm --filter @magnifier-cases/web e2e",
     "simulate": "pnpm --filter @magnifier-cases/sim simulate",
