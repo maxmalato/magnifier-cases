@@ -31,6 +31,26 @@ async function phone(browser: Browser, code: string, name: string) {
   return { context, page }
 }
 
+/** Acusa uma dupla diferente a cada volta; false se outra tela cobriu a da vez no meio. */
+async function accuseRound(player: Page, round: number): Promise<boolean> {
+  const quick = { timeout: 3000 }
+  try {
+    await player.getByRole('button', { name: 'Acusar agora' }).click(quick)
+    const suspects = player.locator('fieldset').nth(0).locator('.opt:not([disabled])')
+    const places = player.locator('fieldset').nth(1).locator('.opt:not([disabled])')
+    await suspects.first().waitFor(quick)
+    const n = await suspects.count()
+    await suspects.nth(round % n).click(quick)
+    await places.nth(Math.floor(round / n) % (await places.count())).click(quick)
+    const accuse = player.getByRole('button', { name: /^Acusar / })
+    if (await accuse.isEnabled()) await accuse.click(quick)
+    else await player.getByRole('button', { name: 'Voltar' }).click(quick)
+    return true
+  } catch {
+    return false
+  }
+}
+
 test('mesa e dois celulares jogam até o fim', async ({ browser }) => {
   test.setTimeout(120_000)
   const tvContext = await browser.newContext(TV)
@@ -71,7 +91,7 @@ test('mesa e dois celulares jogam até o fim', async ({ browser }) => {
 
   // joga até o fim acusando duplas diferentes
   const end = /Mistério resolvido|Tempo esgotado/
-  for (let round = 0; round < 40; round++) {
+  for (let round = 0; round < 80; round++) {
     if ((await tv.getByText(end).count()) > 0) break
     for (const page of [ana, bruno]) {
       const ok = page.getByRole('button', { name: 'OK' })
@@ -80,15 +100,9 @@ test('mesa e dois celulares jogam até o fim', async ({ browser }) => {
     const heading = await ana.getByRole('heading', { level: 1 }).innerText()
     if (!heading.startsWith('Vez de')) continue
     const player = heading === 'Vez de Ana' ? ana : bruno
-    await player.getByRole('button', { name: 'Acusar agora' }).click()
-    const suspects = player.locator('fieldset').nth(0).locator('.opt:not([disabled])')
-    const places = player.locator('fieldset').nth(1).locator('.opt:not([disabled])')
-    const n = await suspects.count()
-    await suspects.nth(round % n).click()
-    await places.nth(Math.floor(round / n) % (await places.count())).click()
-    const accuse = player.getByRole('button', { name: /^Acusar / })
-    if (await accuse.isEnabled()) await accuse.click()
-    else await player.getByRole('button', { name: 'Voltar' }).click()
+    // A tela de resultado da jogada anterior pode chegar a este celular depois da leitura acima
+    // e cobrir a tela da vez: nesse caso, tenta de novo na próxima volta (que toca em OK).
+    if (!(await accuseRound(player, round))) continue
     await expect(
       tv
         .getByText(end)
