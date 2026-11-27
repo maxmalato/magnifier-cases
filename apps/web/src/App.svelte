@@ -17,6 +17,10 @@
   import TableScreen from './lib/screens/TableScreen.svelte'
   import { createTableRoom } from './lib/online/api.ts'
   import Header from './lib/ui/Header.svelte'
+  import Coach from './lib/tutorial/Coach.svelte'
+  import { howToPlay } from './lib/tutorial/launcher.svelte.ts'
+  import { TutorialGame } from './lib/tutorial/tutorial-game.svelte.ts'
+  import { untrack } from 'svelte'
   import type { MessageKey } from './i18n.ts'
 
   /** Espera padrão antes de cada jogada de bot, para a equipe acompanhar. */
@@ -123,11 +127,36 @@
   // cada tela nova começa do topo
   $effect(() => {
     void screen
+    void howToPlay.open
     window.scrollTo({ top: 0 })
   })
+
+  /**
+   * Partida de treino ("Como jogar"): desenhada por cima da tela atual. A partida em andamento
+   * (deste aparelho ou online) continua guardada; ao sair do treino, a pessoa volta para ela.
+   */
+  let tutorial = $state<TutorialGame | null>(null)
+  $effect(() => {
+    const open = howToPlay.open
+    untrack(() => {
+      if (open && !tutorial) tutorial = new TutorialGame(t('tutorial.player'))
+      if (!open && tutorial) {
+        tutorial.destroy()
+        tutorial = null
+      }
+    })
+  })
+  function closeTutorial() {
+    howToPlay.open = false
+  }
 </script>
 
-{#if screen === 'home'}
+{#if tutorial}
+  <div class="practice">
+    <GameScreen game={tutorial} onhome={closeTutorial} homeLabel={t('tutorial.exit')} />
+  </div>
+  <Coach game={tutorial} onexit={closeTutorial} />
+{:else if screen === 'home'}
   <Home
     onplay={() => (screen = 'lobby')}
     oncreate={() => (screen = 'create')}
@@ -193,6 +222,10 @@
 {/if}
 
 <style>
+  /* espaço para o painel do treinador, que fica fixo embaixo */
+  .practice {
+    padding-bottom: 240px;
+  }
   .fatal {
     margin: 0;
     padding: 12px;

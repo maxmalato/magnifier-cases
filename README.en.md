@@ -12,6 +12,8 @@ It runs on phones, tablets, desktops and Smart TVs with a browser, as a PWA.
 - **Table:** a large screen shows the notebook and phones act as controllers. Large screens only (tablet, notebook, TV).
 - **Online:** a room with a code, each person on their own device.
 
+First time? The **How to play** button (next to Sound) opens a guided practice game, step by step.
+
 ## Levels
 
 Apprentice, Investigator, Expert and Legend. The map and the clock change with the level.

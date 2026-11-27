@@ -18,3 +18,4 @@ export {
   type Form,
   type Joiner,
 } from './format.ts'
+export { tutorial } from './party-cake/tutorial.ts'

@@ -22,7 +22,13 @@
     {#each view.cast.suspects as id (id)}
       {@const open = view.candidates.suspects.includes(id)}
       <li>
-        <button type="button" class="item" disabled={!closed(id)} onclick={() => onpick(id)}>
+        <button
+          type="button"
+          class="item"
+          class:guided={game.guide?.includes(`suspect:${id}`)}
+          disabled={!closed(id)}
+          onclick={() => onpick(id)}
+        >
           <span class:struck={!open}>{titleOf(id, ui.locale)}</span>
           {#if !closed(id)}
             <span class="badge">{t('choose.alreadyAsked')}</span>

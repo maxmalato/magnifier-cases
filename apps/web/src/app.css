@@ -299,6 +299,13 @@ button:disabled {
   animation: ring 1.8s ease-in-out infinite;
 }
 
+/* Partida de treino: o botão do passo atual fica destacado (contorno + anel, não só cor). */
+.guided {
+  outline: 4px solid var(--accent) !important;
+  outline-offset: 3px;
+  animation: ring 1.8s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

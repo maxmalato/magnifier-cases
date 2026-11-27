@@ -12,6 +12,8 @@ Roda em celular, tablet, desktop e Smart TV com navegador, como PWA.
 - **Mesa:** uma tela grande mostra o caderno e os celulares são o controle. Só em telas grandes (tablet, notebook, TV).
 - **Online:** sala com código, cada pessoa no seu aparelho.
 
+Primeira vez? O botão **Como jogar** (ao lado do Som) abre uma partida de treino guiada, passo a passo.
+
 ## Níveis
 
 Aprendiz, Investigador, Perito e Lenda. O mapa e o relógio mudam com o nível.

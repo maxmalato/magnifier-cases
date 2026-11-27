@@ -14,7 +14,7 @@
 <main class="screen">
   <Header clock={game.view.clock} />
   <h1>{t('choose.placeTitle')}</h1>
-  <PlaceGrid view={game.view} {onpick} />
+  <PlaceGrid view={game.view} {onpick} guide={game.guide} />
   <button type="button" class="btn" onclick={onback}>{t('app.back')}</button>
 </main>
 

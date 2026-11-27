@@ -29,6 +29,8 @@
   } = $props()
 
   const view = $derived(game.view)
+  /** Treino: o botão do passo atual fica destacado. */
+  const guided = (key: string) => game.guide?.includes(key) ?? false
   const minutes = $derived(duration(view.params.actionMinutes))
   /** Este aparelho joga agora. */
   const human = $derived(game.canAct)
@@ -120,6 +122,7 @@
   <section aria-label={t('turn.map')}>
     <PlaceGrid
       {view}
+      guide={game.guide}
       onpick={human
         ? (placeId) => onask({ type: 'move', placeId })
         : canPropose
@@ -132,6 +135,7 @@
     <button
       type="button"
       class="option"
+      class:guided={guided('investigate')}
       disabled={suggesting ? exhausted : !human || !hereClosed}
       aria-pressed={suggesting ? suggested('investigate') : undefined}
       onclick={() => choose('investigate', () => onask({ type: 'investigate' }))}
@@ -153,6 +157,7 @@
     <button
       type="button"
       class="option"
+      class:guided={guided('interrogate')}
       disabled={(!human && !canPropose) || !anyoneToAsk}
       onclick={() => onchoose('suspect')}
     >
@@ -169,6 +174,7 @@
     <button
       type="button"
       class="option"
+      class:guided={guided('move')}
       disabled={!human && !canPropose}
       aria-pressed={suggesting ? suggested('move') : undefined}
       onclick={() => choose('move', () => onchoose('place'))}
@@ -191,8 +197,16 @@
   {/if}
 
   <div class="row">
-    <button type="button" class="btn" onclick={onnotebook}>{t('turn.notebook')}</button>
-    <button type="button" class="btn" disabled={!human && !canPropose} onclick={onaccuse}>
+    <button type="button" class="btn" class:guided={guided('notebook')} onclick={onnotebook}>
+      {t('turn.notebook')}
+    </button>
+    <button
+      type="button"
+      class="btn"
+      class:guided={guided('accuse')}
+      disabled={!human && !canPropose}
+      onclick={onaccuse}
+    >
       {t('turn.accuse')}
     </button>
   </div>

@@ -122,6 +122,8 @@ Deixa o projeto pronto para receber código.
 - Publicação automática: o workflow `Deploy` publica na Cloudflare depois de cada CI verde na `main`, só quando os segredos do environment `production` do GitHub estiverem configurados (até lá, a publicação é pulada com um aviso).
 - Limites por endereço (10 salas criadas e 60 consultas por minuto) agora vêm das vars do Worker, com os mesmos valores; só o servidor dos testes de ponta a ponta usa valores maiores, porque ali todos os aparelhos simulados saem do mesmo endereço.
 - Roteiro e modelo de anotação das partidas de teste em `docs/playtests/README.md`.
+- Publicado em `https://casos-da-lupa.codemalato.workers.dev` (27/11/2026), com publicação automática a cada CI verde na `main`.
+- "Como jogar": partida guiada com mistério fixo, botão ao lado do Som em todas as telas (pedido do dono em 27/11/2026).
 
 **Falta (com o dono do projeto):** configurar a publicação na conta da Cloudflare, partidas com pessoas e ajustes nos dados, teste com leitor de tela, novo teste em aparelhos com HTTPS, revisão jurídica (LGPD e ECA Digital) e consulta ao INPI.
 

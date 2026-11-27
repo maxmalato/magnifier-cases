@@ -222,7 +222,7 @@ Máquina de estados por assento humano, do `kit`: `connected` → `away` → `bo
 
 ## 10. UI (Svelte 5)
 
-Telas (alinhadas aos mockups em `docs/mockups/`): início (criar sala, entrar, jogar local), lobby (apelidos, bots, nível), novo mistério (briefing), vez de alguém (escolher ação), nova pista, interrogatório, caderno, acusação, revelação, mesa (TV ou tablet).
+Telas (alinhadas aos mockups em `docs/mockups/`): início (criar sala, entrar, jogar local), lobby (apelidos, bots, nível), novo mistério (briefing), vez de alguém (escolher ação), nova pista, interrogatório, caderno, acusação, revelação, mesa (TV ou tablet), partida de treino ("Como jogar": `apps/web/src/lib/tutorial`, um `GameController` que envolve a partida local e só aceita a ação do passo atual; os componentes destacam o alvo do passo pela propriedade `guide`).
 
 - Componentes: `ClockPill`, `ActionSegments` (barra com `actionsTotal` segmentos, não 8 fixos), `PlaceGrid` (grade do mapa, 3×2, 3×3 ou 4×3), `Notebook`, `ClueCard`, `SuggestionMarker`, `OptionList`.
 - O texto da regra e os números do relógio vêm de `DifficultyParams`. Nenhum valor de nível fica escrito na tela.

@@ -12,6 +12,7 @@
     onagain,
     onhome,
     waitText,
+    homeLabel,
   }: {
     game: GameController
     /** Novo mistério; ausente no online para quem não comanda a sala. */
@@ -19,6 +20,8 @@
     onhome: () => void
     /** Texto de espera no lugar do botão de novo mistério. */
     waitText?: string | undefined
+    /** Texto do botão de saída (padrão: "Voltar ao início"). */
+    homeLabel?: string | undefined
   } = $props()
   const view = $derived(game.view)
   const reveal = $derived(view.reveal)
@@ -90,7 +93,7 @@
   {:else if waitText}
     <p class="no-blame" role="status">{waitText}</p>
   {/if}
-  <button type="button" class="btn" onclick={onhome}>{t('reveal.home')}</button>
+  <button type="button" class="btn" onclick={onhome}>{homeLabel ?? t('reveal.home')}</button>
 </main>
 
 <style>

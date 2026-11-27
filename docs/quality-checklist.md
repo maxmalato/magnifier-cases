@@ -18,6 +18,7 @@ Etapa 6 (acabamento), 27/11/2026. Cada item diz como é verificado. Os testes au
 | Leitura fácil para 8 anos: frases de até 12 palavras (listas de nomes contam como uma) | Cumprido | Testes de unidade `reading.test.ts` em `packages/content` (pistas e tema) e em `apps/web` (interface), nos dois idiomas |
 | Idioma da página (`lang`) e textos em PT-BR e inglês | Cumprido | E2E `home`; teste de unidade garante as mesmas chaves nos dois idiomas |
 | Som com botão "Som" em todas as telas, lembrado no aparelho; nenhum som carrega informação que não esteja na tela | Cumprido | E2E `a11y` (liga, desliga e lembra depois de recarregar); revisão de código |
+| Partida de treino ("Como jogar"): axe-core nos dois temas, alvos de 44 px, painel em `aria-live`, destaque com contorno (não só cor) e rolagem até o próximo botão destacado | Cumprido | E2E `tutorial` |
 | Leitor de tela real (TalkBack no Android, VoiceOver no iPhone ou Mac) | Manual, pendente | Dono do projeto, na Etapa 7 |
 
 ## Desempenho

@@ -8,10 +8,13 @@
   let {
     view,
     onpick,
+    guide,
     large = false,
   }: {
     view: PublicView
     onpick?: ((placeId: string) => void) | undefined
+    /** Treino: lugares destacados ("place:ID"). */
+    guide?: readonly string[] | undefined
     /** Tamanho da tela da mesa (TV, notebook ou tablet). */
     large?: boolean
   } = $props()
@@ -42,6 +45,7 @@
       <button
         type="button"
         class="tile {s.kind}"
+        class:guided={guide?.includes(`place:${id}`)}
         onclick={() => onpick(id)}
         aria-label="{name}: {s.note}"
       >
