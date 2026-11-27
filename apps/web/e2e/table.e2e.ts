@@ -111,6 +111,8 @@ test('encerrar pelo celular de quem comanda: a mesa mostra a resposta', async ({
   const code = (await tv.locator('.code').innerText()).replace('·', '')
   const { page: ana, context: anaContext } = await phone(browser, code, 'Ana')
   const { page: bruno, context: brunoContext } = await phone(browser, code, 'Bruno')
+  // só começa depois que os dois entraram (a partida precisa de 2 detetives)
+  await expect(tv.locator('.players .chip', { hasText: 'Bruno' })).toBeVisible()
   await ana.getByRole('button', { name: 'Começar a partida' }).click()
   await expect(tv.getByText('decidindo agora')).toBeVisible()
   // a mesa não tem o botão; Bruno também não (quem comanda é Ana)
