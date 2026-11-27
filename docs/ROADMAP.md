@@ -16,7 +16,7 @@ A ordem é **motor, gerador, solucionador, bots e simulação antes de qualquer 
 | 3 – Telas (um aparelho) | Concluída | `v0.4-local-ui` |
 | 4 – Online | Concluída | `v0.5-online` |
 | 5 – Mesa e PWA | Concluída | `v0.6-table-pwa` |
-| 6 – Acabamento | Não iniciada | `v0.9-polish` |
+| 6 – Acabamento | Concluída | `v0.9-polish` |
 | 7 – Calibração com partidas reais e publicação | Não iniciada | `v1.0` |
 
 ## Etapa 0 – Fundação
@@ -94,6 +94,19 @@ Deixa o projeto pronto para receber código.
 - `README.md` e `README.en.md` finais, com os dois idiomas equivalentes.
 
 **Pronto quando:** checklist de acessibilidade e de desempenho cumprido; READMEs revisados.
+
+**Feito (27/11/2026):**
+
+- Sons sintetizados (Web Audio), ligados por padrão, com o botão "Som" em todas as telas, inclusive na mesa.
+- Animações curtas em CSS, desligadas com `prefers-reduced-motion`.
+- Revisão de acessibilidade com testes novos (`e2e/a11y.e2e.ts`): alvos de toque de 44 px em todas as telas (local, online e mesa), jogada inteira pelo teclado, reduzir movimento, telas em 320 px sem rolagem lateral e botão Som lembrado no aparelho. O axe-core agora espera as animações terminarem.
+- Leitura fácil: pistas divididas em frases curtas e testes que limitam as frases (pistas, tema e interface, nos dois idiomas).
+- Medições de desempenho com CPU 6× mais lenta e rede 3G, todas dentro das metas (`pnpm --filter @magnifier-cases/web perf`).
+- Botão "Encerrar partida" em todos os modos (pedido do dono em 27/11/2026): com confirmação, revela a resposta; no online e na mesa, só quem comanda a sala encerra.
+- Checklist em `docs/quality-checklist.md`.
+- `README.md` e `README.en.md` finais.
+
+**Ficou para a Etapa 7:** teste com leitor de tela real (TalkBack ou VoiceOver) e novo teste em aparelhos reais depois da publicação com HTTPS (instalação do app e sons).
 
 ## Etapa 7 – Calibração com partidas reais e publicação
 

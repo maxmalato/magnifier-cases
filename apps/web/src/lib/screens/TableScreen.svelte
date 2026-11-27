@@ -12,6 +12,7 @@
   import NoticeBar from '../ui/NoticeBar.svelte'
   import PlaceGrid from '../ui/PlaceGrid.svelte'
   import QrCode from '../ui/QrCode.svelte'
+  import SoundToggle from '../ui/SoundToggle.svelte'
   import { roomLink } from '../online/link.ts'
   import { suggestionText } from '../text.ts'
   import { duration, t, ui } from '../locale.svelte.ts'
@@ -70,7 +71,10 @@
   {:else if room.status === 'lobby'}
     <header class="head">
       <h1>{appName}</h1>
-      <span class="subtitle">{themeText('theme.title', ui.locale)}</span>
+      <span class="end">
+        <span class="subtitle">{themeText('theme.title', ui.locale)}</span>
+        <SoundToggle />
+      </span>
     </header>
     <section class="lobby">
       <div class="card join">
@@ -100,7 +104,14 @@
     {@const reveal = view.reveal}
     <section class="reveal" role="status" aria-live="polite">
       <Avatar name={nameOf(reveal.solution.culpritId, ui.locale)} size={120} />
-      <span class="label">{view.phase === 'won' ? t('reveal.solved') : t('reveal.timeout')}</span>
+      <span class="label">
+        {view.phase === 'won'
+          ? t('reveal.solved')
+          : view.phase === 'ended'
+            ? t('reveal.ended')
+            : t('reveal.timeout')}
+      </span>
+      {#if view.phase === 'ended'}<p class="lead">{t('reveal.endedLead')}</p>{/if}
       <h1>
         {themeText('theme.revealCulprit', ui.locale, { culprit: [reveal.solution.culpritId] })}
       </h1>
@@ -142,6 +153,7 @@
           <span class="icon"><Icon name="clock" size={22} /></span>
           {view.clock}
         </span>
+        <SoundToggle />
       </div>
     </header>
 
@@ -154,14 +166,18 @@
       <section class="side">
         <article class="card latest" aria-live="polite">
           {#if latest}
-            <span class="label">
-              {t('table.latest', {
-                n: latestNumber,
-                source: nameOf(latest.source.id, ui.locale),
-                name: nameOfSeat(latest.openedBySeat),
-              })}
-            </span>
-            <p class="clue">{renderClue(latest, ui.locale)}</p>
+            {#key latest.id}
+              <div class="anim-pop">
+                <span class="label">
+                  {t('table.latest', {
+                    n: latestNumber,
+                    source: nameOf(latest.source.id, ui.locale),
+                    name: nameOfSeat(latest.openedBySeat),
+                  })}
+                </span>
+                <p class="clue">{renderClue(latest, ui.locale)}</p>
+              </div>
+            {/key}
           {:else}
             <p class="clue">{t('table.noClue')}</p>
           {/if}
@@ -214,7 +230,7 @@
       <ul class="chips">
         {#each room.seats as seat (seat.seat)}
           {@const active = seat.seat === view.activeSeat}
-          <li class="chip" class:active>
+          <li class="chip" class:active class:anim-ring={active}>
             <Avatar name={seat.name} size={32} />
             {seat.name}
             {#if active}<span class="deciding">{t('table.deciding')}</span>{/if}
@@ -250,6 +266,11 @@
     justify-content: space-between;
     gap: 24px;
     flex-wrap: wrap;
+  }
+  .end {
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
   }
   .title {
     display: flex;

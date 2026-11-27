@@ -32,6 +32,7 @@ export {
 export {
   activeSeatOf,
   actorsOf,
+  endGame,
   hintOf,
   legalActions,
   newGame,

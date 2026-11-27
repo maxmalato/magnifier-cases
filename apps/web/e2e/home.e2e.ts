@@ -1,6 +1,7 @@
 import AxeBuilder from '@axe-core/playwright'
 import { appName } from '@magnifier-cases/content'
 import { expect, test } from '@playwright/test'
+import { settle } from './helpers.ts'
 
 test.describe('página inicial', () => {
   test('mostra o nome do jogo vindo de appName', async ({ page }) => {
@@ -37,6 +38,7 @@ test.describe('página inicial', () => {
       await page.emulateMedia({ colorScheme })
       await page.goto('/')
       await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
+      await settle(page)
       const results = await new AxeBuilder({ page }).analyze()
       expect(results.violations).toEqual([])
     })

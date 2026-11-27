@@ -88,9 +88,16 @@ export interface GameController {
   readonly canAct: boolean
   readonly overlay: Overlay | null
   readonly lastMove: { readonly seat: Seat; readonly placeId: string } | null
+  /**
+   * Este aparelho pode encerrar a partida (botão "Encerrar partida"). No modo de um aparelho,
+   * sempre; no online, só quem comanda a sala (a mesa, nunca).
+   */
+  readonly canEnd: boolean
   hint(): Decision | null
   act(action: Action): void
   dismiss(): void
+  /** Encerra a partida para todos; o jogo revela a resposta. */
+  end(): void
   /** Presente só na partida online. */
   readonly online?: OnlineControls
 }

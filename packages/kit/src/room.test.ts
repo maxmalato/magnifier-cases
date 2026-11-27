@@ -7,6 +7,7 @@ import {
   addBot,
   createRoom,
   disconnect,
+  endGame,
   isExpired,
   joinRoom,
   leave,
@@ -145,6 +146,30 @@ describe('partida', () => {
     const again = okRecord(playAgain(room, 'seat-1', 12))
     expect(again.status).toBe('lobby')
     expect(again.game).toBeNull()
+  })
+
+  it('encerrar: só quem comanda, a qualquer momento, e revela o segredo', () => {
+    const room = started()
+    // seat-2 não comanda a sala; a mesa nem entra aqui (o servidor recusa antes)
+    expect(endGame(def, room, 'seat-2', 11, timings).error).toBe('onlyHost')
+    // quem comanda encerra mesmo fora da sua vez
+    const moved = okRecord(act(def, room, 'seat-1', { type: 'guess', n: 1 }, 11, timings))
+    const out = endGame(def, moved, 'seat-1', 12, timings)
+    expect(out.error).toBeUndefined()
+    expect(out.events).toEqual([{ type: 'ended', secret: 5 }])
+    const over = okRecord(out)
+    expect(over.status).toBe('over')
+    expect(over.nextBotAt).toBeNull()
+    expect(viewOf(def, over, 'seat-2').game?.secret).toBe(5)
+    expect(endGame(def, over, 'seat-1', 13, timings).error).toBe('notPlaying')
+    // depois de encerrar, "jogar de novo" volta ao lobby
+    expect(okRecord(playAgain(over, 'seat-1', 14)).status).toBe('lobby')
+  })
+
+  it('encerrar: se quem comanda caiu, outra pessoa conectada pode encerrar', () => {
+    const room = started()
+    const away = okRecord(disconnect(def, room, 'seat-1', 11, timings))
+    expect(endGame(def, away, 'seat-2', 12, timings).error).toBeUndefined()
   })
 })
 

@@ -16,9 +16,19 @@ Roda em celular, tablet, desktop e Smart TV com navegador, como PWA.
 
 Aprendiz, Investigador, Perito e Lenda. O mapa e o relógio mudam com o nível.
 
+## Acessibilidade
+
+- Alvos de toque grandes (pelo menos 44 px), contraste mínimo de 4,5:1 e jogo inteiro pelo teclado.
+- O estado de cada suspeito e lugar não depende só de cor: riscado com a tarja "descartado" ou "um dos 2".
+- Pistas e relógio anunciados para leitores de tela. Frases curtas, para quem tem 8 anos.
+- Sons curtos com botão "Som" em todas as telas; nenhum som traz informação que não esteja na tela.
+- Animações curtas, desligadas quando o aparelho pede para reduzir movimento.
+
+Detalhes e medições em [`docs/quality-checklist.md`](docs/quality-checklist.md).
+
 ## Situação
 
-Etapa 5 (mesa e PWA) concluída: os três modos funcionam (um aparelho, online e mesa, com a tela grande mostrando o jogo e os celulares como controle, que entram pelo código ou pelo QR code), e o jogo pode ser instalado e jogado sem internet no modo de um aparelho. Testado em aparelho real. Próxima: Etapa 6 (acabamento). Veja `docs/ROADMAP.md`.
+Etapa 6 (acabamento) concluída: sons, animações, revisão de acessibilidade, leitura fácil, medições de desempenho e o botão "Encerrar partida" em todos os modos. Os três modos funcionam (um aparelho, online e mesa, com a tela grande mostrando o jogo e os celulares como controle, que entram pelo código ou pelo QR code), e o jogo pode ser instalado e jogado sem internet no modo de um aparelho. Próxima: Etapa 7 (partidas reais e publicação). Veja `docs/ROADMAP.md`.
 
 ## Como rodar
 
@@ -35,6 +45,7 @@ pnpm simulate    # simulação com bots: 10.000 mistérios por nível e bot (for
 pnpm simulate:check  # simulação reduzida da CI: quebra se um nível sair da meta
 pnpm --filter @magnifier-cases/web dev      # site em desenvolvimento
 pnpm dev:online # compila o site e sobe o servidor local da Cloudflare: abra http://localhost:8787 (online e um aparelho)
+pnpm --filter @magnifier-cases/web perf     # medições de desempenho (CPU 6× e 3G; rode o build antes)
 ```
 
 ## Estrutura
@@ -57,6 +68,9 @@ As dependências apontam para dentro: a interface e o servidor dependem do motor
 - [Regras](docs/magnifier-cases-rules.md)
 - [Especificação técnica](docs/magnifier-cases-tech-spec.md)
 - [Roadmap](docs/ROADMAP.md)
+- [Checklist de acessibilidade e desempenho](docs/quality-checklist.md)
+- [Teste em aparelho real](docs/device-test.md)
+- [Relatórios da simulação](docs/simulation/README.md)
 - [Instruções para o Claude Code](CLAUDE.md)
 
 ## Privacidade

@@ -24,7 +24,7 @@
     left={view.actionsLeft}
     deadline={view.params.deadline}
   />
-  <div class="card" role="status" aria-live="polite">
+  <div class="card anim-pop" role="status" aria-live="polite">
     <h1>{t('wrong.title')}</h1>
     <p>
       {t('wrong.text', {

@@ -50,6 +50,25 @@ test.describe('partida em um aparelho', () => {
     await expect(page.getByRole('button', { name: /^Acusar / })).toBeDisabled()
   })
 
+  test('encerrar: pede confirmação e mostra a resposta', async ({ page }) => {
+    const { solution } = mysteryOf('apprentice', TWO_PEOPLE)
+    await startGame(page, 'apprentice', TWO_PEOPLE)
+    await page.getByRole('button', { name: 'Encerrar partida' }).click()
+    const dialog = page.getByRole('dialog')
+    await expect(dialog.getByRole('heading', { name: 'Encerrar a partida?' })).toBeVisible()
+    // voltar não encerra
+    await dialog.getByRole('button', { name: 'Voltar' }).click()
+    await expect(page.getByRole('heading', { name: 'Vez de Ana' })).toBeVisible()
+    await page.getByRole('button', { name: 'Encerrar partida' }).click()
+    await page.getByRole('dialog').getByRole('button', { name: 'Encerrar', exact: true }).click()
+    await expect(page.getByText('Partida encerrada')).toBeVisible()
+    await expect(page.getByRole('heading', { level: 1 })).toContainText(
+      shortName(solution.culpritId),
+    )
+    await page.getByRole('button', { name: 'Novo mistério' }).click()
+    await expect(page.getByRole('heading', { name: 'O bolo da festa sumiu!' })).toBeVisible()
+  })
+
   test('tempo esgotado: revela a solução sem punição', async ({ page }) => {
     const { solution, cast, params } = mysteryOf('apprentice', TWO_PEOPLE)
     const wrong = cast.places.filter((p) => p !== solution.hideoutId)

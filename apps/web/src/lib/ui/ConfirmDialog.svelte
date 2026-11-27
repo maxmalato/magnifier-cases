@@ -6,9 +6,17 @@
   let {
     title,
     text,
+    yes,
     onconfirm,
     oncancel,
-  }: { title: string; text: string; onconfirm: () => void; oncancel: () => void } = $props()
+  }: {
+    title: string
+    text: string
+    /** Texto do botão de confirmar (padrão: "Confirmar"). */
+    yes?: string
+    onconfirm: () => void
+    oncancel: () => void
+  } = $props()
 
   let dialog: HTMLDialogElement | undefined = $state()
 
@@ -30,7 +38,9 @@
   <p>{text}</p>
   <div class="row">
     <button type="button" class="btn" onclick={oncancel}>{t('confirm.no')}</button>
-    <button type="button" class="btn btn-primary" onclick={onconfirm}>{t('confirm.yes')}</button>
+    <button type="button" class="btn btn-primary" onclick={onconfirm}>
+      {yes ?? t('confirm.yes')}
+    </button>
   </div>
 </dialog>
 

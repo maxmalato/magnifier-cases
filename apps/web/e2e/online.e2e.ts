@@ -3,6 +3,7 @@
 import AxeBuilder from '@axe-core/playwright'
 import { roomParams } from '@magnifier-cases/protocol'
 import { expect, test, type Browser, type Page } from '@playwright/test'
+import { expectTargets, settle } from './helpers.ts'
 
 async function createRoom(page: Page, name: string): Promise<string> {
   await page.goto('/')
@@ -22,6 +23,26 @@ async function joinRoom(browser: Browser, code: string, name: string) {
   await page.getByRole('button', { name: 'Entrar', exact: true }).click()
   await expect(page.getByText(`Esperando Ana começar a partida.`)).toBeVisible()
   return { context, page }
+}
+
+/** Acusa uma dupla diferente a cada volta; false se outra tela cobriu a da vez no meio. */
+async function accuseRound(player: Page, round: number): Promise<boolean> {
+  const quick = { timeout: 3000 }
+  try {
+    await player.getByRole('button', { name: 'Acusar agora' }).click(quick)
+    const suspects = player.locator('fieldset').nth(0).locator('.opt:not([disabled])')
+    const places = player.locator('fieldset').nth(1).locator('.opt:not([disabled])')
+    await suspects.first().waitFor(quick)
+    const n = await suspects.count()
+    await suspects.nth(round % n).click(quick)
+    await places.nth(Math.floor(round / n) % (await places.count())).click(quick)
+    const accuse = player.getByRole('button', { name: /^Acusar / })
+    if (await accuse.isEnabled()) await accuse.click(quick)
+    else await player.getByRole('button', { name: 'Voltar' }).click(quick)
+    return true
+  } catch {
+    return false
+  }
 }
 
 /** Joga a vez de quem estiver nela: interroga o primeiro suspeito disponível. */
@@ -61,7 +82,7 @@ test('criar, entrar, opinar e jogar até o fim', async ({ page: ana, browser }) 
 
   // joga até o fim: quem tem a vez acusa uma dupla diferente até vencer ou o tempo acabar
   const end = /Mistério resolvido|Tempo esgotado/
-  for (let round = 0; round < 40; round++) {
+  for (let round = 0; round < 80; round++) {
     if ((await ana.getByText(end).count()) > 0) break
     for (const page of [ana, bruno]) {
       const ok = page.getByRole('button', { name: 'OK' })
@@ -70,15 +91,9 @@ test('criar, entrar, opinar e jogar até o fim', async ({ page: ana, browser }) 
     const heading = await ana.getByRole('heading', { level: 1 }).innerText()
     if (!heading.startsWith('Vez de')) continue
     const player = heading === 'Vez de Ana' ? ana : bruno
-    await player.getByRole('button', { name: 'Acusar agora' }).click()
-    const suspects = player.locator('fieldset').nth(0).locator('.opt:not([disabled])')
-    const places = player.locator('fieldset').nth(1).locator('.opt:not([disabled])')
-    const n = await suspects.count()
-    await suspects.nth(round % n).click()
-    await places.nth(Math.floor(round / n) % (await places.count())).click()
-    const accuse = player.getByRole('button', { name: /^Acusar / })
-    if (await accuse.isEnabled()) await accuse.click()
-    else await player.getByRole('button', { name: 'Voltar' }).click()
+    // A tela de resultado da jogada anterior pode chegar a este celular depois da leitura acima
+    // e cobrir a tela da vez: nesse caso, tenta de novo na próxima volta (que toca em OK).
+    if (!(await accuseRound(player, round))) continue
     // espera a jogada chegar aos dois aparelhos (tela de erro ou revelação)
     await expect(
       ana
@@ -186,13 +201,42 @@ for (const colorScheme of ['light', 'dark'] as const) {
     await page.emulateMedia({ colorScheme })
     await page.goto('/')
     await page.getByRole('button', { name: 'Criar sala online' }).click()
+    await settle(page)
     expect((await new AxeBuilder({ page }).analyze()).violations, 'criar sala').toEqual([])
+    await expectTargets(page, 'criar sala')
     await page.getByRole('button', { name: 'Voltar' }).click()
     await page.getByRole('button', { name: 'Entrar com código' }).click()
+    await settle(page)
     expect((await new AxeBuilder({ page }).analyze()).violations, 'entrar').toEqual([])
     await page.getByRole('button', { name: 'Voltar' }).click()
     await createRoom(page, 'Ana')
     await expect(page.getByRole('img', { name: /^QR code com o link da sala / })).toBeVisible()
+    await expectTargets(page, 'lobby online')
+    await settle(page)
     expect((await new AxeBuilder({ page }).analyze()).violations, 'lobby online').toEqual([])
   })
 }
+
+test('encerrar: só quem comanda a sala vê o botão, e todos veem a resposta', async ({
+  page: ana,
+  browser,
+}) => {
+  const code = await createRoom(ana, 'Ana')
+  const { page: bruno, context } = await joinRoom(browser, code, 'Bruno')
+  await ana.getByRole('button', { name: 'Começar a partida' }).click()
+  await expect(bruno.getByRole('heading', { name: 'Vez de Ana' })).toBeVisible()
+  await expect(bruno.getByRole('button', { name: 'Encerrar partida' })).toHaveCount(0)
+  await ana.getByRole('button', { name: 'Encerrar partida' }).click()
+  await expect(
+    ana.getByText('O mistério termina para todos na sala.', { exact: false }),
+  ).toBeVisible()
+  await ana.getByRole('button', { name: 'Encerrar', exact: true }).click()
+  for (const page of [ana, bruno]) {
+    await expect(page.getByText('Partida encerrada')).toBeVisible()
+    await expect(page.getByText('Vocês encerraram a partida. Esta era a resposta:')).toBeVisible()
+  }
+  // quem comanda pode pedir um novo mistério; Bruno espera
+  await expect(ana.getByRole('button', { name: 'Novo mistério' })).toBeVisible()
+  await expect(bruno.getByText('Esperando Ana pedir um novo mistério.')).toBeVisible()
+  await context.close()
+})

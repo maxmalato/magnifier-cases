@@ -31,6 +31,8 @@
 
   let page = $state<'turn' | 'suspect' | 'place' | 'notebook' | 'accuse'>('turn')
   let asking = $state<Action | null>(null)
+  /** Pedindo confirmação para encerrar a partida. */
+  let ending = $state(false)
   /** Online, fora da própria vez: as escolhas viram sugestões. */
   const suggesting = $derived(
     !game.canAct &&
@@ -45,6 +47,7 @@
       if (page !== 'notebook') page = 'turn'
       asking = null
     }
+    if (game.isOver) ending = false
   })
 
   // a cada tela nova, o topo da página
@@ -125,6 +128,7 @@
     onchoose={(what) => (page = what === 'suspect' ? 'suspect' : 'place')}
     onnotebook={() => (page = 'notebook')}
     onaccuse={() => (page = 'accuse')}
+    onend={() => (ending = true)}
   />
 {/if}
 
@@ -136,5 +140,18 @@
     text={t('confirm.cost', { duration: duration(game.params.actionMinutes) })}
     onconfirm={confirm}
     oncancel={() => (asking = null)}
+  />
+{/if}
+
+{#if ending}
+  <ConfirmDialog
+    title={t('end.title')}
+    text={game.online ? t('end.textOnline') : t('end.text')}
+    yes={t('end.yes')}
+    onconfirm={() => {
+      ending = false
+      game.end()
+    }}
+    oncancel={() => (ending = false)}
   />
 {/if}

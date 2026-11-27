@@ -7,14 +7,14 @@ type Texts = Readonly<Record<string, string>>
 const ptBR: Texts = {
   'theme.title': 'O bolo da festa sumiu!',
   'theme.intro':
-    'Alguém levou o bolo de cenoura e o escondeu em algum lugar do bairro. Descubram quem pegou e onde está antes da festa.',
+    'Alguém levou o bolo de cenoura e escondeu no bairro. Descubram quem pegou e onde está antes da festa.',
   'theme.accuseQuestion': 'Quem pegou o bolo? E onde está?',
   'theme.revealCulprit': 'Foi {culprit}!',
   'theme.revealHideout': 'O bolo estava {hideout|in}.',
   'theme.timeoutTitle': 'A festa começou e o bolo não apareceu!',
   'theme.secretTitle': 'Só o jogo sabe a resposta',
   'theme.secretText':
-    'Quem pegou o bolo e onde ele está foram sorteados e ficam em segredo até a revelação.',
+    'O jogo sorteou quem pegou o bolo e onde ele está. Isso fica em segredo até o fim.',
 }
 
 const en: Texts = {
@@ -27,7 +27,7 @@ const en: Texts = {
   'theme.timeoutTitle': 'The party started and the cake never showed up!',
   'theme.secretTitle': 'Only the game knows the answer',
   'theme.secretText':
-    'Who took the cake and where it is were drawn at random and stay secret until the reveal.',
+    'The game picked who took the cake and where it is. That stays secret until the end.',
 }
 
 export const themeTexts: Readonly<Record<Locale, Texts>> = { 'pt-BR': ptBR, en }

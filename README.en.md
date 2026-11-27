@@ -16,9 +16,19 @@ It runs on phones, tablets, desktops and Smart TVs with a browser, as a PWA.
 
 Apprentice, Investigator, Expert and Legend. The map and the clock change with the level.
 
+## Accessibility
+
+- Large touch targets (at least 44 px), minimum contrast of 4.5:1 and the whole game playable with the keyboard.
+- The state of each suspect and place does not rely on color alone: crossed out with a "ruled out" or "one of 2" tag.
+- Clues and the clock are announced to screen readers. Short sentences, for 8-year-olds.
+- Short sounds with a "Sound" button on every screen; no sound carries information that is not on the screen.
+- Short animations, turned off when the device asks for reduced motion.
+
+Details and measurements in [`docs/quality-checklist.md`](docs/quality-checklist.md) (in Portuguese).
+
 ## Status
 
-Stage 5 (table and PWA) done: all three modes work (one device, online and table, with the big screen showing the game and phones as controllers, joining by code or QR code), and the game can be installed and played offline in one-device mode. Tested on real devices. Next: Stage 6 (polish). See `docs/ROADMAP.md` (in Portuguese).
+Stage 6 (polish) done: sounds, animations, accessibility review, easy reading, performance measurements and an "End game" button in every mode. All three modes work (one device, online and table, with the big screen showing the game and phones as controllers, joining by code or QR code), and the game can be installed and played offline in one-device mode. Next: Stage 7 (real games and release). See `docs/ROADMAP.md` (in Portuguese).
 
 ## How to run
 
@@ -35,6 +45,7 @@ pnpm simulate    # bot simulation: 10,000 mysteries per level and bot (not part 
 pnpm simulate:check  # reduced CI simulation: fails if a level misses its target
 pnpm --filter @magnifier-cases/web dev      # website in development mode
 pnpm dev:online # builds the website and starts the local Cloudflare server: open http://localhost:8787 (online and one device)
+pnpm --filter @magnifier-cases/web perf     # performance measurements (6× CPU and 3G; build first)
 ```
 
 ## Structure
@@ -57,6 +68,9 @@ Dependencies point inwards: the interface and the server depend on the engine, a
 - [Rules](docs/magnifier-cases-rules.md) (Portuguese)
 - [Technical specification](docs/magnifier-cases-tech-spec.md) (Portuguese)
 - [Roadmap](docs/ROADMAP.md) (Portuguese)
+- [Accessibility and performance checklist](docs/quality-checklist.md) (Portuguese)
+- [Real-device test](docs/device-test.md) (Portuguese)
+- [Simulation reports](docs/simulation/README.md) (Portuguese)
 - [Instructions for Claude Code](CLAUDE.md) (Portuguese)
 
 ## Privacy

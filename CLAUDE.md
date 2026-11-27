@@ -67,6 +67,7 @@ pnpm simulate:check                           # simulação reduzida da CI (queb
 pnpm --filter @magnifier-cases/web dev        # site em desenvolvimento
 pnpm --filter @magnifier-cases/server dev     # servidor local da Cloudflare (exige apps/web/dist: rode o build antes)
 pnpm dev:online                               # build do site + servidor local: http://localhost:8787
+pnpm --filter @magnifier-cases/web perf       # medições de desempenho (CPU 6× e 3G; exige o build)
 ```
 
 Pacotes: `@magnifier-cases/engine`, `content`, `protocol`, `kit`, `bots`, `sim`, `web` e `server`. O ESLint garante a direção das dependências e a pureza do motor, do conteúdo, do kit e dos bots (sem `Math.random`, `Date.now`, `console` nem APIs de navegador).

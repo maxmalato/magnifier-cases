@@ -6,6 +6,7 @@ import {
   activeSeatOf,
   actorsOf,
   difficultyOf,
+  endGame,
   newGame,
   parseAction,
   transition,
@@ -45,6 +46,12 @@ export const magnifierCases: GameDefinition<GameState, Action, GameEvent, RoomCo
       newGame({ params: difficultyOf(config.level), theme: partyCake, seats, seed }),
     transition(state, action, seat) {
       const result = transition(state, action, { seat })
+      return result.ok
+        ? { ok: true, state: result.state, events: result.events }
+        : { ok: false, reason: result.reason }
+    },
+    endGame(state) {
+      const result = endGame(state)
       return result.ok
         ? { ok: true, state: result.state, events: result.events }
         : { ok: false, reason: result.reason }

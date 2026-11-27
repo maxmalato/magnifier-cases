@@ -2,6 +2,7 @@
 // servidor local da Cloudflare (projeto "online"). A tela da mesa só existe em tela grande.
 import AxeBuilder from '@axe-core/playwright'
 import { devices, expect, test, type Browser, type Page } from '@playwright/test'
+import { expectTargets, settle } from './helpers.ts'
 
 const TV = {
   viewport: { width: 1280, height: 720 },
@@ -13,6 +14,7 @@ const TV = {
 async function noViolations(page: Page, where: string) {
   for (const colorScheme of ['light', 'dark'] as const) {
     await page.emulateMedia({ colorScheme })
+    await settle(page)
     expect(
       (await new AxeBuilder({ page }).analyze()).violations,
       `${where} (${colorScheme})`,
@@ -29,6 +31,26 @@ async function phone(browser: Browser, code: string, name: string) {
   return { context, page }
 }
 
+/** Acusa uma dupla diferente a cada volta; false se outra tela cobriu a da vez no meio. */
+async function accuseRound(player: Page, round: number): Promise<boolean> {
+  const quick = { timeout: 3000 }
+  try {
+    await player.getByRole('button', { name: 'Acusar agora' }).click(quick)
+    const suspects = player.locator('fieldset').nth(0).locator('.opt:not([disabled])')
+    const places = player.locator('fieldset').nth(1).locator('.opt:not([disabled])')
+    await suspects.first().waitFor(quick)
+    const n = await suspects.count()
+    await suspects.nth(round % n).click(quick)
+    await places.nth(Math.floor(round / n) % (await places.count())).click(quick)
+    const accuse = player.getByRole('button', { name: /^Acusar / })
+    if (await accuse.isEnabled()) await accuse.click(quick)
+    else await player.getByRole('button', { name: 'Voltar' }).click(quick)
+    return true
+  } catch {
+    return false
+  }
+}
+
 test('mesa e dois celulares jogam até o fim', async ({ browser }) => {
   test.setTimeout(120_000)
   const tvContext = await browser.newContext(TV)
@@ -39,6 +61,7 @@ test('mesa e dois celulares jogam até o fim', async ({ browser }) => {
   // QR code com o link da sala, para os celulares entrarem pela câmera
   await expect(tv.getByRole('img', { name: /^QR code com o link da sala / })).toBeVisible()
   await noViolations(tv, 'lobby da mesa')
+  await expectTargets(tv, 'lobby da mesa')
 
   const { page: ana, context: anaContext } = await phone(browser, code, 'Ana')
   const { page: bruno, context: brunoContext } = await phone(browser, code, 'Bruno')
@@ -51,6 +74,8 @@ test('mesa e dois celulares jogam até o fim', async ({ browser }) => {
   await expect(tv.getByText('Ana escolhe a ação no celular', { exact: false })).toBeVisible()
   await expect(tv.getByText('Nenhuma pista ainda.', { exact: false })).toBeVisible()
   await noViolations(tv, 'partida na mesa')
+  await expectTargets(tv, 'partida na mesa')
+  await expectTargets(bruno, 'celular de quem sugere')
 
   // Bruno sugere; a mesa mostra a sugestão
   await bruno.getByRole('button', { name: /Ir a outro lugar/ }).click()
@@ -66,7 +91,7 @@ test('mesa e dois celulares jogam até o fim', async ({ browser }) => {
 
   // joga até o fim acusando duplas diferentes
   const end = /Mistério resolvido|Tempo esgotado/
-  for (let round = 0; round < 40; round++) {
+  for (let round = 0; round < 80; round++) {
     if ((await tv.getByText(end).count()) > 0) break
     for (const page of [ana, bruno]) {
       const ok = page.getByRole('button', { name: 'OK' })
@@ -75,15 +100,9 @@ test('mesa e dois celulares jogam até o fim', async ({ browser }) => {
     const heading = await ana.getByRole('heading', { level: 1 }).innerText()
     if (!heading.startsWith('Vez de')) continue
     const player = heading === 'Vez de Ana' ? ana : bruno
-    await player.getByRole('button', { name: 'Acusar agora' }).click()
-    const suspects = player.locator('fieldset').nth(0).locator('.opt:not([disabled])')
-    const places = player.locator('fieldset').nth(1).locator('.opt:not([disabled])')
-    const n = await suspects.count()
-    await suspects.nth(round % n).click()
-    await places.nth(Math.floor(round / n) % (await places.count())).click()
-    const accuse = player.getByRole('button', { name: /^Acusar / })
-    if (await accuse.isEnabled()) await accuse.click()
-    else await player.getByRole('button', { name: 'Voltar' }).click()
+    // A tela de resultado da jogada anterior pode chegar a este celular depois da leitura acima
+    // e cobrir a tela da vez: nesse caso, tenta de novo na próxima volta (que toca em OK).
+    if (!(await accuseRound(player, round))) continue
     await expect(
       tv
         .getByText(end)
@@ -95,6 +114,30 @@ test('mesa e dois celulares jogam até o fim', async ({ browser }) => {
   await expect(tv.getByText(end)).toBeVisible()
   await expect(tv.getByText('As pistas que levavam até a resposta')).toBeVisible()
   await noViolations(tv, 'revelação na mesa')
+  await Promise.all([tvContext.close(), anaContext.close(), brunoContext.close()])
+})
+
+test('encerrar pelo celular de quem comanda: a mesa mostra a resposta', async ({ browser }) => {
+  const tvContext = await browser.newContext(TV)
+  const tv = await tvContext.newPage()
+  await tv.goto('/')
+  await tv.getByRole('button', { name: 'Abrir a mesa (tela grande)' }).click()
+  const code = (await tv.locator('.code').innerText()).replace('·', '')
+  const { page: ana, context: anaContext } = await phone(browser, code, 'Ana')
+  const { page: bruno, context: brunoContext } = await phone(browser, code, 'Bruno')
+  // só começa depois que os dois entraram (a partida precisa de 2 detetives)
+  await expect(tv.locator('.players .chip', { hasText: 'Bruno' })).toBeVisible()
+  await ana.getByRole('button', { name: 'Começar a partida' }).click()
+  await expect(tv.getByText('decidindo agora')).toBeVisible()
+  // a mesa não tem o botão; Bruno também não (quem comanda é Ana)
+  await expect(tv.getByRole('button', { name: 'Encerrar partida' })).toHaveCount(0)
+  await expect(bruno.getByRole('heading', { name: 'Vez de Ana' })).toBeVisible()
+  await expect(bruno.getByRole('button', { name: 'Encerrar partida' })).toHaveCount(0)
+  await ana.getByRole('button', { name: 'Encerrar partida' }).click()
+  await ana.getByRole('dialog').getByRole('button', { name: 'Encerrar', exact: true }).click()
+  await expect(tv.getByText('Partida encerrada')).toBeVisible()
+  await expect(tv.getByText('As pistas que levavam até a resposta')).toBeVisible()
+  await noViolations(tv, 'mesa depois de encerrar')
   await Promise.all([tvContext.close(), anaContext.close(), brunoContext.close()])
 })
 

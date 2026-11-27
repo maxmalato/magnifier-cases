@@ -2,6 +2,7 @@
   import { appName, locales, type Locale } from '@magnifier-cases/content'
   import { formatCode } from '@magnifier-cases/kit'
   import { setLocale, t, ui } from '../locale.svelte.ts'
+  import SoundToggle from '../ui/SoundToggle.svelte'
 
   let {
     onplay,
@@ -30,6 +31,7 @@
 </script>
 
 <main class="screen home">
+  <div class="top"><SoundToggle /></div>
   <div class="hero">
     <img src="/logo-icon.svg" alt="" width="120" height="120" />
     <h1>{appName}</h1>
@@ -78,6 +80,10 @@
     justify-content: center;
     text-align: center;
     gap: 28px;
+  }
+  .top {
+    display: flex;
+    justify-content: flex-end;
   }
   .hero {
     display: flex;

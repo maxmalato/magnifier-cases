@@ -454,6 +454,26 @@ function applyAction<S, A, E, C, V>(
 }
 
 /**
+ * Encerra a partida para todos, a qualquer momento (não precisa ser a vez de quem pede). Só quem
+ * comanda a sala pode pedir (decisão de 27/11/2026): evita que alguém encerre sem querer o jogo
+ * de todos. Se quem comanda cair, outra pessoa conectada assume, como em "Jogar de novo".
+ */
+export function endGame<S, A, E, C, V>(
+  def: Def<S, A, E, C, V>,
+  record: RoomRecord<S, C>,
+  seat: SeatId,
+  now: number,
+  timings: RoomTimings,
+): Outcome<S, E, C> {
+  if (record.status !== 'playing' || record.game === null) return fail(record, 'notPlaying')
+  if (!canCommand(record, seat)) return fail(record, 'onlyHost')
+  const result = def.endGame(record.game)
+  if (!result.ok) return fail(record, 'refused', result.reason)
+  const after = afterGameChange(def, { ...touch(record, now), game: result.state }, now, timings)
+  return ok(after.record, { events: result.events, notices: after.notices, by: seat })
+}
+
+/**
  * Depois de cada mudança no jogo: turno novo limpa as sugestões, devolve o assento a quem
  * voltou e passa ao bot o assento de quem caiu; fim de partida; agenda a próxima jogada de bot.
  */

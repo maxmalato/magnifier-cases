@@ -49,7 +49,7 @@
       </div>
     {/if}
 
-    <article class="card clue">
+    <article class="card clue anim-pop">
       <span class="label">
         {t('result.clue', { n: overlay.number, source: nameOf(card.source.id, ui.locale) })}
       </span>
@@ -68,13 +68,15 @@
     <section class="panel changes" aria-labelledby="changes-title">
       <h2 id="changes-title" class="label">{t('result.notebookUpdated')}</h2>
       <ul>
-        {#each overlay.changes as change (change.id)}
+        {#each overlay.changes as change, i (change.id)}
           <li>
             <span class:struck={change.change === 'discarded'}>{nameOf(change.id, ui.locale)}</span>
             {#if change.change === 'discarded'}
-              <span class="badge badge-off">{t('notebook.discarded')}</span>
+              <span class="badge badge-off anim-stamp" style:--i={i}>
+                {t('notebook.discarded')}
+              </span>
             {:else}
-              <span class="badge badge-group">
+              <span class="badge badge-group anim-stamp" style:--i={i}>
                 {t('notebook.oneOf', { n: change.groupSize ?? 2 })}
               </span>
             {/if}

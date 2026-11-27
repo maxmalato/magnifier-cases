@@ -23,15 +23,22 @@
   const view = $derived(game.view)
   const reveal = $derived(view.reveal)
   const won = $derived(view.phase === 'won')
+  const ended = $derived(view.phase === 'ended')
 </script>
 
 <main class="screen">
   <Header clock={view.clock} />
   {#if reveal}
-    <div class="top" role="status" aria-live="polite">
+    <div class="top anim-pop" role="status" aria-live="polite">
       <Avatar name={nameOf(reveal.solution.culpritId, ui.locale)} size={96} />
-      <span class="label">{won ? t('reveal.solved') : t('reveal.timeout')}</span>
-      {#if !won}<p class="lead">{themeText('theme.timeoutTitle', ui.locale)}</p>{/if}
+      <span class="label">
+        {won ? t('reveal.solved') : ended ? t('reveal.ended') : t('reveal.timeout')}
+      </span>
+      {#if ended}
+        <p class="lead">{t('reveal.endedLead')}</p>
+      {:else if !won}
+        <p class="lead">{themeText('theme.timeoutTitle', ui.locale)}</p>
+      {/if}
       <h1>
         {themeText('theme.revealCulprit', ui.locale, { culprit: [reveal.solution.culpritId] })}
       </h1>

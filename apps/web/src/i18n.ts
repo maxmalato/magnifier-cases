@@ -11,6 +11,9 @@ const ptBR = {
   'app.back': 'Voltar',
   'app.ok': 'OK',
   'app.clock': 'Relógio: {time}',
+  'app.sound': 'Som',
+  'app.soundOn': 'Som: ligado',
+  'app.soundOff': 'Som: desligado',
 
   'home.playLocal': 'Jogar neste aparelho',
   'home.playLocalHint': 'De 2 a 6 detetives em volta da mesma tela. Bots completam a equipe.',
@@ -124,7 +127,7 @@ const ptBR = {
   'accuse.discarded': 'descartado',
   'accuse.tried': 'Já acusaram essa dupla. Escolham outra.',
   'accuse.rule':
-    'Se errarem, o relógio avança {duration} e vocês continuam investigando. Se acertarem, o mistério termina na hora.',
+    'Se errarem, o relógio avança {duration}. Depois, vocês continuam investigando. Se acertarem, o mistério termina na hora.',
   'accuse.ruleLast': 'Se errarem, o tempo acaba e o jogo revela a resposta.',
   'accuse.choose': 'Escolham um suspeito e um lugar',
   'accuse.button': 'Acusar {suspect} {place}',
@@ -132,6 +135,13 @@ const ptBR = {
 
   'reveal.solved': 'Mistério resolvido',
   'reveal.timeout': 'Tempo esgotado',
+  'reveal.ended': 'Partida encerrada',
+  'reveal.endedLead': 'Vocês encerraram a partida. Esta era a resposta:',
+  'end.button': 'Encerrar partida',
+  'end.title': 'Encerrar a partida?',
+  'end.text': 'O mistério termina agora e o jogo mostra a resposta.',
+  'end.textOnline': 'O mistério termina para todos na sala. O jogo mostra a resposta.',
+  'end.yes': 'Encerrar',
   'reveal.keyClues': 'As pistas que levavam até a resposta',
   'reveal.hint': 'Juntas, as pistas {list} já deixavam uma única resposta.',
   'reveal.notOpened': 'não aberta',
@@ -149,7 +159,7 @@ const ptBR = {
   'home.openTable': 'Abrir a mesa (tela grande)',
   'home.openTableHint': 'A tela grande mostra o jogo; cada um joga no próprio celular.',
   'home.tableOnlyBig':
-    'A tela da mesa só abre em telas grandes (tablet, notebook ou TV). Neste aparelho, entrem como jogador.',
+    'A tela da mesa só abre em telas grandes: tablet, notebook ou TV. Neste aparelho, entrem como jogador.',
   'home.backToTable': 'Voltar para a mesa {code}',
 
   'table.joinHere': 'Entrem pelo celular: abram o jogo, toquem em "Entrar com código" e digitem',
@@ -233,6 +243,7 @@ const ptBR = {
   'error.invalidSuggestion': 'Essa sugestão não vale nesta partida.',
   'error.notYourControl': 'O bot está jogando no seu lugar até a sua próxima vez.',
   'error.refused': 'O jogo não aceitou essa jogada.',
+  'error.onlyHost': 'Só quem comanda a sala pode fazer isso.',
 
   'duration.minutes': '{n} min',
   'duration.hours.one': '1 hora',
@@ -248,6 +259,9 @@ const en: Record<MessageKey, string> = {
   'app.back': 'Back',
   'app.ok': 'OK',
   'app.clock': 'Clock: {time}',
+  'app.sound': 'Sound',
+  'app.soundOn': 'Sound: on',
+  'app.soundOff': 'Sound: off',
 
   'home.playLocal': 'Play on this device',
   'home.playLocalHint': '2 to 6 detectives around the same screen. Bots fill the team.',
@@ -361,14 +375,21 @@ const en: Record<MessageKey, string> = {
   'accuse.discarded': 'ruled out',
   'accuse.tried': 'You already accused this pair. Choose another one.',
   'accuse.rule':
-    'If you are wrong, the clock moves forward {duration} and you keep investigating. If you are right, the mystery ends right away.',
-  'accuse.ruleLast': 'If you are wrong, time runs out and the game shows the answer.',
+    'If you are wrong, the clock moves forward {duration}. Then you keep investigating. If you are right, the mystery ends right away.',
+  'accuse.ruleLast': 'If you are wrong, time runs out. Then the game shows the answer.',
   'accuse.choose': 'Choose a suspect and a place',
   'accuse.button': 'Accuse {suspect} {place}',
   'accuse.back': 'Back',
 
   'reveal.solved': 'Mystery solved',
   'reveal.timeout': 'Time is up',
+  'reveal.ended': 'Game ended',
+  'reveal.endedLead': 'You ended the game. This was the answer:',
+  'end.button': 'End game',
+  'end.title': 'End the game?',
+  'end.text': 'The mystery ends now and the game shows the answer.',
+  'end.textOnline': 'The mystery ends for everyone in the room. The game shows the answer.',
+  'end.yes': 'End game',
   'reveal.keyClues': 'The clues that led to the answer',
   'reveal.hint': 'Together, the clues {list} already left a single answer.',
   'reveal.notOpened': 'not opened',
@@ -386,7 +407,7 @@ const en: Record<MessageKey, string> = {
   'home.openTable': 'Open the table (big screen)',
   'home.openTableHint': 'The big screen shows the game; everyone plays on their own phone.',
   'home.tableOnlyBig':
-    'The table screen only opens on big screens (tablet, notebook or TV). On this device, join as a player.',
+    'The table screen only opens on big screens: tablet, notebook or TV. On this device, join as a player.',
   'home.backToTable': 'Back to table {code}',
 
   'table.joinHere': 'Join from your phone: open the game, tap "Join with a code" and type',
@@ -470,6 +491,7 @@ const en: Record<MessageKey, string> = {
   'error.invalidSuggestion': 'That suggestion does not count in this game.',
   'error.notYourControl': 'A bot is playing for you until your next turn.',
   'error.refused': 'The game did not accept that move.',
+  'error.onlyHost': 'Only the person running the room can do that.',
 
   'duration.minutes': '{n} min',
   'duration.hours.one': '1 hour',

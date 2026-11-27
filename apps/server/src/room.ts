@@ -18,6 +18,7 @@ import {
   MESSAGE_LIMIT,
   nextWake,
   parseClientMessage,
+  endGame,
   playAgain,
   RateLimiter,
   reconnect,
@@ -189,6 +190,8 @@ export class Room extends DurableObject<Env> {
         return this.commit(unsuggest(record, seat, now), ws)
       case 'again':
         return this.commit(playAgain(record, seat, now), ws)
+      case 'end':
+        return this.commit(endGame(def, record, seat, now, this.timings), ws)
       case 'leave': {
         ws.serializeAttachment({ seat: null } satisfies Attachment)
         await this.commit(leave(def, record, seat, now, this.timings), ws)

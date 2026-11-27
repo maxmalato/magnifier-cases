@@ -20,6 +20,8 @@ import {
 import { t } from '../locale.svelte.ts'
 import type { MessageKey } from '../../i18n.ts'
 import { RoomConnection } from './connection.svelte.ts'
+import { cueFor } from '../sound/cues.ts'
+import { sound } from '../sound/player.svelte.ts'
 
 /** Recusas conhecidas do servidor durante a partida; as outras viram um aviso genérico. */
 const KNOWN_ERRORS = new Set([
@@ -28,6 +30,7 @@ const KNOWN_ERRORS = new Set([
   'notYourTurn',
   'invalidSuggestion',
   'notYourControl',
+  'onlyHost',
   'tooManyRequests',
   'refused',
 ])
@@ -189,6 +192,19 @@ export class OnlineGame implements GameController {
     return list
   }
 
+  /** Só quem comanda a sala (ou qualquer pessoa, se quem comanda caiu), como no servidor. */
+  get canEnd(): boolean {
+    const room = this.room
+    if (!room || this.isOver || this.isTable || this.mySeat === null) return false
+    if (room.host === this.mySeat) return true
+    const host = room.seats.find((s) => s.seat === room.host)
+    return !host || host.presence !== 'connected'
+  }
+
+  end(): void {
+    this.connection.send({ type: 'end' })
+  }
+
   hint(): Decision | null {
     if (!this.canAct || this.mySeat === null) return null
     return hintFor(this.view, this.mySeat)
@@ -282,6 +298,21 @@ export class OnlineGame implements GameController {
       }
     }
     if (after.phase !== 'playing') this.overlay = null
+    sound.play(this.#cue(events, room))
+  }
+
+  /**
+   * Com a mesa na sala, a tela grande toca os sons da partida e os celulares só avisam "sua
+   * vez". Sem mesa, cada celular toca tudo, e "sua vez" só no aparelho de quem vai jogar.
+   */
+  #cue(events: readonly GameEvent[], room: MagnifierRoomView) {
+    if (this.isTable) return cueFor(events)
+    if (room.table)
+      return cueFor(
+        events.filter((e) => e.type === 'turn-started'),
+        this.mySeat,
+      )
+    return cueFor(events, this.mySeat)
   }
 
   #announce(notice: Notice, room: MagnifierRoomView) {

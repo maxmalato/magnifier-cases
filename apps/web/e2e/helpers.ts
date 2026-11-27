@@ -91,3 +91,42 @@ export async function accuse(page: Page, suspectId: string, placeId: string) {
   await placeSet.getByRole('button', { name: shortName(placeId), exact: true }).click()
   await page.getByRole('button', { name: /^Acusar / }).click()
 }
+
+/**
+ * Espera as animações de entrada terminarem (as que se repetem para sempre, como o anel de
+ * quem joga, não contam). O axe mede o contraste do estado final, não do meio da animação.
+ */
+export async function settle(page: Page) {
+  await page.evaluate(() =>
+    Promise.all(
+      document
+        .getAnimations()
+        .filter((a) => a.effect?.getComputedTiming().iterations !== Infinity)
+        .map((a) => a.finished.catch(() => undefined)),
+    ),
+  )
+}
+
+/** Controles visíveis menores que 44 × 44 px (rádio e caixa contam pelo rótulo clicável). */
+export async function smallTargets(page: Page): Promise<string[]> {
+  return page.evaluate(() => {
+    const selector =
+      'button, a[href], select, input:not([type="radio"]):not([type="checkbox"]), label:has(> input[type="radio"]), label:has(> input[type="checkbox"])'
+    const problems: string[] = []
+    for (const el of document.querySelectorAll<HTMLElement>(selector)) {
+      if (el.closest('dialog:not([open])')) continue
+      const rect = el.getBoundingClientRect()
+      const style = getComputedStyle(el)
+      if (rect.width === 0 || style.visibility === 'hidden') continue
+      if (rect.width < 43.5 || rect.height < 43.5) {
+        const name = (el.getAttribute('aria-label') ?? el.textContent ?? el.tagName).trim()
+        problems.push(`${name.slice(0, 40)} (${Math.round(rect.width)}×${Math.round(rect.height)})`)
+      }
+    }
+    return problems
+  })
+}
+
+export async function expectTargets(page: Page, where: string) {
+  expect(await smallTargets(page), where).toEqual([])
+}
