@@ -137,6 +137,31 @@ const ptBR = {
   'reveal.timeout': 'Tempo esgotado',
   'reveal.ended': 'Partida encerrada',
   'reveal.endedLead': 'Vocês encerraram a partida. Esta era a resposta:',
+  'howto.button': 'Como jogar',
+  'tutorial.title': 'Partida de treino',
+  'tutorial.player': 'Detetive',
+  'tutorial.step': 'Passo {n} de {total}',
+  'tutorial.next': 'Continuar',
+  'tutorial.exit': 'Sair do treino',
+  'tutorial.wrong': 'No treino, sigam o botão destacado.',
+  'tutorial.intro':
+    'Alguém levou o bolo da festa! Descubram quem foi e onde ele está. Toda pista é verdadeira.',
+  'tutorial.clock':
+    'Cada ação gasta {duration} do relógio. A festa começa às {deadline}. A barra mostra as ações que restam.',
+  'tutorial.interrogateFirst': 'Vamos começar! Toquem em Interrogar alguém e escolham {suspect}.',
+  'tutorial.interrogate': 'Agora toquem em Interrogar alguém e escolham {suspect}.',
+  'tutorial.readFirstClue':
+    'Leiam a pista juntos. O caderno já riscou quem foi descartado. Toquem em OK.',
+  'tutorial.readClue': 'Mais uma pista! Vejam o que ela descartou e toquem em OK.',
+  'tutorial.notebook':
+    'Toquem em Abrir caderno para ver o que ainda falta descobrir. Depois, voltem e toquem em Continuar.',
+  'tutorial.move':
+    'Para investigar um lugar, a equipe precisa estar lá. Toquem em Ir a outro lugar e escolham {place}.',
+  'tutorial.investigate': 'Chegaram! Agora toquem em Investigar {place}.',
+  'tutorial.accuse':
+    'Só sobrou uma dupla no caderno! Toquem em Acusar agora. Escolham {suspect} e {place} e acusem.',
+  'tutorial.done':
+    'Mistério resolvido! Agora vocês já sabem jogar. Toquem em Sair do treino para jogar de verdade.',
   'end.button': 'Encerrar partida',
   'end.title': 'Encerrar a partida?',
   'end.text': 'O mistério termina agora e o jogo mostra a resposta.',
@@ -385,6 +410,30 @@ const en: Record<MessageKey, string> = {
   'reveal.timeout': 'Time is up',
   'reveal.ended': 'Game ended',
   'reveal.endedLead': 'You ended the game. This was the answer:',
+  'howto.button': 'How to play',
+  'tutorial.title': 'Practice game',
+  'tutorial.player': 'Detective',
+  'tutorial.step': 'Step {n} of {total}',
+  'tutorial.next': 'Continue',
+  'tutorial.exit': 'Leave practice',
+  'tutorial.wrong': 'In practice, follow the highlighted button.',
+  'tutorial.intro':
+    'Someone took the party cake! Find out who did it and where it is. Every clue is true.',
+  'tutorial.clock':
+    'Each action uses {duration} of the clock. The party starts at {deadline}. The bar shows the actions left.',
+  'tutorial.interrogateFirst': "Let's start! Tap Question someone and choose {suspect}.",
+  'tutorial.interrogate': 'Now tap Question someone and choose {suspect}.',
+  'tutorial.readFirstClue':
+    'Read the clue together. The notebook already crossed out who was ruled out. Tap OK.',
+  'tutorial.readClue': 'One more clue! See what it ruled out and tap OK.',
+  'tutorial.notebook':
+    'Tap Open notebook to see what is still missing. Then go back and tap Continue.',
+  'tutorial.move':
+    'To search a place, the team must be there. Tap Go somewhere else and choose {place}.',
+  'tutorial.investigate': 'You made it! Now tap Search {place}.',
+  'tutorial.accuse':
+    'Only one pair is left in the notebook! Tap Accuse now. Choose {suspect} and {place}, then accuse.',
+  'tutorial.done': 'Mystery solved! Now you know how to play. Tap Leave practice to play for real.',
   'end.button': 'End game',
   'end.title': 'End the game?',
   'end.text': 'The mystery ends now and the game shows the answer.',

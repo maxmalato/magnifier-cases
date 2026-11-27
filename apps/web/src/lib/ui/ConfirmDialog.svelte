@@ -7,6 +7,7 @@
     title,
     text,
     yes,
+    guided = false,
     onconfirm,
     oncancel,
   }: {
@@ -14,6 +15,8 @@
     text: string
     /** Texto do botão de confirmar (padrão: "Confirmar"). */
     yes?: string
+    /** Treino: o botão de confirmar fica destacado. */
+    guided?: boolean
     onconfirm: () => void
     oncancel: () => void
   } = $props()
@@ -38,7 +41,7 @@
   <p>{text}</p>
   <div class="row">
     <button type="button" class="btn" onclick={oncancel}>{t('confirm.no')}</button>
-    <button type="button" class="btn btn-primary" onclick={onconfirm}>
+    <button type="button" class="btn btn-primary" class:guided onclick={onconfirm}>
       {yes ?? t('confirm.yes')}
     </button>
   </div>

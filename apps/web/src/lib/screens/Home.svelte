@@ -2,6 +2,7 @@
   import { appName, locales, type Locale } from '@magnifier-cases/content'
   import { formatCode } from '@magnifier-cases/kit'
   import { setLocale, t, ui } from '../locale.svelte.ts'
+  import HowToPlayButton from '../ui/HowToPlayButton.svelte'
   import SoundToggle from '../ui/SoundToggle.svelte'
 
   let {
@@ -31,7 +32,7 @@
 </script>
 
 <main class="screen home">
-  <div class="top"><SoundToggle /></div>
+  <div class="top"><HowToPlayButton /><SoundToggle /></div>
   <div class="hero">
     <img src="/logo-icon.svg" alt="" width="120" height="120" />
     <h1>{appName}</h1>
@@ -84,6 +85,7 @@
   .top {
     display: flex;
     justify-content: flex-end;
+    gap: 8px;
   }
   .hero {
     display: flex;

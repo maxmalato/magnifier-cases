@@ -60,7 +60,14 @@
     {/if}
   </section>
 
-  <button type="button" class="btn btn-primary" onclick={onback}>{t('notebook.back')}</button>
+  <button
+    type="button"
+    class="btn btn-primary"
+    class:guided={game.guide?.includes('notebook-back')}
+    onclick={onback}
+  >
+    {t('notebook.back')}
+  </button>
 </main>
 
 <style>

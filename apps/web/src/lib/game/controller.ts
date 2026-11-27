@@ -98,6 +98,11 @@ export interface GameController {
   dismiss(): void
   /** Encerra a partida para todos; o jogo revela a resposta. */
   end(): void
+  /**
+   * Partida de treino ("Como jogar"): o que fica destacado na tela agora (ex.: "interrogate",
+   * "suspect:baker-ze", "confirm"). Ausente fora do treino.
+   */
+  readonly guide?: readonly string[]
   /** Presente só na partida online. */
   readonly online?: OnlineControls
 }

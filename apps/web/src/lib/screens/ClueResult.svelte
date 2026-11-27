@@ -91,7 +91,13 @@
     {#if overlay.next}<p>{t('result.next', { name: overlay.next.name })}</p>{/if}
   </div>
 
-  <button type="button" class="btn btn-primary ok" bind:this={okButton} onclick={onok}>
+  <button
+    type="button"
+    class="btn btn-primary ok"
+    class:guided={game.guide?.includes('ok')}
+    bind:this={okButton}
+    onclick={onok}
+  >
     {t('app.ok')}
   </button>
 </main>

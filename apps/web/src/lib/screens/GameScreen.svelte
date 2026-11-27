@@ -22,11 +22,13 @@
     onagain,
     onhome,
     waitText,
+    homeLabel,
   }: {
     game: GameController
     onagain?: (() => void) | undefined
     onhome: () => void
     waitText?: string | undefined
+    homeLabel?: string | undefined
   } = $props()
 
   let page = $state<'turn' | 'suspect' | 'place' | 'notebook' | 'accuse'>('turn')
@@ -103,7 +105,7 @@
 </script>
 
 {#if game.isOver}
-  <Reveal {game} {onagain} {onhome} {waitText} />
+  <Reveal {game} {onagain} {onhome} {waitText} {homeLabel} />
 {:else if game.overlay?.kind === 'clue'}
   <ClueResult {game} overlay={game.overlay} onok={() => game.dismiss()} />
 {:else if game.overlay?.kind === 'wrong'}
@@ -138,6 +140,7 @@
   <ConfirmDialog
     title={confirmText(asking)}
     text={t('confirm.cost', { duration: duration(game.params.actionMinutes) })}
+    guided={game.guide?.includes('confirm') ?? false}
     onconfirm={confirm}
     oncancel={() => (asking = null)}
   />

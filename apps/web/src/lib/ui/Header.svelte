@@ -2,6 +2,7 @@
   import { appName } from '@magnifier-cases/content'
   import { t } from '../locale.svelte.ts'
   import Icon from './Icon.svelte'
+  import HowToPlayButton from './HowToPlayButton.svelte'
   import SoundToggle from './SoundToggle.svelte'
 
   let { clock }: { clock?: string } = $props()
@@ -21,6 +22,7 @@
         {#key clock}<span class="anim-tick" aria-hidden="true">{clock}</span>{/key}
       </span>
     {/if}
+    <HowToPlayButton />
     <SoundToggle />
   </span>
 </header>

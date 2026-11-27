@@ -38,6 +38,7 @@
   chosen: string | null,
   pick: (id: string) => void,
   legend: string,
+  domain: 'suspect' | 'place',
 )}
   <fieldset>
     <legend class="label">{legend}</legend>
@@ -48,6 +49,7 @@
           type="button"
           class="opt"
           class:chosen={chosen === id}
+          class:guided={game.guide?.includes(`accuse-${domain}:${id}`)}
           disabled={off}
           aria-pressed={chosen === id}
           onclick={() => pick(id)}
@@ -72,6 +74,7 @@
     suspect,
     (id) => (suspect = id),
     t('accuse.suspect'),
+    'suspect',
   )}
   {@render options(
     view.cast.places,
@@ -79,6 +82,7 @@
     place,
     (id) => (place = id),
     t('accuse.place'),
+    'place',
   )}
 
   <p class="card rule">
@@ -89,6 +93,7 @@
   <button
     type="button"
     class="btn btn-primary"
+    class:guided={game.guide?.includes('accuse-submit')}
     disabled={suspect === null || place === null || tried}
     onclick={() => suspect && place && onaccuse(suspect, place)}
   >
