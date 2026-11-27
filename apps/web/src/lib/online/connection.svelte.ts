@@ -2,7 +2,7 @@
 // estado da sala como o servidor mandou. Não calcula regra: só guarda e repassa.
 // Origem: village-flood, apps/web/src/lib/online/connection.svelte.ts.
 import type { GameEvent } from '@magnifier-cases/engine'
-import type { ClientMessage, Notice, SeatId } from '@magnifier-cases/kit'
+import { TABLE_SEAT, type ClientMessage, type Notice, type SeatId } from '@magnifier-cases/kit'
 import type { MagnifierRoomView, MagnifierServerMessage } from '@magnifier-cases/protocol'
 import { forgetRoom, saveRoom } from './link.ts'
 
@@ -66,7 +66,8 @@ export class RoomConnection {
 
   /** Sai da sala de vez (avisa o servidor e esquece a sala neste aparelho). */
   leave() {
-    this.send({ type: 'leave' })
+    // a mesa não ocupa assento: basta fechar a conexão
+    if (this.seat !== TABLE_SEAT) this.send({ type: 'leave' })
     forgetRoom()
     this.close()
   }
@@ -115,7 +116,11 @@ export class RoomConnection {
         this.token = message.token
         this.retries = 0
         this.status = 'open'
-        saveRoom({ code: this.code, token: message.token })
+        saveRoom({
+          code: this.code,
+          token: message.token,
+          ...(message.seat === TABLE_SEAT ? { table: true } : {}),
+        })
         return
       case 'room':
         this.room = message.room

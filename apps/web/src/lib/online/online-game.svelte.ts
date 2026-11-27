@@ -3,7 +3,7 @@
 // de resultado a partir dos eventos. O OK de cada tela só fecha a tela neste aparelho.
 import { suggest as hintFor, type Decision } from '@magnifier-cases/bots'
 import type { Action, GameEvent, PublicView, SeatId } from '@magnifier-cases/engine'
-import type { Notice } from '@magnifier-cases/kit'
+import { TABLE_SEAT, type Notice } from '@magnifier-cases/kit'
 import {
   decodeSuggestion,
   type MagnifierRoomView,
@@ -111,6 +111,11 @@ export class OnlineGame implements GameController {
     return this.connection.seat
   }
 
+  /** Este aparelho é a mesa (tela grande): só mostra a partida. */
+  get isTable(): boolean {
+    return this.mySeat === TABLE_SEAT
+  }
+
   get isHost(): boolean {
     return this.room !== null && this.room.host === this.mySeat
   }
@@ -162,7 +167,9 @@ export class OnlineGame implements GameController {
   }
 
   get canSuggest(): boolean {
-    return !this.isOver && this.mySeat !== null && this.view.activeSeat !== this.mySeat
+    return (
+      !this.isOver && this.mySeat !== null && !this.isTable && this.view.activeSeat !== this.mySeat
+    )
   }
 
   /** Quantas vezes este aparelho ainda pode marcar ou trocar a sugestão nesta jogada. */

@@ -9,6 +9,12 @@
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
   Cross-Origin-Opener-Policy: same-origin
 
+# O service worker e o registro sempre conferem se há versão nova.
+/sw.js
+  Cache-Control: no-cache
+/registerSW.js
+  Cache-Control: no-cache
+
 # Arquivos com hash no nome nunca mudam: podem ficar em cache por 1 ano.
 /assets/*
   Cache-Control: public, max-age=31536000, immutable

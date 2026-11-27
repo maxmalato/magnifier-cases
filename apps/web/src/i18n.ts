@@ -14,7 +14,6 @@ const ptBR = {
 
   'home.playLocal': 'Jogar neste aparelho',
   'home.playLocalHint': 'De 2 a 6 detetives em volta da mesma tela. Bots completam a equipe.',
-  'home.moreSoon': 'O modo mesa chega em breve.',
 
   'lobby.title': 'Montar a equipe',
   'lobby.level': 'Nível',
@@ -147,6 +146,30 @@ const ptBR = {
   'home.joinRoom': 'Entrar com código',
   'home.backToRoom': 'Voltar para a sala {code}',
 
+  'home.openTable': 'Abrir a mesa (tela grande)',
+  'home.openTableHint': 'A tela grande mostra o jogo; cada um joga no próprio celular.',
+  'home.tableOnlyBig':
+    'A tela da mesa só abre em telas grandes (tablet, notebook ou TV). Neste aparelho, entrem como jogador.',
+  'home.backToTable': 'Voltar para a mesa {code}',
+
+  'table.joinHere': 'Entrem pelo celular: abram o jogo, toquem em "Entrar com código" e digitem',
+  'table.scan': 'Ou apontem a câmera do celular para o QR code:',
+  'table.qrLabel': 'QR code com o link da sala {code}',
+  'table.firstCommands': 'Quem entrar primeiro comanda a sala: escolhe o nível e começa a partida.',
+  'table.players': 'Detetives na sala',
+  'table.nobody': 'Ninguém entrou ainda.',
+  'table.latest': 'Pista {n} · {source} · achada por {name}',
+  'table.noClue': 'Nenhuma pista ainda. A investigação está começando!',
+  'table.suspectsLeft': 'suspeitos ainda possíveis',
+  'table.placesLeft': 'lugares ainda possíveis',
+  'table.clues': 'pistas no caderno',
+  'table.countOf': '{n} de {total}',
+  'table.deciding': 'decidindo agora',
+  'table.choosing': '{name} escolhe a ação no celular · Sala {code}',
+  'table.wrong':
+    '{name} acusou {suspect} {place}: não foi essa dupla. O relógio avançou {duration}.',
+  'table.close': 'Fechar a mesa',
+
   'online.createTitle': 'Criar sala online',
   'online.joinTitle': 'Entrar numa sala',
   'online.code': 'Código da sala',
@@ -228,7 +251,6 @@ const en: Record<MessageKey, string> = {
 
   'home.playLocal': 'Play on this device',
   'home.playLocalHint': '2 to 6 detectives around the same screen. Bots fill the team.',
-  'home.moreSoon': 'Table mode is coming soon.',
 
   'lobby.title': 'Build the team',
   'lobby.level': 'Level',
@@ -360,6 +382,30 @@ const en: Record<MessageKey, string> = {
   'home.createRoom': 'Create an online room',
   'home.joinRoom': 'Join with a code',
   'home.backToRoom': 'Back to room {code}',
+
+  'home.openTable': 'Open the table (big screen)',
+  'home.openTableHint': 'The big screen shows the game; everyone plays on their own phone.',
+  'home.tableOnlyBig':
+    'The table screen only opens on big screens (tablet, notebook or TV). On this device, join as a player.',
+  'home.backToTable': 'Back to table {code}',
+
+  'table.joinHere': 'Join from your phone: open the game, tap "Join with a code" and type',
+  'table.scan': 'Or point the phone camera at the QR code:',
+  'table.qrLabel': 'QR code with the link to room {code}',
+  'table.firstCommands': 'Whoever joins first runs the room: picks the level and starts the game.',
+  'table.players': 'Detectives in the room',
+  'table.nobody': 'Nobody has joined yet.',
+  'table.latest': 'Clue {n} · {source} · found by {name}',
+  'table.noClue': 'No clues yet. The investigation is just starting!',
+  'table.suspectsLeft': 'suspects still possible',
+  'table.placesLeft': 'places still possible',
+  'table.clues': 'clues in the notebook',
+  'table.countOf': '{n} of {total}',
+  'table.deciding': 'deciding now',
+  'table.choosing': '{name} picks the action on their phone · Room {code}',
+  'table.wrong':
+    '{name} accused {suspect} {place}: not that pair. The clock moved forward {duration}.',
+  'table.close': 'Close the table',
 
   'online.createTitle': 'Create an online room',
   'online.joinTitle': 'Join a room',

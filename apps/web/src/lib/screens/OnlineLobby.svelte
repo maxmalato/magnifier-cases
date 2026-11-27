@@ -6,6 +6,7 @@
   import Header from '../ui/Header.svelte'
   import type { OnlineGame } from '../online/online-game.svelte.ts'
   import { roomLink } from '../online/link.ts'
+  import QrCode from '../ui/QrCode.svelte'
   import { levelKey } from '../text.ts'
   import { t } from '../locale.svelte.ts'
   import type { MessageKey } from '../../i18n.ts'
@@ -36,6 +37,13 @@
   {#if room}
     <h1>{t('online.lobbyTitle', { code: '' })}<span class="code">{formatCode(room.code)}</span></h1>
     <p class="share">{t('online.share')}</p>
+    <div class="qr-box">
+      <QrCode
+        text={roomLink(room.code)}
+        label={t('table.qrLabel', { code: formatCode(room.code) })}
+        size={180}
+      />
+    </div>
     <button type="button" class="btn" onclick={copyLink}>
       {copied ? t('online.copied') : t('online.copyLink')}
     </button>
@@ -120,6 +128,10 @@
     font-size: 2.75rem;
     letter-spacing: 0.08em;
     color: var(--accent-text);
+  }
+  .qr-box {
+    display: flex;
+    justify-content: center;
   }
   .share,
   .wait {

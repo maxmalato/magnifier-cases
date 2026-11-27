@@ -8,14 +8,23 @@
     oncreate,
     onjoin,
     savedCode,
+    savedIsTable = false,
     onrejoin,
+    ontable,
+    tableBlocked = false,
   }: {
     onplay: () => void
     oncreate: () => void
     onjoin: () => void
     /** Sala guardada neste aparelho (para voltar pelo token). */
     savedCode: string | null
+    /** A sala guardada é a de uma mesa (este aparelho é a tela grande). */
+    savedIsTable?: boolean
     onrejoin: () => void
+    /** Abrir a mesa: só existe em tela grande (canShowTable). */
+    ontable?: (() => void) | undefined
+    /** Pediram a mesa (?mesa) num aparelho pequeno: mostra o aviso. */
+    tableBlocked?: boolean
   } = $props()
   const languageNames: Record<Locale, string> = { 'pt-BR': 'Português', en: 'English' }
 </script>
@@ -34,10 +43,18 @@
     <button type="button" class="btn" onclick={onjoin}>{t('home.joinRoom')}</button>
     {#if savedCode}
       <button type="button" class="btn" onclick={onrejoin}>
-        {t('home.backToRoom', { code: formatCode(savedCode) })}
+        {savedIsTable
+          ? t('home.backToTable', { code: formatCode(savedCode) })
+          : t('home.backToRoom', { code: formatCode(savedCode) })}
       </button>
     {/if}
-    <p class="hint">{t('home.moreSoon')}</p>
+    {#if ontable}
+      <button type="button" class="btn" onclick={ontable}>{t('home.openTable')}</button>
+      <p class="hint">{t('home.openTableHint')}</p>
+    {/if}
+    {#if tableBlocked}
+      <p class="blocked" role="status">{t('home.tableOnlyBig')}</p>
+    {/if}
   </div>
 
   <fieldset class="lang">
@@ -80,6 +97,13 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
+  }
+  .blocked {
+    margin: 0;
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: 2px solid var(--accent-text);
+    font-weight: 800;
   }
   .hint {
     margin: 0;

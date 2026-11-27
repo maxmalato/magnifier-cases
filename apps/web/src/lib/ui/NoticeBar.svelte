@@ -4,10 +4,17 @@
   import type { OnlineControls } from '../game/controller.ts'
   import { t } from '../locale.svelte.ts'
 
-  let { online }: { online: OnlineControls | undefined } = $props()
+  let {
+    online,
+    placement = 'bottom',
+  }: {
+    online: OnlineControls | undefined
+    /** Na mesa, os avisos ficam no topo para não cobrir a faixa dos jogadores. */
+    placement?: 'bottom' | 'top'
+  } = $props()
 </script>
 
-<div class="notices" role="status" aria-live="polite">
+<div class="notices {placement}" role="status" aria-live="polite">
   {#if online?.reconnecting}<p class="notice warn">{t('online.reconnecting')}</p>{/if}
   {#if online?.error}<p class="notice warn">{online.error}</p>{/if}
   {#each online?.notices ?? [] as notice, i (i)}<p class="notice">{notice}</p>{/each}
@@ -18,7 +25,6 @@
     position: fixed;
     left: 16px;
     right: 16px;
-    bottom: 16px;
     max-width: 528px;
     margin: 0 auto;
     display: flex;
@@ -26,6 +32,12 @@
     gap: 6px;
     z-index: 10;
     pointer-events: none;
+  }
+  .bottom {
+    bottom: 16px;
+  }
+  .top {
+    top: 16px;
   }
   .notice {
     margin: 0;

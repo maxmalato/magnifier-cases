@@ -18,7 +18,7 @@ Apprentice, Investigator, Expert and Legend. The map and the clock change with t
 
 ## Status
 
-Stage 4 (online) ready for review: besides the one-device mode, you can create a room, send the code to people on other devices, make suggestions outside your turn and get back into the room if the connection drops (a bot plays in your place meanwhile). Table mode and PWA come in the next stage. See `docs/ROADMAP.md` (in Portuguese).
+Stage 5 (table and PWA) done: all three modes work (one device, online and table, with the big screen showing the game and phones as controllers, joining by code or QR code), and the game can be installed and played offline in one-device mode. Tested on real devices. Next: Stage 6 (polish). See `docs/ROADMAP.md` (in Portuguese).
 
 ## How to run
 

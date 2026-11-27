@@ -192,6 +192,7 @@ for (const colorScheme of ['light', 'dark'] as const) {
     expect((await new AxeBuilder({ page }).analyze()).violations, 'entrar').toEqual([])
     await page.getByRole('button', { name: 'Voltar' }).click()
     await createRoom(page, 'Ana')
+    await expect(page.getByRole('img', { name: /^QR code com o link da sala / })).toBeVisible()
     expect((await new AxeBuilder({ page }).analyze()).violations, 'lobby online').toEqual([])
   })
 }
