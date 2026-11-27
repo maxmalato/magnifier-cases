@@ -17,7 +17,7 @@ A ordem é **motor, gerador, solucionador, bots e simulação antes de qualquer 
 | 4 – Online | Concluída | `v0.5-online` |
 | 5 – Mesa e PWA | Concluída | `v0.6-table-pwa` |
 | 6 – Acabamento | Concluída | `v0.9-polish` |
-| 7 – Calibração com partidas reais e publicação | Não iniciada | `v1.0` |
+| 7 – Calibração com partidas reais e publicação | Em andamento | `v1.0` |
 
 ## Etapa 0 – Fundação
 
@@ -115,6 +115,15 @@ Deixa o projeto pronto para receber código.
 - Publicação na Cloudflare e tag `v1.0`.
 
 **Pronto quando:** taxas de vitória reais próximas das faixas alvo e nenhum ponto "a testar" sem decisão registrada.
+
+**Feito até agora (27/11/2026):**
+
+- Preparação para publicar: comando `pnpm cf:deploy`, passo a passo em `docs/deploy.md` e teste de ponta a ponta do site servido pelo Worker (`e2e/security.e2e.ts`): cabeçalhos de segurança e de cache, e o jogo inteiro (um aparelho, sala online, QR code e service worker) sem nenhuma violação da CSP.
+- Publicação automática: o workflow `Deploy` publica na Cloudflare depois de cada CI verde na `main`, só quando os segredos do environment `production` do GitHub estiverem configurados (até lá, a publicação é pulada com um aviso).
+- Limites por endereço (10 salas criadas e 60 consultas por minuto) agora vêm das vars do Worker, com os mesmos valores; só o servidor dos testes de ponta a ponta usa valores maiores, porque ali todos os aparelhos simulados saem do mesmo endereço.
+- Roteiro e modelo de anotação das partidas de teste em `docs/playtests/README.md`.
+
+**Falta (com o dono do projeto):** configurar a publicação na conta da Cloudflare, partidas com pessoas e ajustes nos dados, teste com leitor de tela, novo teste em aparelhos com HTTPS, revisão jurídica (LGPD e ECA Digital) e consulta ao INPI.
 
 ## Depois da v1
 

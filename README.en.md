@@ -28,7 +28,7 @@ Details and measurements in [`docs/quality-checklist.md`](docs/quality-checklist
 
 ## Status
 
-Stage 6 (polish) done: sounds, animations, accessibility review, easy reading, performance measurements and an "End game" button in every mode. All three modes work (one device, online and table, with the big screen showing the game and phones as controllers, joining by code or QR code), and the game can be installed and played offline in one-device mode. Next: Stage 7 (real games and release). See `docs/ROADMAP.md` (in Portuguese).
+Stage 6 (polish) done: sounds, animations, accessibility review, easy reading, performance measurements and an "End game" button in every mode. All three modes work (one device, online and table, with the big screen showing the game and phones as controllers, joining by code or QR code), and the game can be installed and played offline in one-device mode. Stage 7 (real games and release) in progress: publishing on Cloudflare is ready and the playtest guide is in `docs/playtests/README.md`. See `docs/ROADMAP.md` (in Portuguese).
 
 ## How to run
 
@@ -46,6 +46,7 @@ pnpm simulate:check  # reduced CI simulation: fails if a level misses its target
 pnpm --filter @magnifier-cases/web dev      # website in development mode
 pnpm dev:online # builds the website and starts the local Cloudflare server: open http://localhost:8787 (online and one device)
 pnpm --filter @magnifier-cases/web perf     # performance measurements (6× CPU and 3G; build first)
+pnpm cf:deploy   # publishes to Cloudflare by hand (see docs/deploy.md)
 ```
 
 ## Structure
@@ -71,6 +72,8 @@ Dependencies point inwards: the interface and the server depend on the engine, a
 - [Accessibility and performance checklist](docs/quality-checklist.md) (Portuguese)
 - [Real-device test](docs/device-test.md) (Portuguese)
 - [Simulation reports](docs/simulation/README.md) (Portuguese)
+- [Publishing on Cloudflare](docs/deploy.md) (Portuguese)
+- [Playtests with people](docs/playtests/README.md) (Portuguese)
 - [Instructions for Claude Code](CLAUDE.md) (Portuguese)
 
 ## Privacy

@@ -2,7 +2,7 @@ import { defineConfig, devices } from '@playwright/test'
 
 // Caminho opcional de um Chromium já instalado (ex.: ambientes sem download de navegador).
 const executablePath = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH
-const ONLINE = /(online|table)\.e2e\.ts/
+const ONLINE = /(online|table|security)\.e2e\.ts/
 
 export default defineConfig({
   testDir: './e2e',
@@ -41,10 +41,11 @@ export default defineConfig({
     },
     {
       // Worker + Durable Objects no workerd, com prazos curtos para o teste não esperar 20 s
-      // pelo bot. Usa o apps/web/dist do build acima.
+      // pelo bot e limites por endereço maiores (aqui todos os aparelhos simulados saem do mesmo
+      // endereço; os limites de produção ficam no wrangler.jsonc). Usa o apps/web/dist do build.
       command:
         'pnpm --filter @magnifier-cases/server exec wrangler dev --port 8787 --ip 127.0.0.1 ' +
-        '--var TAKEOVER_MS:1500 --var BOT_STEP_MS:60 --persist-to .wrangler/e2e',
+        '--var TAKEOVER_MS:1500 --var BOT_STEP_MS:60 --var ROOM_CREATE_LIMIT:1000 --var ROOM_LOOKUP_LIMIT:5000 --persist-to .wrangler/e2e',
       url: 'http://127.0.0.1:8787/api/health',
       reuseExistingServer: !process.env.CI,
       env: { WRANGLER_SEND_METRICS: 'false' },

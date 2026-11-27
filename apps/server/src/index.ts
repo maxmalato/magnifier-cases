@@ -7,9 +7,26 @@ import { hashToken, newToken } from './tokens.ts'
 
 export { Room } from './room.ts'
 
-/** Tentativas por minuto e por endereço (dificulta adivinhar códigos de sala). */
-const createLimiter = new RateLimiter(10, 60_000)
-const lookupLimiter = new RateLimiter(60, 60_000)
+/**
+ * Tentativas por minuto e por endereço (dificulta adivinhar códigos de sala). Os valores vêm das
+ * vars do Worker (wrangler.jsonc: 10 salas criadas e 60 consultas); só o servidor dos testes de
+ * ponta a ponta usa valores maiores, porque ali todos os aparelhos simulados saem do mesmo
+ * endereço. Valor ausente ou inválido volta ao padrão.
+ */
+const DEFAULT_LIMITS = { create: 10, lookup: 60 } as const
+let limiters: { create: RateLimiter; lookup: RateLimiter } | null = null
+
+function limitersOf(env: Env) {
+  const count = (value: string | undefined, fallback: number) => {
+    const n = Number(value)
+    return Number.isInteger(n) && n > 0 ? n : fallback
+  }
+  limiters ??= {
+    create: new RateLimiter(count(env.ROOM_CREATE_LIMIT, DEFAULT_LIMITS.create), 60_000),
+    lookup: new RateLimiter(count(env.ROOM_LOOKUP_LIMIT, DEFAULT_LIMITS.lookup), 60_000),
+  }
+  return limiters
+}
 
 function json(body: unknown, status = 200): Response {
   return Response.json(body, { status, headers: { 'Cache-Control': 'no-store' } })
@@ -32,7 +49,7 @@ export default {
     // Com table, quem cria é a mesa (tela grande): recebe o token dela, que só ela conhece.
     if (path === '/api/rooms') {
       if (request.method !== 'POST') return json({ error: 'methodNotAllowed' }, 405)
-      if (!createLimiter.allow(clientKey(request), now))
+      if (!limitersOf(env).create.allow(clientKey(request), now))
         return json({ error: 'tooManyRequests' }, 429)
       const body = (await request.json().catch(() => null)) as {
         config?: unknown
@@ -55,7 +72,7 @@ export default {
     // sala existente: GET /api/rooms/CODIGO (resumo) e /api/rooms/CODIGO/ws (conexão)
     const match = /^\/api\/rooms\/([^/]+)(\/ws)?$/.exec(path)
     if (match) {
-      if (!lookupLimiter.allow(clientKey(request), now))
+      if (!limitersOf(env).lookup.allow(clientKey(request), now))
         return json({ error: 'tooManyRequests' }, 429)
       const code = normalizeCode(decodeURIComponent(match[1] ?? ''))
       if (!code) return json({ error: 'notFound' }, 404)
