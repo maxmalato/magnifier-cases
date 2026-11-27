@@ -43,4 +43,19 @@ describe('appName', () => {
       .map((file) => relative(root, file))
     expect(offenders).toEqual([])
   })
+
+  it('o nome no endereço do site (casos-da-lupa) só aparece na configuração do Worker', () => {
+    // O nome do Worker vira o endereço público (decisão do dono, 27/11/2026). Se o nome mudar
+    // depois da consulta ao INPI, só este arquivo (e o appName) muda.
+    const slug = appName
+      .normalize('NFD')
+      .replace(/\p{Diacritic}/gu, '')
+      .toLocaleLowerCase('pt-BR')
+      .replace(/\s+/g, '-')
+    const allowed = join(root, 'apps/server/wrangler.jsonc')
+    const found = [...files(root)]
+      .filter((file) => file !== fileURLToPath(import.meta.url))
+      .filter((file) => readFileSync(file, 'utf8').toLocaleLowerCase('pt-BR').includes(slug))
+    expect(found.map((file) => relative(root, file))).toEqual([relative(root, allowed)])
+  })
 })

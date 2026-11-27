@@ -48,7 +48,7 @@ Publicar (gera o site e publica o Worker com os arquivos do site):
 pnpm cf:deploy
 ```
 
-Na primeira vez, o Wrangler pode pedir o subdomínio `workers.dev` da conta. No fim, ele mostra o endereço, no formato `https://magnifier-cases.SEU-SUBDOMINIO.workers.dev`.
+Na primeira vez, o Wrangler pode pedir o subdomínio `workers.dev` da conta. No fim, ele mostra o endereço: `https://casos-da-lupa.codemalato.workers.dev` (nome do Worker + subdomínio da conta).
 
 Voltar à versão anterior, se algo der errado:
 
@@ -62,14 +62,16 @@ pnpm --filter @magnifier-cases/server exec wrangler rollback
 2. Crie uma sala online e entre por outro aparelho (código, link ou QR code).
 3. Abra a mesa na TV e jogue um turno pelo celular. Teste o botão "Encerrar partida" pelo celular de quem comanda a sala.
 4. No celular com o app instalado, ligue o modo avião e confira que "Jogar neste aparelho" continua funcionando.
-5. No painel da Cloudflare (Workers e Pages → magnifier-cases → Configurações), confira que os registros ("Workers Logs" ou "Observability") estão desligados. O projeto já publica com `observability` desligado, para não guardar dados de quem joga.
+5. No painel da Cloudflare (Workers e Pages → casos-da-lupa → Configurações), confira que os registros ("Workers Logs" ou "Observability") estão desligados. O projeto já publica com `observability` desligado, para não guardar dados de quem joga.
 6. Repita o roteiro de `docs/device-test.md` com HTTPS (o teste da Etapa 5 foi pela rede local).
 
 ## Domínio próprio (opcional)
 
-Se você tiver um domínio na Cloudflare: Workers e Pages → magnifier-cases → Configurações → Domínios e rotas → Adicionar → Domínio personalizado. O endereço `workers.dev` continua funcionando.
+Se você tiver um domínio na Cloudflare: Workers e Pages → casos-da-lupa → Configurações → Domínios e rotas → Adicionar → Domínio personalizado. O endereço `workers.dev` continua funcionando.
 
-O endereço é `NOME-DO-WORKER.SUBDOMINIO-DA-CONTA.workers.dev`. Use um subdomínio de conta neutro (o seu "estúdio", não o nome de um jogo): assim o Enchente na Vila e o Casos da Lupa convivem na mesma conta. O nome do Worker (`magnifier-cases`) é o nome de código, não o nome público, que ainda depende do INPI.
+O endereço é `NOME-DO-WORKER.SUBDOMINIO-DA-CONTA.workers.dev`: aqui, `casos-da-lupa.codemalato.workers.dev`. O subdomínio da conta (`codemalato`) é neutro, de estúdio, e serve a todos os jogos da conta. O nome do Worker (`casos-da-lupa`, em `apps/server/wrangler.jsonc`) segue o nome público, a pedido do dono (27/11/2026); o nome de código continua `magnifier-cases`.
+
+**Se o nome público mudar depois da consulta ao INPI:** mude o `name` no `wrangler.jsonc` e o `appName`. A Cloudflare cria um Worker novo, com outro endereço: links, QR codes e apps instalados com o endereço antigo deixam de funcionar (as salas expiram em 12 h, então nada de partida se perde). Apague o Worker antigo no painel depois de conferir o novo.
 
 ## O que o projeto já cuida
 

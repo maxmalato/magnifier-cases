@@ -2,7 +2,10 @@
 // credenciais ficam no painel da Cloudflare, no `wrangler secret` ou nos segredos do GitHub Actions.
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "magnifier-cases",
+  // Nome do Worker = endereço público (casos-da-lupa.SUBDOMINIO.workers.dev), pedido do dono em
+  // 27/11/2026. O nome de código continua magnifier-cases. Se o nome público mudar (INPI), mude
+  // aqui e no appName.
+  "name": "casos-da-lupa",
   "main": "src/index.ts",
   "compatibility_date": "2026-11-01",
   // Sem telemetria do Wrangler (privacidade)
